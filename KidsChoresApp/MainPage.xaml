@@ -8,10 +8,10 @@
             Padding="30,0"
             Spacing="25">
             <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
+                Source="mainicon.svg"
+                HeightRequest="150"
                 Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
+                BackgroundColor="SteelBlue"/>
 
             <Label
                 Text="Hello, World!"
