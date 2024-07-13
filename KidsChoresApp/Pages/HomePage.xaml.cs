@@ -46,7 +46,7 @@ namespace KidsChoresApp.Pages
                     Money = 10.5m,
                     WeeklyEarnings = 5.0m,
                     LifetimeEarnings = 50.0m,
-                    Image = "child1.png" // Ensure you have this image in your resources
+                    Image = "batboy" 
                 },
                 new()
                 {
@@ -55,35 +55,81 @@ namespace KidsChoresApp.Pages
                     Money = 15.75m,
                     WeeklyEarnings = 7.0m,
                     LifetimeEarnings = 70.0m,
-                    Image = "child2.png" // Ensure you have this image in your resources
+                    Image = "batgirl" 
                 },
                 new()
                 {
-                    Id = 2,
+                    Id = 3,
                     Name = "Tom Doe",
-                    Money = 15.75m,
+                    Money = 150.05m,
                     WeeklyEarnings = 7.0m,
                     LifetimeEarnings = 70.0m,
-                    Image = "child3.png" // Ensure you have this image in your resources
+                    Image = "flashboy" 
                 },
                 new()
                 {
-                    Id = 2,
+                    Id = 4,
                     Name = "Tanya Doe",
                     Money = 15.75m,
                     WeeklyEarnings = 7.0m,
                     LifetimeEarnings = 70.0m,
-                    Image = "child4.png" // Ensure you have this image in your resources
+                    Image = "flashgirl" 
                 },
                 new()
                 {
-                    Id = 2,
+                    Id = 5,
                     Name = "Mick Doe",
+                    Money = 1500.70m,
+                    WeeklyEarnings = 7.0m,
+                    LifetimeEarnings = 70.0m,
+                    Image = "hulkboy" 
+                },
+                new()
+                {
+                    Id = 6,
+                    Name = "Michelle Doe",
                     Money = 15.75m,
                     WeeklyEarnings = 7.0m,
                     LifetimeEarnings = 70.0m,
-                    Image = "child5.png" // Ensure you have this image in your resources
+                    Image = "hulkgirl" 
+                },
+                new()
+                {
+                    Id = 7,
+                    Name = "Ben Doe",
+                    Money = 15000.75m,
+                    WeeklyEarnings = 7.0m,
+                    LifetimeEarnings = 70.0m,
+                    Image = "spiderboy" 
+                },
+                new()
+                {
+                    Id = 8,
+                    Name = "Brenda Doe",
+                    Money = 15.75m,
+                    WeeklyEarnings = 7.0m,
+                    LifetimeEarnings = 70.0m,
+                    Image = "spidergirl" 
+                },
+                new()
+                {
+                    Id = 9,
+                    Name = "Frank Doe",
+                    Money = 15.75m,
+                    WeeklyEarnings = 7.0m,
+                    LifetimeEarnings = 70.0m,
+                    Image = "superboy" 
+                },
+                new()
+                {
+                    Id = 10,
+                    Name = "Francis Doe",
+                    Money = 15.75m,
+                    WeeklyEarnings = 7.0m,
+                    LifetimeEarnings = 70.0m,
+                    Image = "supergirl" 
                 }
+
             };
 
             Children.Clear();
