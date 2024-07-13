@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:KidsChoresApp.Pages"
+             x:Class="KidsChoresApp.Pages.SettingsPage"
+             x:DataType="pages:SettingsPage"
+             Title="Settings Page">
+
+    <StackLayout Padding="20" Spacing="20">
+
+        <Label Text="Currency" />
+
+        <Frame BackgroundColor="AliceBlue" 
+               CornerRadius="10"
+               Padding="5"
+               HasShadow="True">
+            <Picker x:Name="CurrencyPicker"
+                    Title="Select Currency"
+                    FontSize="Medium"
+                    BackgroundColor="AntiqueWhite"
+                    HorizontalOptions="FillAndExpand"
+                    SelectedIndexChanged="OnCurrencySelected">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>USD</x:String>
+                        <x:String>EUR</x:String>
+                        <x:String>GBP</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </Frame>
+
+        <Button Text="Change Parental Passcode" Clicked="OnChangePasscodeClicked"/>
+
+        <Button Text="Logout" Clicked="OnLogoutClicked"/>
+
+    </StackLayout>
+
+</ContentPage>

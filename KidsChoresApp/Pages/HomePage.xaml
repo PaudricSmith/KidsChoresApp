@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:KidsChoresApp.Pages"
+             xmlns:models="clr-namespace:KidsChoresApp.Models"
+             x:Class="KidsChoresApp.Pages.HomePage"
+             x:DataType="pages:HomePage">
+
+    <Grid Padding="20" RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
+            <Image Source="mainicon" 
+                   HeightRequest="200"
+                   Aspect="AspectFit" 
+                   BackgroundColor="CornflowerBlue" />
+        </Frame>
+
+        <CollectionView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Child">
+                    <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="Black" Margin="10">
+                        <StackLayout>
+                            <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                            <Label Text="{Binding Name}" HorizontalOptions="Center" />
+                            <Label Text="{Binding Money}" HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <StackLayout Grid.Row="3" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+            <Button Text="Add Child" Clicked="OnAddChildClicked" />
+            <Button Text="Assign Chores" Clicked="OnAssignChoresClicked" />
+        </StackLayout>
+
+    </Grid>
+</ContentPage>

@@ -5,13 +5,13 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
+            Padding="20,20"
+            Spacing="20">
             <Image
                 Source="mainicon.svg"
-                HeightRequest="150"
+                HeightRequest="200"
                 Aspect="AspectFit"
-                BackgroundColor="SteelBlue"/>
+                BackgroundColor="CadetBlue"/>
 
             <Label
                 Text="Hello, World!"
