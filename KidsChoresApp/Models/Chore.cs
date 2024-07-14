@@ -9,27 +9,34 @@ namespace KidsChoresApp.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        [MaxLength(100)]
+        public string? Name { get; set; }
 
+        [MaxLength(500)]
         public string? Description { get; set; }
 
+        [MaxLength(200)]
         public string? Image { get; set; }
 
+        [MaxLength(50)]
         public string? AssignedTo { get; set; }
 
+        [Required]
         public DateTime Deadline { get; set; }
 
-        public decimal Worth { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, double.MaxValue)]
+        public decimal Worth { get; set; } = 0m;
 
-        public int Priority { get; set; }
+        [Range(1, 10)]
+        public int Priority { get; set; } = 1;
 
-        public bool IsComplete { get; set; }
-        
+        public bool IsComplete { get; set; } = false;
+
         [Required]
         public int ChildId { get; set; }
 
-        [ForeignKey(nameof(ChildId))]
+        [ForeignKey(nameof(ChildId))] // Navigation property
         public Child Child { get; set; }
     }
 }

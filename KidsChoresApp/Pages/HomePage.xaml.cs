@@ -1,4 +1,5 @@
 using KidsChoresApp.Models;
+using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 
 
@@ -6,12 +7,20 @@ namespace KidsChoresApp.Pages
 {
     public partial class HomePage : ContentPage
     {
+        private readonly UserService _userService;
+
+        public ObservableCollection<User> Users { get; set; }
+        public User CurrentUser { get; set; }
         public ObservableCollection<Child> Children { get; set; }
 
 
-        public HomePage()
+        public HomePage(UserService userService)
         {
             InitializeComponent();
+
+            _userService = userService;
+
+            Users = new ObservableCollection<User>();
 
             Children = new ObservableCollection<Child>();
 
@@ -23,121 +32,60 @@ namespace KidsChoresApp.Pages
 
         private async void OnPageLoaded(object? sender, EventArgs e)
         {
-            await LoadData();
+            //await LoadData();
+            await LoadUsers();
+
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadData();
+            //await LoadData();
+            await LoadUsers();
+
         }
 
-        private async Task LoadData()
+        private async Task LoadUsers()
         {
-            // Simulate loading data
-            await Task.Delay(1000);
-
-            var children = new ObservableCollection<Child>
+            var users = await _userService.GetAllUsersAsync();
+            Users.Clear();
+            foreach (var user in users)
             {
-                new()
-                {
-                    Id = 1,
-                    Name = "John Doe",
-                    Money = 10.5m,
-                    WeeklyEarnings = 5.0m,
-                    LifetimeEarnings = 50.0m,
-                    Image = "batboy" 
-                },
-                new()
-                {
-                    Id = 2,
-                    Name = "Jane Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "batgirl" 
-                },
-                new()
-                {
-                    Id = 3,
-                    Name = "Tom Doe",
-                    Money = 150.05m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "flashboy" 
-                },
-                new()
-                {
-                    Id = 4,
-                    Name = "Tanya Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "flashgirl" 
-                },
-                new()
-                {
-                    Id = 5,
-                    Name = "Mick Doe",
-                    Money = 1500.70m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "hulkboy" 
-                },
-                new()
-                {
-                    Id = 6,
-                    Name = "Michelle Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "hulkgirl" 
-                },
-                new()
-                {
-                    Id = 7,
-                    Name = "Ben Doe",
-                    Money = 15000.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "spiderboy" 
-                },
-                new()
-                {
-                    Id = 8,
-                    Name = "Brenda Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "spidergirl" 
-                },
-                new()
-                {
-                    Id = 9,
-                    Name = "Frank Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "superboy" 
-                },
-                new()
-                {
-                    Id = 10,
-                    Name = "Francis Doe",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "supergirl" 
-                }
-
-            };
-
-            Children.Clear();
-            foreach (var child in children)
-            {
-                Children.Add(child);
+                Users.Add(user);
             }
         }
+
+        private async void OnUserSelected(object sender, EventArgs e)
+        {
+            var picker = sender as Picker;
+            if (picker?.SelectedItem is User selectedUser)
+            {
+                CurrentUser = await _userService.GetUserWithDetailsAsync(selectedUser.Id);
+                Children.Clear();
+                if (CurrentUser != null)
+                {
+                    foreach (var child in CurrentUser.Children)
+                    {
+                        Children.Add(child);
+                    }
+                }
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
+
+        //private async Task LoadData()
+        //{
+        //    CurrentUser = await _userService.GetUserWithDetailsAsync(1); // Assuming user with ID 1
+        //    if (CurrentUser != null)
+        //    {
+        //        Children.Clear();
+        //        foreach (var child in CurrentUser.Children)
+        //        {
+        //            Children.Add(child);
+        //        }
+        //    }
+        //    OnPropertyChanged(nameof(CurrentUser));
+        //}
 
         private async void OnAddChildClicked(object sender, EventArgs e)
         {

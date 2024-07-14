@@ -10,12 +10,13 @@ namespace KidsChoresApp.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(4)]
         public string Passcode { get; set; }
 
         [Required]
-        public int UserId { get; set; } 
+        public int UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
+        [ForeignKey(nameof(UserId))] // Navigation property
         public User User { get; set; }
     }
 }

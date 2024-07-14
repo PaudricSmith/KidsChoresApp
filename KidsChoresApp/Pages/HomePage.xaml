@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -18,14 +19,28 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
+        <!-- User Picker -->
+        <Picker Grid.Row="0" Grid.ColumnSpan="2"
+                Title="Select User"
+                ItemsSource="{Binding Users}"
+                ItemDisplayBinding="{Binding Email}"
+                SelectedIndexChanged="OnUserSelected" />
+
+        <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
             <Image Source="mainicon" 
                    HeightRequest="200"
                    Aspect="AspectFit" 
                    BackgroundColor="CornflowerBlue" />
         </Frame>
 
-        <CollectionView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+        <!-- Display User Details -->
+        <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10">
+            <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
+            <Label Text="{Binding CurrentUser.Parent.Passcode}" FontAttributes="Italic" />
+        </StackLayout>
+
+        <!-- Children List -->
+        <CollectionView Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="2" />
             </CollectionView.ItemsLayout>
@@ -42,7 +57,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <StackLayout Grid.Row="3" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+        <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Padding="20">
             <Button Text="Add Child" Clicked="OnAddChildClicked" />
             <Button Text="Assign Chores" Clicked="OnAssignChoresClicked" />
         </StackLayout>
