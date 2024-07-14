@@ -6,61 +6,75 @@
              x:Class="KidsChoresApp.Pages.HomePage"
              x:DataType="pages:HomePage">
 
-    <Grid Padding="20" RowSpacing="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <!-- User Picker -->
-        <Picker Grid.Row="0" Grid.ColumnSpan="2"
-                Title="Select User"
-                ItemsSource="{Binding Users}"
-                ItemDisplayBinding="{Binding Email}"
-                SelectedIndexChanged="OnUserSelected" />
+            <!-- User Picker -->
+            <Picker Grid.Row="0" Grid.ColumnSpan="2"
+            Title="Select User"
+            ItemsSource="{Binding Users}"
+            ItemDisplayBinding="{Binding Email}"
+            SelectedIndexChanged="OnUserSelected" />
 
-        <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
-            <Image Source="mainicon" 
-                   HeightRequest="200"
-                   Aspect="AspectFit" 
-                   BackgroundColor="CornflowerBlue" />
-        </Frame>
+            <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
+                <Image Source="mainicon" 
+               HeightRequest="200"
+               Aspect="AspectFit" 
+               BackgroundColor="CornflowerBlue" />
+            </Frame>
 
-        <!-- Display User Details -->
-        <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10">
-            <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
-            <Label Text="{Binding CurrentUser.Parent.Passcode}" FontAttributes="Italic" />
-        </StackLayout>
+            <!-- Display User Details -->
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10">
+                <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
+                <Label Text="{Binding CurrentUser.Parent.Passcode}" FontAttributes="Italic" />
+            </StackLayout>
 
-        <!-- Children List -->
-        <CollectionView Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="2" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Child">
-                    <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="Black" Margin="10">
-                        <StackLayout>
-                            <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
-                            <Label Text="{Binding Name}" HorizontalOptions="Center" />
-                            <Label Text="{Binding Money}" HorizontalOptions="Center" />
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            <!-- Children List -->
+            <CollectionView Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Child">
+                        <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="Black" Margin="10">
+                            <StackLayout>
+                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Label Text="{Binding Name}" HorizontalOptions="Center" />
+                                <Label Text="{Binding Money}" HorizontalOptions="Center" />
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-        <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Padding="20">
-            <Button Text="Add Child" Clicked="OnAddChildClicked" />
-            <Button Text="Assign Chores" Clicked="OnAssignChoresClicked" />
-        </StackLayout>
+            <!-- Child Picker and Details -->
+            <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Padding="10" Spacing="10">
+                <Picker x:Name="ChildPicker"
+                Title="Select Child"
+                ItemsSource="{Binding Children}"
+                ItemDisplayBinding="{Binding Name}" />
 
-    </Grid>
+                <Button Text="View Child Details" Clicked="OnViewChildDetailsClicked" />
+            </StackLayout>
+
+            <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+                <Button Text="Add Child" Clicked="OnAddChildClicked" />
+                <!--<Button Text="Assign Chores" Clicked="OnAssignChoresClicked" />-->
+            </StackLayout>
+
+        </Grid>
+    </ScrollView>
+    
 </ContentPage>

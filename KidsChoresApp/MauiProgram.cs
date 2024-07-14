@@ -36,9 +36,13 @@ namespace KidsChoresApp
             });
 
 
+
             builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<ChildService>();
+
 
             builder.Services.AddScoped<HomePage>();
+
 
 
             var mauiApp = builder.Build();
@@ -47,7 +51,7 @@ namespace KidsChoresApp
             using (var scope = mauiApp.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<KidsChoresDbContext>();
-                dbContext.Database.EnsureDeleted();
+                //dbContext.Database.EnsureDeleted();
                 dbContext.Database.EnsureCreated();
                 SeedDatabaseAsync(dbContext).Wait();
             }

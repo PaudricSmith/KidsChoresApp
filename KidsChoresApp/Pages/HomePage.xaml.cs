@@ -8,20 +8,22 @@ namespace KidsChoresApp.Pages
     public partial class HomePage : ContentPage
     {
         private readonly UserService _userService;
+        private readonly ChildService _childService;
 
         public ObservableCollection<User> Users { get; set; }
-        public User CurrentUser { get; set; }
         public ObservableCollection<Child> Children { get; set; }
+        public User? CurrentUser { get; set; }
+        public Child? SelectedChild { get; set; }
 
 
-        public HomePage(UserService userService)
+        public HomePage(UserService userService, ChildService childService)
         {
             InitializeComponent();
 
             _userService = userService;
+            _childService = childService;
 
             Users = new ObservableCollection<User>();
-
             Children = new ObservableCollection<Child>();
 
             BindingContext = this;
@@ -34,7 +36,6 @@ namespace KidsChoresApp.Pages
         {
             //await LoadData();
             await LoadUsers();
-
         }
 
         protected override async void OnAppearing()
@@ -42,7 +43,6 @@ namespace KidsChoresApp.Pages
             base.OnAppearing();
             //await LoadData();
             await LoadUsers();
-
         }
 
         private async Task LoadUsers()
@@ -58,7 +58,7 @@ namespace KidsChoresApp.Pages
         private async void OnUserSelected(object sender, EventArgs e)
         {
             var picker = sender as Picker;
-            if (picker?.SelectedItem is User selectedUser)
+            if (picker.SelectedItem is User selectedUser)
             {
                 CurrentUser = await _userService.GetUserWithDetailsAsync(selectedUser.Id);
                 Children.Clear();
@@ -73,28 +73,48 @@ namespace KidsChoresApp.Pages
             }
         }
 
-        //private async Task LoadData()
-        //{
-        //    CurrentUser = await _userService.GetUserWithDetailsAsync(1); // Assuming user with ID 1
-        //    if (CurrentUser != null)
-        //    {
-        //        Children.Clear();
-        //        foreach (var child in CurrentUser.Children)
-        //        {
-        //            Children.Add(child);
-        //        }
-        //    }
-        //    OnPropertyChanged(nameof(CurrentUser));
-        //}
+        private async void OnViewChildDetailsClicked(object sender, EventArgs e)
+        {
+            var selectedChild = ChildPicker.SelectedItem as Child;
+            if (selectedChild != null && CurrentUser != null)
+            {
+                SelectedChild = await _childService.GetChildForUserAsync(CurrentUser.Id, selectedChild.Id);
+                if (SelectedChild != null)
+                {
+                    await DisplayAlert("Child Details", $"Name: {SelectedChild.Name}\nMoney: {SelectedChild.Money}\nWeekly Earnings: {SelectedChild.WeeklyEarnings}\nLifetime Earnings: {SelectedChild.LifetimeEarnings}", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Child does not belong to the current user.", "OK");
+                }
+            }
+        }
 
         private async void OnAddChildClicked(object sender, EventArgs e)
         {
+            if (CurrentUser == null) return;
 
+            // Create a new child (for simplicity, hardcoding values here)
+            var newChild = new Child
+            {
+                Name = "New Child",
+                Image = "spiderboy",
+                Money = 100,
+                WeeklyEarnings = 100,
+                LifetimeEarnings = 100,
+                UserId = CurrentUser.Id
+            };
+
+            await _childService.AddChildAsync(newChild);
+
+            // Update the UI
+            Children.Add(newChild);
+            OnPropertyChanged(nameof(Children));
         }
 
         private async void OnAssignChoresClicked(object sender, EventArgs e)
         {
-
+            // Implement assign chores logic
         }
     }
 }
