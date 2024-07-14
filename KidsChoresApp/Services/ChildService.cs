@@ -16,35 +16,47 @@ namespace KidsChoresApp.Services
         }
 
 
-        public async Task<Child> GetChildAsync(int childId)
+        public async Task<Child> GetChildAsync(int userId, int childId)
         {
             return await _dbContext.Children
                 .Include(c => c.Chores)
-                .FirstOrDefaultAsync(c => c.Id == childId);
+                .Where(c => c.Id == childId && c.UserId == userId).FirstOrDefaultAsync();
         }
 
-        public async Task<Child> GetChildForUserAsync(int userId, int childId)
+        public async Task<List<Child>> GetChildrenForUserAsync(int userId)
         {
             return await _dbContext.Children
                 .Include(c => c.Chores)
-                .FirstOrDefaultAsync(c => c.Id == childId && c.UserId == userId);
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
         }
 
-        public async Task AddChildAsync(Child child)
+        public async Task AddChildAsync(int userId, Child child)
         {
+            child.UserId = userId;
             _dbContext.Children.Add(child);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateChildAsync(Child child)
+        public async Task UpdateChildAsync(int userId, Child child)
         {
-            _dbContext.Children.Update(child);
-            await _dbContext.SaveChangesAsync();
+            var existingChild = await GetChildAsync(userId, child.Id);
+            if (existingChild != null)
+            {
+                existingChild.Name = child.Name;
+                existingChild.Image = child.Image;
+                existingChild.Money = child.Money;
+                existingChild.WeeklyEarnings = child.WeeklyEarnings;
+                existingChild.LifetimeEarnings = child.LifetimeEarnings;
+
+                _dbContext.Children.Update(existingChild);
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
-        public async Task DeleteChildAsync(int childId)
+        public async Task DeleteChildAsync(int userId, int childId)
         {
-            var child = await _dbContext.Children.FindAsync(childId);
+            var child = await GetChildAsync(userId, childId);
             if (child != null)
             {
                 _dbContext.Children.Remove(child);

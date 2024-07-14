@@ -27,21 +27,12 @@ namespace KidsChoresApp.Pages
             Children = new ObservableCollection<Child>();
 
             BindingContext = this;
-
-            Loaded += OnPageLoaded;
         }
 
-
-        private async void OnPageLoaded(object? sender, EventArgs e)
-        {
-            //await LoadData();
-            await LoadUsers();
-        }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            //await LoadData();
             await LoadUsers();
         }
 
@@ -78,7 +69,7 @@ namespace KidsChoresApp.Pages
             var selectedChild = ChildPicker.SelectedItem as Child;
             if (selectedChild != null && CurrentUser != null)
             {
-                SelectedChild = await _childService.GetChildForUserAsync(CurrentUser.Id, selectedChild.Id);
+                SelectedChild = await _childService.GetChildAsync(CurrentUser.Id, selectedChild.Id);
                 if (SelectedChild != null)
                 {
                     await DisplayAlert("Child Details", $"Name: {SelectedChild.Name}\nMoney: {SelectedChild.Money}\nWeekly Earnings: {SelectedChild.WeeklyEarnings}\nLifetime Earnings: {SelectedChild.LifetimeEarnings}", "OK");
@@ -97,15 +88,14 @@ namespace KidsChoresApp.Pages
             // Create a new child (for simplicity, hardcoding values here)
             var newChild = new Child
             {
-                Name = "New Child",
-                Image = "spiderboy",
+                Name = "Hanna Doe",
+                Image = "hulkgirl",
                 Money = 100,
                 WeeklyEarnings = 100,
                 LifetimeEarnings = 100,
-                UserId = CurrentUser.Id
             };
 
-            await _childService.AddChildAsync(newChild);
+            await _childService.AddChildAsync(CurrentUser.Id, newChild);
 
             // Update the UI
             Children.Add(newChild);
