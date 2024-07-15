@@ -1,42 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using SQLite;
 
 
 namespace KidsChoresApp.Models
 {
     public class Chore
     {
-        [Key]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [MaxLength(100)]
-        public string? Name { get; set; }
-
-        [MaxLength(500)]
-        public string? Description { get; set; }
-
-        [MaxLength(200)]
-        public string? Image { get; set; }
-
-        [MaxLength(50)]
-        public string? AssignedTo { get; set; }
-
-        [Required]
-        public DateTime Deadline { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
-        [Range(0, double.MaxValue)]
-        public decimal Worth { get; set; } = 0m;
-
-        [Range(1, 10)]
-        public int Priority { get; set; } = 1;
-
-        public bool IsComplete { get; set; } = false;
-
-        [Required]
+        [Indexed]
         public int ChildId { get; set; }
 
-        [ForeignKey(nameof(ChildId))] // Navigation property
-        public Child Child { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Image { get; set; }
+        public DateTime Deadline { get; set; }
+        public decimal Worth { get; set; }
+        public int Priority { get; set; }
+        public bool IsComplete { get; set; }
     }
 }

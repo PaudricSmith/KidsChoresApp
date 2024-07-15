@@ -1,29 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SQLite;
 
 
 namespace KidsChoresApp.Models
 {
     public class User
     {
-        [Key]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Required]
-        [EmailAddress]
-        [MaxLength(100)]
+        [Unique, NotNull]
         public string Email { get; set; }
 
-        [Required]
+        [NotNull]
         public string PasswordHash { get; set; }
-
-        [MaxLength(3)]
-        public string? PreferredCurrency { get; set; }
-
+        public string PreferredCurrency { get; set; }
         public bool IsSetupCompleted { get; set; }
-
-
-        // Navigation properties
-        public Parent Parent { get; set; }
-        public ICollection<Child> Children { get; set; } = new List<Child>();
     }
 }

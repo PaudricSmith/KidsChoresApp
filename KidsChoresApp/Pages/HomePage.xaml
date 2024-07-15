@@ -15,6 +15,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -23,22 +24,23 @@
 
             <!-- User Picker -->
             <Picker Grid.Row="0" Grid.ColumnSpan="2"
-            Title="Select User"
-            ItemsSource="{Binding Users}"
-            ItemDisplayBinding="{Binding Email}"
-            SelectedIndexChanged="OnUserSelected" />
+                    Title="Select User"
+                    ItemsSource="{Binding Users}"
+                    ItemDisplayBinding="{Binding Email}"
+                    SelectedIndexChanged="OnUserSelected" />
 
+            <!-- Main Icon -->
             <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
                 <Image Source="mainicon" 
-               HeightRequest="200"
-               Aspect="AspectFit" 
-               BackgroundColor="CornflowerBlue" />
+                       HeightRequest="200"
+                       Aspect="AspectFit" 
+                       BackgroundColor="CornflowerBlue" />
             </Frame>
 
             <!-- Display User Details -->
             <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10">
                 <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
-                <Label Text="{Binding CurrentUser.Parent.Passcode}" FontAttributes="Italic" />
+                <Label Text="{Binding CurrentParent.Passcode}" FontAttributes="Italic" />
             </StackLayout>
 
             <!-- Children List -->
@@ -62,19 +64,23 @@
             <!-- Child Picker and Details -->
             <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Padding="10" Spacing="10">
                 <Picker x:Name="ChildPicker"
-                Title="Select Child"
-                ItemsSource="{Binding Children}"
-                ItemDisplayBinding="{Binding Name}" />
+                        Title="Select Child"
+                        ItemsSource="{Binding Children}"
+                        ItemDisplayBinding="{Binding Name}" />
 
                 <Button Text="View Child Details" Clicked="OnViewChildDetailsClicked" />
             </StackLayout>
 
+            <!-- Add and Delete Child Buttons -->
             <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="20">
                 <Button Text="Add Child" Clicked="OnAddChildClicked" />
-                <!--<Button Text="Assign Chores" Clicked="OnAssignChoresClicked" />-->
+            </StackLayout>
+
+            <StackLayout Grid.Row="6" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+                <Button Text="Delete Child" Clicked="OnDeleteChildClicked" />
             </StackLayout>
 
         </Grid>
     </ScrollView>
-    
+
 </ContentPage>

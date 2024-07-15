@@ -1,22 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using SQLite;
 
 
 namespace KidsChoresApp.Models
 {
     public class Parent
     {
-        [Key]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(4)]
-        public string Passcode { get; set; }
-
-        [Required]
+        [Indexed]
         public int UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))] // Navigation property
-        public User User { get; set; }
+        [NotNull]
+        public string Passcode { get; set; }
     }
 }
