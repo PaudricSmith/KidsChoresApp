@@ -27,8 +27,15 @@ namespace KidsChoresApp.Pages
             Children = new ObservableCollection<Child>();
 
             BindingContext = this;
+
+            Loaded += OnPageLoaded;
         }
 
+
+        private async void OnPageLoaded(object? sender, EventArgs e)
+        {
+            await LoadUsers();
+        }
 
         protected override async void OnAppearing()
         {
