@@ -1,21 +1,50 @@
 using KidsChoresApp.Models;
+using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace KidsChoresApp.Pages
 {
-    public partial class HomePage : ContentPage
+    public partial class HomePage : ContentPage, INotifyPropertyChanged
     {
         private readonly UserService _userService;
         private readonly ChildService _childService;
         private readonly ParentService _parentService;
 
-        public ObservableCollection<User> Users { get; set; }
-        public User CurrentUser { get; set; }
-        public Parent CurrentParent { get; set; }
-        public ObservableCollection<Child> Children { get; set; }
+        private User _currentUser;
+        private Parent _currentParent;
+        private ObservableCollection<Child> _children;
 
+        public User CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged();
+            }
+        }
+        public Parent CurrentParent
+        {
+            get => _currentParent;
+            set
+            {
+                _currentParent = value;
+                OnPropertyChanged();
+            }
+        }
+        public ObservableCollection<Child> Children
+        {
+            get => _children;
+            set
+            {
+                _children = value;
+                OnPropertyChanged();
+            }
+        }
 
         public HomePage(UserService userService, ChildService childService, ParentService parentService)
         {
@@ -25,7 +54,6 @@ namespace KidsChoresApp.Pages
             _childService = childService;
             _parentService = parentService;
 
-            Users = new ObservableCollection<User>();
             Children = new ObservableCollection<Child>();
 
             BindingContext = this;
@@ -35,37 +63,22 @@ namespace KidsChoresApp.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadUsers();
+            await LoadData();
         }
 
-        private async Task LoadUsers()
+
+        private async Task LoadData()
         {
-            var users = await _userService.GetUsersAsync();
-            Users.Clear();
-            foreach (var user in users)
+            CurrentUser = await _userService.GetUserAsync(1);
+
+            Children.Clear();
+            var children = await _childService.GetChildrenByUserIdAsync(CurrentUser.Id);
+            foreach (var child in children)
             {
-                Users.Add(user);
+                Children.Add(child);
             }
-        }
 
-        private async void OnUserSelected(object sender, EventArgs e)
-        {
-            var picker = sender as Picker;
-            if (picker.SelectedItem is User selectedUser)
-            {
-                CurrentUser = selectedUser;
-                Children.Clear();
-                var children = await _childService.GetChildrenByUserIdAsync(CurrentUser.Id);
-                foreach (var child in children)
-                {
-                    Children.Add(child);
-                }
-
-                CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
-
-                OnPropertyChanged(nameof(CurrentUser));
-                OnPropertyChanged(nameof(CurrentParent));
-            }
+            CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
         }
 
         private async void OnViewChildDetailsClicked(object sender, EventArgs e)
@@ -76,7 +89,12 @@ namespace KidsChoresApp.Pages
                 var child = await _childService.GetChildAsync(selectedChild.Id);
                 if (child != null)
                 {
-                    await DisplayAlert("Child Details", $"Name: {child.Name}\nMoney: {child.Money}\nWeekly Earnings: {child.WeeklyEarnings}\nLifetime Earnings: {child.LifetimeEarnings}", "OK");
+                    await DisplayAlert("Child Details", 
+                        $"Name: {child.Name}\n" +
+                        $"Money: {child.Money}\n" +
+                        $"Weekly Earnings: {child.WeeklyEarnings}\n" +
+                        $"Lifetime Earnings: {child.LifetimeEarnings}", 
+                        "OK");
                 }
             }
         }
@@ -93,7 +111,6 @@ namespace KidsChoresApp.Pages
 
                     // Update the UI
                     Children.Remove(selectedChild);
-                    OnPropertyChanged(nameof(Children));
 
                     await DisplayAlert("Success", "Child deleted successfully.", "OK");
                 }
@@ -108,22 +125,15 @@ namespace KidsChoresApp.Pages
         {
             if (CurrentUser == null) return;
 
-            // Create a new child (for simplicity, hardcoding values here)
-            var newChild = new Child
-            {
-                Name = "New Child",
-                Image = "default_child_image.png",
-                Money = 0,
-                WeeklyEarnings = 0,
-                LifetimeEarnings = 0,
-                UserId = CurrentUser.Id
-            };
+            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
+        }
 
-            await _childService.SaveChildAsync(newChild);
 
-            // Update the UI
-            Children.Add(newChild);
-            OnPropertyChanged(nameof(Children));
+
+        public new event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

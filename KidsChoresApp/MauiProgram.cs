@@ -1,4 +1,5 @@
 ﻿using KidsChoresApp.Pages;
+using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Services;
 using Microsoft.Extensions.Logging;
 using SQLite;
@@ -29,9 +30,7 @@ namespace KidsChoresApp
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
             builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
 
-            //if (File.Exists(dbPath))
-            //    File.Delete(dbPath);
-            
+            //if (File.Exists(dbPath)) File.Delete(dbPath);
 
             // Services
             builder.Services.AddSingleton<DataSeedingService>();
@@ -42,12 +41,13 @@ namespace KidsChoresApp
 
             // Pages
             builder.Services.AddSingleton<HomePage>();
+            builder.Services.AddTransient<AddChildPage>();
 
 
             var app = builder.Build();
 
             // Seed database
-            SeedDatabase(app);
+            //SeedDatabase(app);
 
             return app;
         }

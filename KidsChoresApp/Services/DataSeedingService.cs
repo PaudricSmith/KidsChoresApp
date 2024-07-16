@@ -62,20 +62,22 @@ namespace KidsChoresApp.Services
                 {
                     UserId = user.Id,
                     Name = "John Doe",
+                    Image = "batboy",
+                    Passcode = "1111",
                     Money = 10.5m,
                     WeeklyEarnings = 5.0m,
-                    LifetimeEarnings = 50.0m,
-                    Image = "batboy"
+                    LifetimeEarnings = 50.0m
                 };
 
                 var child2a = new Child
                 {
                     UserId = user.Id,
                     Name = "Jane Doe",
+                    Image = "batgirl",
+                    Passcode = "1111",
                     Money = 15.75m,
                     WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "batgirl"
+                    LifetimeEarnings = 70.0m
                 };
 
                 await _database.InsertAsync(child1a);
@@ -134,20 +136,22 @@ namespace KidsChoresApp.Services
                 {
                     UserId = user2.Id,
                     Name = "John Doe",
+                    Image = "superboy",
+                    Passcode = "2222",
                     Money = 10.5m,
                     WeeklyEarnings = 5.0m,
-                    LifetimeEarnings = 50.0m,
-                    Image = "superboy"
+                    LifetimeEarnings = 50.0m
                 };
 
                 var child2b = new Child
                 {
                     UserId = user2.Id,
                     Name = "Jane Doe",
+                    Image = "supergirl",
+                    Passcode = "2222",
                     Money = 15.75m,
                     WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m,
-                    Image = "supergirl"
+                    LifetimeEarnings = 70.0m
                 };
 
                 await _database.InsertAsync(child1b);

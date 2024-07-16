@@ -22,15 +22,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- User Picker -->
-            <Picker Grid.Row="0" Grid.ColumnSpan="2"
-                    Title="Select User"
-                    ItemsSource="{Binding Users}"
-                    ItemDisplayBinding="{Binding Email}"
-                    SelectedIndexChanged="OnUserSelected" />
-
             <!-- Main Icon -->
-            <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
+            <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
                 <Image Source="mainicon" 
                        HeightRequest="200"
                        Aspect="AspectFit" 
@@ -38,21 +31,21 @@
             </Frame>
 
             <!-- Display User Details -->
-            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10">
+            <!--<StackLayout Grid.Row="1" Grid.ColumnSpan="2" Padding="10">
                 <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
                 <Label Text="{Binding CurrentParent.Passcode}" FontAttributes="Italic" />
-            </StackLayout>
+            </StackLayout>-->
 
             <!-- Children List -->
-            <CollectionView Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+            <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Child">
-                        <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="Black" Margin="10">
+                        <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="CornflowerBlue" Margin="10">
                             <StackLayout>
-                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Image Source="{Binding Image}" Aspect="AspectFit" />
                                 <Label Text="{Binding Name}" HorizontalOptions="Center" />
                                 <Label Text="{Binding Money}" HorizontalOptions="Center" />
                             </StackLayout>
@@ -62,7 +55,7 @@
             </CollectionView>
 
             <!-- Child Picker and Details -->
-            <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Padding="10" Spacing="10">
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10" Spacing="10">
                 <Picker x:Name="ChildPicker"
                         Title="Select Child"
                         ItemsSource="{Binding Children}"
@@ -72,11 +65,11 @@
             </StackLayout>
 
             <!-- Add and Delete Child Buttons -->
-            <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+            <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="1" Spacing="10" Padding="10">
                 <Button Text="Add Child" Clicked="OnAddChildClicked" />
             </StackLayout>
 
-            <StackLayout Grid.Row="6" Grid.ColumnSpan="2" Spacing="10" Padding="20">
+            <StackLayout Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="1" Spacing="10" Padding="10">
                 <Button Text="Delete Child" Clicked="OnDeleteChildClicked" />
             </StackLayout>
 
