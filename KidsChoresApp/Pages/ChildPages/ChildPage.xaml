@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KidsChoresApp.Pages.ChildPages.ChildPage"
+             xmlns:models="clr-namespace:KidsChoresApp.Models"
+             xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
+             x:DataType="childPages:ChildPage"
+             Title="{Binding Child.Name}">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+
+            <Frame 
+                CornerRadius="10" 
+                Padding="10" 
+                Margin="10"
+                HasShadow="True" 
+                BorderColor="CornflowerBlue">
+                <Image 
+                    x:Name="ChildImage" 
+                    Source="{Binding Child.Image}" 
+                    HeightRequest="200" 
+                    WidthRequest="200" />
+            </Frame>
+
+            <Button Text="Change Avatar" Clicked="OnChangeImageClicked" />
+
+            <Frame CornerRadius="10" 
+                Padding="10" 
+                Margin="10"
+                HasShadow="True" 
+                BorderColor="CornflowerBlue">
+                <StackLayout>
+                    <Label 
+                        x:Name="NameLabel"
+                        Text="{Binding Child.Name}" 
+                        FontSize="20" 
+                        FontAttributes="Bold" 
+                        HorizontalOptions="Center" 
+                        IsVisible="True" />
+                    <Entry 
+                        x:Name="NameEntry"
+                        Text="{Binding Child.Name}" 
+                        FontSize="20" 
+                        FontAttributes="Bold" 
+                        HorizontalOptions="Center" 
+                        IsVisible="False" 
+                        MaxLength="20"
+                        TextChanged="OnNameEntryTextChanged"
+                        Completed="OnNameEntryCompleted" />
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNameFrameTapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Label Text="Lifetime Earnings" FontSize="20" FontAttributes="Bold" />
+                <Label Text="{Binding Child.LifetimeEarnings, StringFormat='€{0:F2}'}" FontSize="20" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Label Text="Weekly Earnings" FontSize="20" FontAttributes="Bold" />
+                <Label Text="{Binding Child.WeeklyEarnings, StringFormat='€{0:F2}'}" FontSize="20" />
+            </StackLayout>
+
+            <ListView x:Name="ChoresListView" ItemsSource="{Binding Chores}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Chore">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Image Source="{Binding Image}" HeightRequest="50" WidthRequest="50" />
+                                <Label Text="{Binding Name}" VerticalOptions="Center" />
+                                <Label Text="{Binding Worth, StringFormat='€{0:F2}'}" VerticalOptions="Center" />
+                                <CheckBox IsChecked="{Binding IsComplete}" CheckedChanged="OnChoreCheckedChanged" VerticalOptions="Center" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -11,10 +11,14 @@ namespace KidsChoresApp.Models
         [Indexed]
         public int UserId { get; set; }
 
-        [NotNull]
+        [NotNull, MaxLength(20)]
         public string Name { get; set; }
-        public string Image { get; set; }
+
+        [NotNull, MaxLength(4)]
         public string Passcode { get; set; }
+
+        public string Image { get; set; }
+        
         public decimal Money { get; set; }
         public decimal WeeklyEarnings { get; set; }
         public decimal LifetimeEarnings { get; set; }

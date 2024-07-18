@@ -11,7 +11,7 @@ namespace KidsChoresApp.Models
         [Indexed]
         public int UserId { get; set; }
 
-        [NotNull]
+        [NotNull, MaxLength(4)]
         public string Passcode { get; set; }
     }
 }

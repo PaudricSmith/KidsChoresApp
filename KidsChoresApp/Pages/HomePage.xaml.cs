@@ -4,6 +4,7 @@ using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 
 namespace KidsChoresApp.Pages
@@ -46,6 +47,9 @@ namespace KidsChoresApp.Pages
             }
         }
 
+        public ICommand OnChildTappedCommand { get; }
+
+
         public HomePage(UserService userService, ChildService childService, ParentService parentService)
         {
             InitializeComponent();
@@ -56,6 +60,8 @@ namespace KidsChoresApp.Pages
 
             Children = new ObservableCollection<Child>();
 
+            OnChildTappedCommand = new Command<Child>(async (child) => await OnChildTapped(child));
+
             BindingContext = this;
         }
 
@@ -65,7 +71,6 @@ namespace KidsChoresApp.Pages
             base.OnAppearing();
             await LoadData();
         }
-
 
         private async Task LoadData()
         {
@@ -81,6 +86,15 @@ namespace KidsChoresApp.Pages
             CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
         }
 
+
+        private async Task OnChildTapped(Child child)
+        {
+            if (child != null)
+            {
+                await Shell.Current.GoToAsync($"{nameof(ChildPage)}?childId={child.Id}");
+            }
+        }
+
         private async void OnViewChildDetailsClicked(object sender, EventArgs e)
         {
             var selectedChild = ChildPicker.SelectedItem as Child;
@@ -89,11 +103,11 @@ namespace KidsChoresApp.Pages
                 var child = await _childService.GetChildAsync(selectedChild.Id);
                 if (child != null)
                 {
-                    await DisplayAlert("Child Details", 
+                    await DisplayAlert("Child Details",
                         $"Name: {child.Name}\n" +
                         $"Money: {child.Money}\n" +
                         $"Weekly Earnings: {child.WeeklyEarnings}\n" +
-                        $"Lifetime Earnings: {child.LifetimeEarnings}", 
+                        $"Lifetime Earnings: {child.LifetimeEarnings}",
                         "OK");
                 }
             }

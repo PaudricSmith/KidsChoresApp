@@ -10,6 +10,7 @@ namespace KidsChoresApp
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(AddChildPage), typeof(AddChildPage));
+            Routing.RegisterRoute(nameof(ChildPage), typeof(ChildPage));
         }
     }
 }

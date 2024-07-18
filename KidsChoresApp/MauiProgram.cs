@@ -28,10 +28,13 @@ namespace KidsChoresApp
 
             // Sqlite-net-pcl
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
-            builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
+            //builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
 
             //if (File.Exists(dbPath)) File.Delete(dbPath);
+            //dbPath ??= Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
 
+            builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
+            
             // Services
             builder.Services.AddSingleton<DataSeedingService>();
             builder.Services.AddSingleton<UserService>();
@@ -42,12 +45,13 @@ namespace KidsChoresApp
             // Pages
             builder.Services.AddSingleton<HomePage>();
             builder.Services.AddTransient<AddChildPage>();
+            builder.Services.AddTransient<ChildPage>();
 
 
             var app = builder.Build();
 
             // Seed database
-            //SeedDatabase(app);
+            SeedDatabase(app);
 
             return app;
         }

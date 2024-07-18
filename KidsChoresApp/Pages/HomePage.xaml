@@ -7,7 +7,7 @@
              x:DataType="pages:HomePage">
 
     <ScrollView>
-        <Grid Padding="20" RowSpacing="20">
+        <Grid Padding="10" RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -23,9 +23,9 @@
             </Grid.ColumnDefinitions>
 
             <!-- Main Icon -->
-            <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" CornerRadius="10">
+            <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" Margin="10" CornerRadius="10">
                 <Image Source="mainicon" 
-                       HeightRequest="200"
+                       HeightRequest="180"
                        Aspect="AspectFit" 
                        BackgroundColor="CornflowerBlue" />
             </Frame>
@@ -43,10 +43,13 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Child">
-                        <Frame CornerRadius="10" Padding="10" HasShadow="True" BorderColor="CornflowerBlue" Margin="10">
+                        <Frame CornerRadius="10" Padding="10" Margin="10" HasShadow="True" BorderColor="CornflowerBlue">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pages:HomePage}}, Path=OnChildTappedCommand}" CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
                             <StackLayout>
                                 <Image Source="{Binding Image}" Aspect="AspectFit" />
-                                <Label Text="{Binding Name}" HorizontalOptions="Center" />
+                                <Label Text="{Binding Name}" HorizontalOptions="Center" FontSize="11" LineBreakMode="CharacterWrap" FontAttributes="Bold" />
                                 <Label Text="{Binding Money}" HorizontalOptions="Center" />
                             </StackLayout>
                         </Frame>

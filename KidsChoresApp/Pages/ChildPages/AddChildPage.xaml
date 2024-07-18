@@ -7,19 +7,19 @@
     <ScrollView>
         <StackLayout Padding="20">
             <Label Text="Name" />
-            <Entry x:Name="NameEntry" Placeholder="Enter child's name" />
+            <Entry x:Name="NameEntry" Placeholder="Enter child's name" MaxLength="20" FontSize="20" />
 
             <Label Text="Image URL" />
-            <Entry x:Name="ImageEntry" Placeholder="Enter image URL" />
+            <Entry x:Name="ImageEntry" Placeholder="Enter image URL" FontSize="20" />
 
             <Label Text="Weekly Allowance" />
-            <Entry x:Name="WeeklyAllowanceEntry" Placeholder="Enter weekly allowance" Keyboard="Numeric" />
+            <Entry x:Name="WeeklyAllowanceEntry" Placeholder="Enter weekly allowance" Keyboard="Numeric" MaxLength="8" FontSize="20" />
 
             <Label Text="Child Passcode" />
-            <Entry x:Name="PasscodeEntry" Placeholder="Enter passcode" IsPassword="True" />
+            <Entry x:Name="PasscodeEntry" Placeholder="Enter 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
 
             <Label Text="Verify Passcode" />
-            <Entry x:Name="VerifyPasscodeEntry" Placeholder="Verify passcode" IsPassword="True" />
+            <Entry x:Name="VerifyPasscodeEntry" Placeholder="Verify 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
 
             <Button Text="Add Child" Clicked="OnAddChildClicked" />
         </StackLayout>

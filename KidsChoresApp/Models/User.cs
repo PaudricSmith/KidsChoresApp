@@ -13,6 +13,8 @@ namespace KidsChoresApp.Models
 
         [NotNull]
         public string PasswordHash { get; set; }
+
+        [NotNull, MaxLength(3)]
         public string PreferredCurrency { get; set; }
         public bool IsSetupCompleted { get; set; }
     }
