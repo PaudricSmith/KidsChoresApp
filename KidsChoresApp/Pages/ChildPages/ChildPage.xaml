@@ -46,7 +46,6 @@
                         HorizontalOptions="Center" 
                         IsVisible="False" 
                         MaxLength="20"
-                        TextChanged="OnNameEntryTextChanged"
                         Completed="OnNameEntryCompleted" />
                 </StackLayout>
                 <Frame.GestureRecognizers>
@@ -72,7 +71,13 @@
                                 <Image Source="{Binding Image}" HeightRequest="50" WidthRequest="50" />
                                 <Label Text="{Binding Name}" VerticalOptions="Center" />
                                 <Label Text="{Binding Worth, StringFormat='€{0:F2}'}" VerticalOptions="Center" />
-                                <CheckBox IsChecked="{Binding IsComplete}" CheckedChanged="OnChoreCheckedChanged" VerticalOptions="Center" />
+                                <CheckBox IsChecked="{Binding IsComplete}">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type childPages:ChildPage}}, Path=BindingContext.ChoreCheckedChangedCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>         
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

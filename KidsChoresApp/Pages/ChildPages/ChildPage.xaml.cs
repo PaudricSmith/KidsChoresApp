@@ -3,6 +3,7 @@ using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 
 namespace KidsChoresApp.Pages.ChildPages
@@ -17,6 +18,8 @@ namespace KidsChoresApp.Pages.ChildPages
         private int _childId;
 
         public ObservableCollection<Chore> Chores { get; set; } = [];
+
+        public ICommand ChoreCheckedChangedCommand { get; }
 
         public Child Child
         {
@@ -45,6 +48,8 @@ namespace KidsChoresApp.Pages.ChildPages
             _childService = childService;
             _choreService = choreService;
 
+            ChoreCheckedChangedCommand = new Command<Chore>(OnChoreCheckedChanged);
+
             BindingContext = this;
         }
 
@@ -70,26 +75,27 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private async void OnChoreCheckedChanged(object sender, CheckedChangedEventArgs e)
+        private async void OnChoreCheckedChanged(Chore chore)
         {
-            if (sender is CheckBox checkBox && checkBox.BindingContext is Chore chore)
+            if (chore == null) return;
+
+            chore.IsComplete = !chore.IsComplete;
+
+            if (chore.IsComplete)
             {
-                if (checkBox.IsChecked)
-                {
-                    Child.LifetimeEarnings += chore.Worth;
-                    Child.WeeklyEarnings += chore.Worth;
-                }
-                else
-                {
-                    Child.LifetimeEarnings -= chore.Worth;
-                    Child.WeeklyEarnings -= chore.Worth;
-                }
-
-                chore.IsComplete = checkBox.IsChecked;
-
-                await _choreService.SaveChoreAsync(chore); 
-                await _childService.SaveChildAsync(Child); 
+                Child.LifetimeEarnings += chore.Worth;
+                Child.WeeklyEarnings += chore.Worth;
             }
+            else
+            {
+                Child.LifetimeEarnings -= chore.Worth;
+                Child.WeeklyEarnings -= chore.Worth;
+            }
+
+            await _choreService.SaveChoreAsync(chore);
+            await _childService.SaveChildAsync(Child);
+
+            OnPropertyChanged(nameof(Child));
         }
 
         private async void OnChangeImageClicked(object sender, EventArgs e)
@@ -116,32 +122,13 @@ namespace KidsChoresApp.Pages.ChildPages
             NameEntry.Focus();
         }
 
-        private void OnNameEntryTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (e.NewTextValue.Length > 9)
-            {
-                //AdjustFontSize((Entry)sender);
-            }
-        }
-
-        private void AdjustFontSize(Entry entry)
-        {
-            if (entry.Text.Length > 9)
-            {
-                entry.FontSize = 20;
-            }
-            else
-            {
-                entry.FontSize = 24;
-            }
-        }
-
         private async void OnNameEntryCompleted(object sender, EventArgs e)
         {
             if (Child != null)
             {
-                await _childService.SaveChildAsync(Child);
                 OnPropertyChanged(nameof(Child));
+
+                await _childService.SaveChildAsync(Child);
             }
 
             NameLabel.IsVisible = true;

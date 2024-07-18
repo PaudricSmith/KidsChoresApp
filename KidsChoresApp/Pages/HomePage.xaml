@@ -50,7 +50,7 @@
                             <StackLayout>
                                 <Image Source="{Binding Image}" Aspect="AspectFit" />
                                 <Label Text="{Binding Name}" HorizontalOptions="Center" FontSize="11" LineBreakMode="CharacterWrap" FontAttributes="Bold" />
-                                <Label Text="{Binding Money}" HorizontalOptions="Center" />
+                                <Label Text="{Binding Money, StringFormat='€{0:F2}'}" HorizontalOptions="Center" />
                             </StackLayout>
                         </Frame>
                     </DataTemplate>
