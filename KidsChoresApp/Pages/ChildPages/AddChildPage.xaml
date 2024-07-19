@@ -2,26 +2,67 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KidsChoresApp.Pages.ChildPages.AddChildPage"
+             xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
+             x:DataType="childPages:AddChildPage"
              Title="Add Child">
+    <Grid>
+        <!-- Main Content -->
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="10">
+                
+                <Frame 
+                    CornerRadius="10" 
+                    Padding="10" 
+                    Margin="10"
+                    HasShadow="True" 
+                    BorderColor="CornflowerBlue">
+                    <Image 
+                        x:Name="SelectedAvatarImage" 
+                        HeightRequest="150" 
+                        WidthRequest="150" />
+                </Frame>
 
-    <ScrollView>
-        <StackLayout Padding="20">
-            <Label Text="Name" />
-            <Entry x:Name="NameEntry" Placeholder="Enter child's name" MaxLength="20" FontSize="20" />
+                <Button Text="Add an Avatar" Clicked="OnAddAvatarClicked" />
 
-            <Label Text="Image URL" />
-            <Entry x:Name="ImageEntry" Placeholder="Enter image URL" FontSize="20" />
+                <!-- Avatar Selection Overlay -->
+                <ContentView x:Name="AvatarSelectionOverlay" IsVisible="False" BackgroundColor="White" Opacity="0.9" Padding="20">
+                    <StackLayout Spacing="10">
+                        <Label Text="Select an Avatar" FontSize="24" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" />
+                        <CollectionView x:Name="AvatarsCollectionView" ItemsSource="{Binding Avatars}" SelectionMode="None">
 
-            <Label Text="Weekly Allowance" />
-            <Entry x:Name="WeeklyAllowanceEntry" Placeholder="Enter weekly allowance" Keyboard="Numeric" MaxLength="8" FontSize="20" />
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="2" />
+                            </CollectionView.ItemsLayout>
 
-            <Label Text="Child Passcode" />
-            <Entry x:Name="PasscodeEntry" Placeholder="Enter 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Padding="10" HasShadow="True" Margin="5"  CornerRadius="10" BorderColor="Gray">
+                                        <Image Source="{Binding}" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type childPages:AddChildPage}}, 
+                                                    Path=BindingContext.SelectAvatarCommand}" CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Close" Clicked="OnCloseAvatarSelectionClicked" />
+                    </StackLayout>
+                </ContentView>
 
-            <Label Text="Verify Passcode" />
-            <Entry x:Name="VerifyPasscodeEntry" Placeholder="Verify 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
+                <Entry x:Name="NameEntry" Placeholder="Enter child's name" MaxLength="20" FontSize="20" />
 
-            <Button Text="Add Child" Clicked="OnAddChildClicked" />
-        </StackLayout>
-    </ScrollView>
+                <Entry x:Name="WeeklyAllowanceEntry" Placeholder="Enter weekly allowance" Keyboard="Numeric" MaxLength="8" FontSize="20" />
+
+                <Entry x:Name="PasscodeEntry" Placeholder="Enter 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
+
+                <Entry x:Name="VerifyPasscodeEntry" Placeholder="Verify 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
+
+                <Button Text="Add Child" Clicked="OnAddChildClicked" />
+            </StackLayout>
+        </ScrollView>
+
+    </Grid>
 </ContentPage>

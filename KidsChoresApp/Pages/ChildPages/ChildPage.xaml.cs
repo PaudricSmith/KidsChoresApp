@@ -15,8 +15,10 @@ namespace KidsChoresApp.Pages.ChildPages
         private Child _child;
         private int _childId;
 
+        public ObservableCollection<string> Avatars { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<Chore> Chores { get; set; } = [];
 
+        public ICommand SelectAvatarCommand { get; }
         public ICommand ChoreCheckedChangedCommand { get; }
 
         public Child Child
@@ -46,7 +48,10 @@ namespace KidsChoresApp.Pages.ChildPages
             _childService = childService;
             _choreService = choreService;
 
+            SelectAvatarCommand = new Command<string>(OnAvatarSelected);
             ChoreCheckedChangedCommand = new Command<Chore>(OnChoreCheckedChanged);
+
+            LoadAvatars();
 
             BindingContext = this;
         }
@@ -73,6 +78,41 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
+        private void LoadAvatars()
+        {
+            // Add the known avatars to the Avatars collection
+            var avatarFiles = new[]
+            {
+                "batboy.png",
+                "batgirl.png",
+                "flashboy.png",
+                "flashgirl.png",
+                "hulkboy.png",
+                "hulkgirl.png",
+                "superboy.png",
+                "supergirl.png",
+                "spiderboy.png",
+                "spidergirl.png",
+            };
+
+            foreach (var avatar in avatarFiles)
+            {
+                Avatars.Add($"Resources/Images/Avatars/{avatar}");
+            }
+        }
+
+        private async void OnAvatarSelected(string selectedAvatar)
+        {
+            if (selectedAvatar != null && Child != null)
+            {
+                Child.Image = selectedAvatar;
+                
+                AvatarSelectionOverlay.IsVisible = false;
+                
+                await _childService.SaveChildAsync(Child);
+            }
+        }
+
         private async void OnChoreCheckedChanged(Chore chore)
         {
             if (chore == null || Child == null) return;
@@ -94,9 +134,9 @@ namespace KidsChoresApp.Pages.ChildPages
             await _childService.SaveChildAsync(Child);
         }
 
-        private async void OnChangeImageClicked(object sender, EventArgs e)
+        private async void OnChangeAvatarClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Choose an image", "Cancel", null, "Choose from library", "Take a photo", "Select from avatars");
+            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Choose from library", "Take a photo", "Select from avatars");
             switch (action)
             {
                 case "Choose from library":
@@ -106,9 +146,14 @@ namespace KidsChoresApp.Pages.ChildPages
                     // Implement photo capture
                     break;
                 case "Select from avatars":
-                    // Implement avatar selection
+                    AvatarSelectionOverlay.IsVisible = true;
                     break;
             }
+        }
+
+        private void OnCloseAvatarSelectionClicked(object sender, EventArgs e)
+        {
+            AvatarSelectionOverlay.IsVisible = false;
         }
 
         private void OnNameFrameTapped(object sender, EventArgs e)

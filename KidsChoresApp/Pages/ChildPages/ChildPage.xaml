@@ -17,13 +17,41 @@
                 HasShadow="True" 
                 BorderColor="CornflowerBlue">
                 <Image 
-                    x:Name="ChildImage" 
+                    x:Name="SelectedAvatarImage" 
                     Source="{Binding Child.Image}" 
-                    HeightRequest="200" 
-                    WidthRequest="200" />
+                    HeightRequest="150" 
+                    WidthRequest="150" />
             </Frame>
 
-            <Button Text="Change Avatar" Clicked="OnChangeImageClicked" />
+            <Button Text="Change Avatar" Clicked="OnChangeAvatarClicked" />
+
+            <!-- Avatar Selection Overlay -->
+            <ContentView x:Name="AvatarSelectionOverlay" IsVisible="False" BackgroundColor="White" Opacity="0.9" Padding="20">
+                <StackLayout Spacing="10">
+                    <Label Text="Select an Avatar" FontSize="24" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" />
+                    <CollectionView x:Name="AvatarsCollectionView" ItemsSource="{Binding Avatars}" SelectionMode="None">
+
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="2" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="10" HasShadow="True" Margin="5"  CornerRadius="10" BorderColor="Gray">
+                                    <Image Source="{Binding}" Aspect="AspectFill">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type childPages:ChildPage}}, 
+                                                Path=BindingContext.SelectAvatarCommand}" CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="Close" Clicked="OnCloseAvatarSelectionClicked" />
+                </StackLayout>
+            </ContentView>
 
             <Frame CornerRadius="10" 
                 Padding="10" 
