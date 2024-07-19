@@ -1,15 +1,13 @@
 using KidsChoresApp.Models;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 
 namespace KidsChoresApp.Pages.ChildPages
 {
     [QueryProperty(nameof(ChildId), "childId")]
-    public partial class ChildPage : ContentPage, INotifyPropertyChanged
+    public partial class ChildPage : ContentPage
     {
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
@@ -77,7 +75,7 @@ namespace KidsChoresApp.Pages.ChildPages
 
         private async void OnChoreCheckedChanged(Chore chore)
         {
-            if (chore == null) return;
+            if (chore == null || Child == null) return;
 
             chore.IsComplete = !chore.IsComplete;
 
@@ -94,8 +92,6 @@ namespace KidsChoresApp.Pages.ChildPages
 
             await _choreService.SaveChoreAsync(chore);
             await _childService.SaveChildAsync(Child);
-
-            OnPropertyChanged(nameof(Child));
         }
 
         private async void OnChangeImageClicked(object sender, EventArgs e)
@@ -126,21 +122,11 @@ namespace KidsChoresApp.Pages.ChildPages
         {
             if (Child != null)
             {
-                OnPropertyChanged(nameof(Child));
-
                 await _childService.SaveChildAsync(Child);
             }
 
             NameLabel.IsVisible = true;
             NameEntry.IsVisible = false;
-        }
-
-
-
-        public new event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
