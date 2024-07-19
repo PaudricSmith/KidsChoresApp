@@ -9,43 +9,15 @@ using System.Windows.Input;
 
 namespace KidsChoresApp.Pages
 {
-    public partial class HomePage : ContentPage, INotifyPropertyChanged
+    public partial class HomePage : ContentPage
     {
         private readonly UserService _userService;
         private readonly ChildService _childService;
         private readonly ParentService _parentService;
 
-        private User _currentUser;
-        private Parent _currentParent;
-        private ObservableCollection<Child> _children;
-
-        public User CurrentUser
-        {
-            get => _currentUser;
-            set
-            {
-                _currentUser = value;
-                OnPropertyChanged();
-            }
-        }
-        public Parent CurrentParent
-        {
-            get => _currentParent;
-            set
-            {
-                _currentParent = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<Child> Children
-        {
-            get => _children;
-            set
-            {
-                _children = value;
-                OnPropertyChanged();
-            }
-        }
+        public User CurrentUser { get; set; }
+        public Parent CurrentParent { get; set; }
+        public ObservableCollection<Child> Children { get; set; } = [];
 
         public ICommand OnChildTappedCommand { get; }
 
@@ -57,8 +29,6 @@ namespace KidsChoresApp.Pages
             _userService = userService;
             _childService = childService;
             _parentService = parentService;
-
-            Children = new ObservableCollection<Child>();
 
             OnChildTappedCommand = new Command<Child>(async (child) => await OnChildTapped(child));
 
@@ -97,8 +67,7 @@ namespace KidsChoresApp.Pages
 
         private async void OnViewChildDetailsClicked(object sender, EventArgs e)
         {
-            var selectedChild = ChildPicker.SelectedItem as Child;
-            if (selectedChild != null)
+            if (ChildPicker.SelectedItem is Child selectedChild)
             {
                 var child = await _childService.GetChildAsync(selectedChild.Id);
                 if (child != null)
@@ -113,17 +82,22 @@ namespace KidsChoresApp.Pages
             }
         }
 
+        private async void OnAddChildClicked(object sender, EventArgs e)
+        {
+            if (CurrentUser == null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
+        }
+
         private async void OnDeleteChildClicked(object sender, EventArgs e)
         {
-            var selectedChild = ChildPicker.SelectedItem as Child;
-            if (selectedChild != null)
+            if (ChildPicker.SelectedItem is Child selectedChild)
             {
                 var confirm = await DisplayAlert("Confirm", $"Are you sure you want to delete {selectedChild.Name}?", "Yes", "No");
                 if (confirm)
                 {
                     await _childService.DeleteChildAsync(selectedChild);
 
-                    // Update the UI
                     Children.Remove(selectedChild);
 
                     await DisplayAlert("Success", "Child deleted successfully.", "OK");
@@ -133,21 +107,6 @@ namespace KidsChoresApp.Pages
             {
                 await DisplayAlert("Error", "Please select a child to delete.", "OK");
             }
-        }
-
-        private async void OnAddChildClicked(object sender, EventArgs e)
-        {
-            if (CurrentUser == null) return;
-
-            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
-        }
-
-
-
-        public new event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
