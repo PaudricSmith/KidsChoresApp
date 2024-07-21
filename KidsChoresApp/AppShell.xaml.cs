@@ -1,4 +1,5 @@
-﻿using KidsChoresApp.Pages.ChildPages;
+﻿using KidsChoresApp.Pages;
+using KidsChoresApp.Pages.ChildPages;
 
 
 namespace KidsChoresApp
@@ -9,6 +10,9 @@ namespace KidsChoresApp
         {
             InitializeComponent();
 
+            Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(LoadingPage), typeof(LoadingPage));
             Routing.RegisterRoute(nameof(AddChildPage), typeof(AddChildPage));
             Routing.RegisterRoute(nameof(ChildPage), typeof(ChildPage));
         }

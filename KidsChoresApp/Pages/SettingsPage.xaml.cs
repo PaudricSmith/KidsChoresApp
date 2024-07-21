@@ -1,12 +1,19 @@
 
 
+using KidsChoresApp.Services;
+
 namespace KidsChoresApp.Pages
 {
     public partial class SettingsPage : ContentPage
     {
-        public SettingsPage()
+        private readonly AuthService _authService;
+
+
+        public SettingsPage(AuthService authService)
         {
             InitializeComponent();
+
+            _authService = authService;
 
             BindingContext = this;
         }
@@ -24,7 +31,9 @@ namespace KidsChoresApp.Pages
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
+            _authService.Logout();
 
+            Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
 
         private async void OnChangePasscodeClicked(object sender, EventArgs e)

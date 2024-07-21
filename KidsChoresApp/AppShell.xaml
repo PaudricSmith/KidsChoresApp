@@ -4,17 +4,27 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:root="clr-namespace:KidsChoresApp"
-    xmlns:local="clr-namespace:KidsChoresApp.Pages"
+    xmlns:pages="clr-namespace:KidsChoresApp.Pages"
+    xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
     FlyoutBehavior="Disabled"
     Title="KidsChoresApp">
 
-    <TabBar>
-        <Tab Title="Home" Icon="home.png">
-            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
+    <ShellContent
+        Title="LOADING..."
+        ContentTemplate="{DataTemplate pages:LoadingPage}"
+        Route="LoadingPage" />
+
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="LoginPage" />
+
+    <TabBar Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
+        <Tab  Route="HomePage" Title="Home" Icon="home.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
-        <Tab Title="Settings" Icon="settings.png">
-            <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
+        <Tab Route="SettingsPage" Title="Settings" Icon="settings.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
         </Tab>
     </TabBar>
-
 </Shell>
