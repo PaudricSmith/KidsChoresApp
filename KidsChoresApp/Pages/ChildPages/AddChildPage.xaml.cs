@@ -1,7 +1,6 @@
 using KidsChoresApp.Services;
 using KidsChoresApp.Models;
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.Windows.Input;
 
 

@@ -38,9 +38,11 @@
 
             <!-- Children List -->
             <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+                
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
+                
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Child">
                         <Frame CornerRadius="10" Padding="10" Margin="10" HasShadow="True" BorderColor="CornflowerBlue">
@@ -55,6 +57,7 @@
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                
             </CollectionView>
 
             <!-- Child Picker and Details -->

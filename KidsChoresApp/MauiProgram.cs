@@ -57,7 +57,6 @@ namespace KidsChoresApp
         }
 
 
-
         private static async void SeedDatabase(MauiApp app)
         {
             using var scope = app.Services.CreateScope();
