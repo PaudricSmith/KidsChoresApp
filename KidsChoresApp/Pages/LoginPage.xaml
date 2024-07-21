@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KidsChoresApp.Pages.LoginPage"
-             Title="LoginPage">
-    <VerticalStackLayout Padding="20" Spacing="20" VerticalOptions="Center">
-        <Label 
-            Text="Login Page"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-        <Button Text="Login" Clicked="Button_Clicked"/>
-    </VerticalStackLayout>
+             x:Class="KidsChoresApp.Pages.LoginPage">
+
+    <Grid RowDefinitions="*, Auto"  Padding="0,0,0,50">
+        
+        <VerticalStackLayout Grid.Row="0" Padding="20" Spacing="20">
+            <Frame BackgroundColor="AliceBlue">
+                <Image 
+                    Source="mainicon" 
+                    HeightRequest="200"
+                    WidthRequest="200"
+                    Aspect="AspectFit" />
+            </Frame>
+            <Label 
+                Text="Welcome"
+                FontSize="20"
+                TextColor="CornflowerBlue"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+            <Label 
+                Text="KIDS CHORES APP"
+                FontSize="24"
+                TextColor="CornflowerBlue"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />   
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20" VerticalOptions="Center">
+            <Button Text="SignUp" Clicked="Button_Clicked"/>
+            <Button Text="SignIn" Clicked="Button_Clicked"/>
+        </VerticalStackLayout>
+
+    </Grid>
+    
 </ContentPage>

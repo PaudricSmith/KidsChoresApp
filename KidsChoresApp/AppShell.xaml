@@ -15,16 +15,15 @@
         Route="LoadingPage" />
 
     <ShellContent
-        Title="Login"
         ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="LoginPage" />
 
-    <TabBar Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
-        <Tab  Route="HomePage" Title="Home" Icon="home.png">
-            <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" />
+    <TabBar FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
+        <Tab  Route="HomePage" Title="Home">
+            <ShellContent Icon="Home" ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
-        <Tab Route="SettingsPage" Title="Settings" Icon="settings.png">
-            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        <Tab Route="SettingsPage" Title="Settings">
+            <ShellContent Icon="Gear" ContentTemplate="{DataTemplate pages:SettingsPage}" />
         </Tab>
     </TabBar>
 </Shell>
