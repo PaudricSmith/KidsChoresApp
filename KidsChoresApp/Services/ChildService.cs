@@ -12,7 +12,7 @@ namespace KidsChoresApp.Services
         public ChildService(SQLiteAsyncConnection database)
         {
             _database = database;
-            _database.CreateTableAsync<Child>();
+            _database.CreateTableAsync<Child>().Wait();
         }
 
 
@@ -40,7 +40,18 @@ namespace KidsChoresApp.Services
 
         public async Task<int> DeleteChildAsync(Child child)
         {
+            if (!string.IsNullOrEmpty(child.Image) && File.Exists(child.Image))
+            {
+                File.Delete(child.Image);
+            }
+
             return await _database.DeleteAsync(child);
+        }
+
+        public async Task<bool> ChildExistsAsync(string name)
+        {
+            var child = await _database.Table<Child>().Where(c => c.Name == name).FirstOrDefaultAsync();
+            return child != null;
         }
     }
 }

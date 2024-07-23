@@ -10,12 +10,22 @@ namespace KidsChoresApp.Pages.ChildPages
     public partial class AddChildPage : ContentPage
     {
         private readonly ChildService _childService;
-        
-        public int UserId { get; set; }
+        private string _selectedImage = "";
+        private int _userId;
 
-        public ObservableCollection<string> Avatars { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Avatars { get; set; } = [];
+
+        public int UserId
+        {
+            get => _userId;
+            set
+            {
+                _userId = value;
+            }
+        }
 
         public ICommand SelectAvatarCommand { get; }
+
 
 
         public AddChildPage(ChildService childService)
@@ -33,7 +43,6 @@ namespace KidsChoresApp.Pages.ChildPages
 
         private void LoadAvatars()
         {
-            // Add the known avatars to the Avatars collection
             var avatarFiles = new[]
             {
                 "batboy.png",
@@ -58,25 +67,47 @@ namespace KidsChoresApp.Pages.ChildPages
         {
             if (selectedAvatar != null)
             {
-                SelectedAvatarImage.Source = selectedAvatar;
                 AvatarSelectionOverlay.IsVisible = false;
+
+                ChildImage.Source = selectedAvatar;
+                _selectedImage = selectedAvatar;
             }
         }
 
         private async void OnAddAvatarClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Choose from library", "Take a photo", "Select from avatars");
+            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Choose from library", "Select from avatars");
             switch (action)
             {
                 case "Choose from library":
-                    // Implement photo library selection
-                    break;
-                case "Take a photo":
-                    // Implement photo capture
+                    await PickPhotoAsync();
                     break;
                 case "Select from avatars":
                     AvatarSelectionOverlay.IsVisible = true;
                     break;
+            }
+        }
+
+        private async Task PickPhotoAsync()
+        {
+            try
+            {
+                var result = await MediaPicker.PickPhotoAsync();
+                if (result != null)
+                {
+                    var stream = await result.OpenReadAsync();
+
+                    // Use a Guid for the image name
+                    var tempImagePath = await ImageHelper.SaveImageAsync(stream, Guid.NewGuid().ToString());
+
+                    // Set the selected image
+                    _selectedImage = tempImagePath;
+                    ChildImage.Source = ImageSource.FromFile(tempImagePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
         }
 
@@ -96,11 +127,18 @@ namespace KidsChoresApp.Pages.ChildPages
                 return;
             }
 
+            var childInDatabase = await _childService.ChildExistsAsync(NameEntry.Text);
+            if (await _childService.ChildExistsAsync(NameEntry.Text)) 
+            {
+                await DisplayAlert("Error", "Child already exists!", "OK");
+                return;
+            }
+
             var child = new Child
             {
                 UserId = UserId,
                 Name = NameEntry.Text,
-                Image = SelectedAvatarImage.Source.ToString(),
+                Image = _selectedImage,
                 Passcode = PasscodeEntry.Text,
                 Money = 20,
                 WeeklyEarnings = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0,

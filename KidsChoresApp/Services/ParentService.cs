@@ -12,7 +12,7 @@ namespace KidsChoresApp.Services
         public ParentService(SQLiteAsyncConnection database)
         {
             _database = database;
-            _database.CreateTableAsync<Parent>();
+            _database.CreateTableAsync<Parent>().Wait();
         }
 
 

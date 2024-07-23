@@ -17,7 +17,7 @@
                     HasShadow="True" 
                     BorderColor="CornflowerBlue">
                     <Image 
-                        x:Name="SelectedAvatarImage" 
+                        x:Name="ChildImage" 
                         HeightRequest="150" 
                         WidthRequest="150" />
                 </Frame>

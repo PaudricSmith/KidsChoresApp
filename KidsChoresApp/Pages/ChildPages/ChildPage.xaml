@@ -17,10 +17,11 @@
                 HasShadow="True" 
                 BorderColor="CornflowerBlue">
                 <Image 
-                    x:Name="SelectedAvatarImage" 
+                    x:Name="ChildImage" 
                     Source="{Binding Child.Image}" 
                     HeightRequest="150" 
-                    WidthRequest="150" />
+                    WidthRequest="150" 
+                    Aspect="AspectFill" />
             </Frame>
 
             <Button Text="Change Avatar" Clicked="OnChangeAvatarClicked" />
@@ -74,7 +75,7 @@
                         FontAttributes="Bold" 
                         HorizontalOptions="Center" 
                         IsVisible="False" 
-                        MaxLength="20"
+                        MaxLength="15"
                         Completed="OnNameEntryCompleted" />
                 </StackLayout>
                 <Frame.GestureRecognizers>

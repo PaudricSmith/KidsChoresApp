@@ -20,7 +20,7 @@ namespace KidsChoresApp.Models
         public int UserId { get; set; }
 
 
-        [NotNull, MaxLength(20)]
+        [NotNull, MaxLength(15)]
         public string Name
         {
             get => _name;
