@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KidsChoresApp.Pages.ChildPages.ChildPage"
              xmlns:models="clr-namespace:KidsChoresApp.Models"
+             xmlns:views="clr-namespace:KidsChoresApp.Views"
              xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
              x:DataType="childPages:ChildPage"
              Title="{Binding Child.Name}">
@@ -26,7 +27,15 @@
 
             <Button Text="Change Avatar" Clicked="OnChangeAvatarClicked" />
 
-            <!-- Avatar Selection Overlay -->
+            <!-- Custom Avatar Action Sheet ==============================================-->
+            <views:CustomActionSheet x:Name="CustomActionSheet" 
+                         CapturePhotoClicked="OnCapturePhotoClicked"
+                         ChooseFromLibraryClicked="OnChooseFromLibraryClicked"
+                         SelectFromAvatarsClicked="OnSelectFromAvatarsClicked"
+                         CancelClicked="OnCancelClicked" />
+            <!--==========================================================================-->
+
+            <!-- Avatar Selection Overlay ========================================================================================================-->
             <ContentView x:Name="AvatarSelectionOverlay" IsVisible="False" BackgroundColor="White" Opacity="0.9" Padding="20">
                 <StackLayout Spacing="10">
                     <Label Text="Select an Avatar" FontSize="24" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" />
@@ -54,6 +63,7 @@
                     <Button Text="Close" Clicked="OnCloseAvatarSelectionClicked" />
                 </StackLayout>
             </ContentView>
+            <!--==================================================================================================================================-->
 
             <Frame CornerRadius="10" 
                 Padding="10" 

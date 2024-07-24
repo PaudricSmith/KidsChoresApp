@@ -12,7 +12,7 @@ namespace KidsChoresApp.Pages.ChildPages
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
-        private Child _child;
+        private Child? _child;
         private int _childId;
 
         public ObservableCollection<string> Avatars { get; set; } = [];
@@ -21,7 +21,7 @@ namespace KidsChoresApp.Pages.ChildPages
         public ICommand SelectAvatarCommand { get; }
         public ICommand ChoreCheckedChangedCommand { get; }
 
-        public Child Child
+        public Child? Child
         {
             get => _child;
             set
@@ -113,6 +113,34 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
+        private void OnChangeAvatarClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = true;
+        }
+
+        private async void OnCapturePhotoClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            await CapturePhotoAsync();
+        }
+
+        private async void OnChooseFromLibraryClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            await PickPhotoAsync();
+        }
+
+        private void OnSelectFromAvatarsClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            AvatarSelectionOverlay.IsVisible = true;
+        }
+
+        private void OnCancelClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+        }
+
         private async void OnChoreCheckedChanged(Chore chore)
         {
             if (chore == null || Child == null) return;
@@ -132,23 +160,6 @@ namespace KidsChoresApp.Pages.ChildPages
 
             await _choreService.SaveChoreAsync(chore);
             await _childService.SaveChildAsync(Child);
-        }
-
-        private async void OnChangeAvatarClicked(object sender, EventArgs e)
-        {
-            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Take a photo", "Choose from library", "Select from avatars");
-            switch (action)
-            {
-                case "Take a photo":
-                    await CapturePhotoAsync();
-                    break;
-                case "Choose from library":
-                    await PickPhotoAsync();
-                    break;
-                case "Select from avatars":
-                    AvatarSelectionOverlay.IsVisible = true;
-                    break;
-            }
         }
 
         private async Task CapturePhotoAsync()

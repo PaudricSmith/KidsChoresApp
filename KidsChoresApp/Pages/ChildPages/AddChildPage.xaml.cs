@@ -41,6 +41,7 @@ namespace KidsChoresApp.Pages.ChildPages
             BindingContext = this;
         }
 
+
         private void LoadAvatars()
         {
             var avatarFiles = new[]
@@ -74,22 +75,34 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private async void OnAddAvatarClicked(object sender, EventArgs e)
+        private void OnAddAvatarClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Take a photo", "Choose from library", "Select from avatars");
-            switch (action)
-            {
-                case "Take a photo":
-                    await CapturePhotoAsync();
-                    break;
-                case "Choose from library":
-                    await PickPhotoAsync();
-                    break;
-                case "Select from avatars":
-                    AvatarSelectionOverlay.IsVisible = true;
-                    break;
-            }
+            CustomActionSheet.IsVisible = true;
         }
+
+        private async void OnCapturePhotoClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            await CapturePhotoAsync();
+        }
+
+        private async void OnChooseFromLibraryClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            await PickPhotoAsync();
+        }
+
+        private void OnSelectFromAvatarsClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+            AvatarSelectionOverlay.IsVisible = true;
+        }
+
+        private void OnCancelClicked(object sender, EventArgs e)
+        {
+            CustomActionSheet.IsVisible = false;
+        }
+
 
         private async Task CapturePhotoAsync()
         {
@@ -100,10 +113,8 @@ namespace KidsChoresApp.Pages.ChildPages
                 {
                     var stream = await result.OpenReadAsync();
 
-                    // Use a Guid for the image name
                     var tempImagePath = await ImageHelper.SaveImageAsync(stream, Guid.NewGuid().ToString());
 
-                    // Set the selected image
                     _selectedImage = tempImagePath;
                     ChildImage.Source = ImageSource.FromFile(tempImagePath);
                 }
@@ -123,10 +134,8 @@ namespace KidsChoresApp.Pages.ChildPages
                 {
                     var stream = await result.OpenReadAsync();
 
-                    // Use a Guid for the image name
                     var tempImagePath = await ImageHelper.SaveImageAsync(stream, Guid.NewGuid().ToString());
 
-                    // Set the selected image
                     _selectedImage = tempImagePath;
                     ChildImage.Source = ImageSource.FromFile(tempImagePath);
                 }
