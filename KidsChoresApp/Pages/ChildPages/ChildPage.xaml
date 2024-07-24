@@ -93,36 +93,52 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <StackLayout Orientation="Horizontal" Spacing="10">
-                <Label Text="Lifetime Earnings" FontSize="20" FontAttributes="Bold" />
-                <Label Text="{Binding Child.LifetimeEarnings, StringFormat='€{0:F2}'}" FontSize="20" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Label Text="Lifetime Earnings" FontSize="18" FontAttributes="Bold" />
+                <Label Text="{Binding Child.LifetimeEarnings, StringFormat='€{0:F2}'}" FontSize="18" />
             </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Spacing="10">
-                <Label Text="Weekly Earnings" FontSize="20" FontAttributes="Bold" />
-                <Label Text="{Binding Child.WeeklyEarnings, StringFormat='€{0:F2}'}" FontSize="20" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Label Text="Weekly Earnings" FontSize="18" FontAttributes="Bold" />
+                <Label Text="{Binding Child.WeeklyEarnings, StringFormat='€{0:F2}'}" FontSize="18" />
             </StackLayout>
 
-            <ListView x:Name="ChoresListView" ItemsSource="{Binding Chores}">
+            <Line X1="180" Stroke="Black" StrokeThickness="1" ScaleX="1.75" TranslationX="120"  />
+
+            <!-- Chores List =========================================================================================================================================================-->
+            <ListView x:Name="ChoresListView" ItemsSource="{Binding Chores}" BackgroundColor="AliceBlue" RowHeight="120" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Chore">
                         <ViewCell>
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Image Source="{Binding Image}" HeightRequest="50" WidthRequest="50" />
-                                <Label Text="{Binding Name}" VerticalOptions="Center" />
-                                <Label Text="{Binding Worth, StringFormat='€{0:F2}'}" VerticalOptions="Center" />
-                                <CheckBox IsChecked="{Binding IsComplete}">
+                            <Grid Padding="10">
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Image Source="{Binding Image}" Grid.Column="0" HeightRequest="100" WidthRequest="100" Aspect="AspectFill" VerticalOptions="Center" />
+                                
+                                <StackLayout Grid.Column="1" Padding="10" VerticalOptions="Center" Spacing="10">
+                                    <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center" />
+                                    <Label Text="{Binding Worth, StringFormat='€{0:F2}'}" FontSize="18" VerticalOptions="Center" />
+                                </StackLayout>
+                                
+                                <CheckBox Grid.Column="2" IsChecked="{Binding IsComplete}">
                                     <CheckBox.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type childPages:ChildPage}}, Path=BindingContext.ChoreCheckedChangedCommand}"
-                                            CommandParameter="{Binding .}" />
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type childPages:ChildPage}}, Path=BindingContext.ChoreCheckedChangedCommand}"
+                                                CommandParameter="{Binding .}" />
                                     </CheckBox.GestureRecognizers>
-                                </CheckBox>         
-                            </StackLayout>
+                                </CheckBox>
+                                
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <!--======================================================================================================================================================================-->
 
         </StackLayout>
     </ScrollView>

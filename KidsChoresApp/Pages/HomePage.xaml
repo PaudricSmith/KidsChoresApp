@@ -74,12 +74,16 @@
             </StackLayout>
 
             <!-- Add and Delete Child Buttons -->
-            <StackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Spacing="10" Padding="10">
+            <StackLayout Grid.Row="3" Spacing="10" Padding="10">
                 <Button Text="Add Child" Clicked="OnAddChildClicked" />
             </StackLayout>
-
-            <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Spacing="10" Padding="10">
+            <StackLayout Grid.Row="4" Spacing="10" Padding="10">
                 <Button Text="Delete Child" Clicked="OnDeleteChildClicked" />
+            </StackLayout>
+
+            <!-- Add Chores Button -->
+            <StackLayout Grid.Row="5" Spacing="10" Padding="10">
+                <Button Text="Add Chores" Clicked="OnAddChoresClicked" />
             </StackLayout>
 
         </Grid>

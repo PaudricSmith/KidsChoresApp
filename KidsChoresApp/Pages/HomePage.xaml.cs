@@ -1,5 +1,6 @@
 using KidsChoresApp.Models;
 using KidsChoresApp.Pages.ChildPages;
+using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -85,6 +86,13 @@ namespace KidsChoresApp.Pages
             if (CurrentUser == null) return;
 
             await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
+        }
+
+        private async void OnAddChoresClicked(object sender, EventArgs e)
+        {
+            if (CurrentUser == null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={CurrentUser.Id}");
         }
 
         private async void OnDeleteChildClicked(object sender, EventArgs e)

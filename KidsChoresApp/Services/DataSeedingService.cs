@@ -88,7 +88,20 @@ namespace KidsChoresApp.Services
                     ChildId = child1a.Id,
                     Name = "Clean Room",
                     Description = "Clean your room thoroughly.",
-                    Image = "cleanroom.png",
+                    Image = "tidybedroom.png",
+                    Deadline = DateTime.Now.AddDays(2),
+                    Worth = 5.0m,
+                    Priority = 1,
+                    IsComplete = false
+                };
+
+
+                var chore1b = new Chore
+                {
+                    ChildId = child1a.Id,
+                    Name = "Clean bathroom",
+                    Description = "Clean the bathroom thoroughly.",
+                    Image = "cleanbathroom.png",
                     Deadline = DateTime.Now.AddDays(2),
                     Worth = 5.0m,
                     Priority = 1,
@@ -107,8 +120,22 @@ namespace KidsChoresApp.Services
                     IsComplete = false
                 };
 
+                var chore2b = new Chore
+                {
+                    ChildId = child2a.Id,
+                    Name = "Wash Dad's car",
+                    Description = "Wash Dad's car.",
+                    Image = "washcar.png",
+                    Deadline = DateTime.Now.AddDays(1),
+                    Worth = 3.0m,
+                    Priority = 2,
+                    IsComplete = false
+                };
+
                 await _database.InsertAsync(chore1a);
+                await _database.InsertAsync(chore1b);
                 await _database.InsertAsync(chore2a);
+                await _database.InsertAsync(chore2b);
 
 
                 hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes("Password2!"));
@@ -157,32 +184,32 @@ namespace KidsChoresApp.Services
                 await _database.InsertAsync(child1b);
                 await _database.InsertAsync(child2b);
 
-                var chore1b = new Chore
+                var chore1c = new Chore
                 {
                     ChildId = child1b.Id,
-                    Name = "Clean Room",
-                    Description = "Clean your room thoroughly.",
-                    Image = "cleanroom.png",
+                    Name = "Eat all dinner",
+                    Description = "Eat up all of your dinner.",
+                    Image = "eatallfood.png",
                     Deadline = DateTime.Now.AddDays(2),
                     Worth = 5.0m,
                     Priority = 1,
                     IsComplete = false
                 };
 
-                var chore2b = new Chore
+                var chore2d = new Chore
                 {
                     ChildId = child2b.Id,
-                    Name = "Wash Dishes",
-                    Description = "Wash all the dishes after dinner.",
-                    Image = "washdishes.png",
+                    Name = "Feed pets",
+                    Description = "Feed Max, Rover and Purrrfect the cat.",
+                    Image = "feedpets.png",
                     Deadline = DateTime.Now.AddDays(1),
                     Worth = 3.0m,
                     Priority = 2,
                     IsComplete = false
                 };
 
-                await _database.InsertAsync(chore1b);
-                await _database.InsertAsync(chore2b);
+                await _database.InsertAsync(chore1c);
+                await _database.InsertAsync(chore2d);
             }
         }
     }

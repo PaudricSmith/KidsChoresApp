@@ -48,6 +48,7 @@
     <!-- Images -->
     <MauiImage Include="Resources\Images\*" />
     <MauiImage Include="Resources\Images\Avatars\*.png" />
+    <MauiImage Include="Resources\Images\Chores\*.png" />
     <MauiImage Update="Resources\Images\mainicon.svg" Resize="True" BaseSize="300,185" />
 
     <!-- Custom Fonts -->
@@ -55,6 +56,10 @@
 
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\Chores\cleanwindows.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Pages\ChildPages\ChildPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Pages\ChorePages\AddChoresPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Pages\HomePage.xaml">

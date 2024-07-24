@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chorePages="clr-namespace:KidsChoresApp.Pages.ChorePages"
+             x:Class="KidsChoresApp.Pages.ChorePages.AddChoresPage"
+             x:DataType="chorePages:AddChoresPage"
+             Title="Add Chores">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+
+            <Frame 
+                CornerRadius="10" 
+                Padding="10" 
+                Margin="10"
+                HasShadow="True" 
+                BorderColor="CornflowerBlue">
+                <Image 
+                    x:Name="ChoreImage" 
+                    HeightRequest="150" 
+                    WidthRequest="150" />
+            </Frame>
+
+            <Button Text="Add Chore Image" Clicked="OnAddChoreImageClicked" />
+            
+            <!-- Image Selection Overlay -->
+            <ContentView x:Name="ImageSelectionOverlay" IsVisible="False" BackgroundColor="White" Opacity="0.9" Padding="20">
+                <StackLayout Spacing="10">
+                    <Label Text="Select an Image" FontSize="24" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" />
+                    <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ChoreImages}" SelectionMode="None">
+
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="3" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type x:String}">
+                                <Frame Padding="10" HasShadow="True" Margin="5" CornerRadius="10" BorderColor="Gray">
+                                    <Image Source="{Binding}" Aspect="AspectFill">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type chorePages:AddChoresPage}}, Path=SelectImageCommand}" CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="Close" Clicked="OnCloseImageSelectionClicked" />
+                </StackLayout>
+            </ContentView>
+                
+            <Entry x:Name="ChoreNameEntry" Placeholder="Chore Name" />
+            <Editor x:Name="ChoreDescriptionEditor" Placeholder="Chore Description" AutoSize="TextChanges" />
+
+            <Picker x:Name="ChildPicker" Title="Assign to Child" ItemsSource="{Binding Children}" ItemDisplayBinding="{Binding Name}" />
+
+            <Entry x:Name="ChoreWorthEntry" Placeholder="Chore Worth" Keyboard="Numeric" />
+            <DatePicker x:Name="DeadlinePicker" />
+
+            <Button Text="Save Chore" Clicked="OnSaveChoreClicked" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,5 +1,6 @@
 ﻿using KidsChoresApp.Pages;
 using KidsChoresApp.Pages.ChildPages;
+using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Services;
 using Microsoft.Extensions.Logging;
 using SQLite;
@@ -49,6 +50,7 @@ namespace KidsChoresApp
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<AddChildPage>();
             builder.Services.AddTransient<ChildPage>();
+            builder.Services.AddTransient<AddChoresPage>();
             builder.Services.AddSingleton<HomePage>();
 
 
