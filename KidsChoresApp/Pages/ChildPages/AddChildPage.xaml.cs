@@ -76,15 +76,41 @@ namespace KidsChoresApp.Pages.ChildPages
 
         private async void OnAddAvatarClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Choose from library", "Select from avatars");
+            string action = await DisplayActionSheet("Choose an Avatar", "Cancel", null, "Take a photo", "Choose from library", "Select from avatars");
             switch (action)
             {
+                case "Take a photo":
+                    await CapturePhotoAsync();
+                    break;
                 case "Choose from library":
                     await PickPhotoAsync();
                     break;
                 case "Select from avatars":
                     AvatarSelectionOverlay.IsVisible = true;
                     break;
+            }
+        }
+
+        private async Task CapturePhotoAsync()
+        {
+            try
+            {
+                var result = await MediaPicker.CapturePhotoAsync();
+                if (result != null)
+                {
+                    var stream = await result.OpenReadAsync();
+
+                    // Use a Guid for the image name
+                    var tempImagePath = await ImageHelper.SaveImageAsync(stream, Guid.NewGuid().ToString());
+
+                    // Set the selected image
+                    _selectedImage = tempImagePath;
+                    ChildImage.Source = ImageSource.FromFile(tempImagePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
         }
 
