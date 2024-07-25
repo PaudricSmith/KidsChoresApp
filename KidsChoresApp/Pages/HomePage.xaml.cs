@@ -11,8 +11,9 @@ namespace KidsChoresApp.Pages
     public partial class HomePage : ContentPage
     {
         private readonly UserService _userService;
-        private readonly ChildService _childService;
         private readonly ParentService _parentService;
+        private readonly ChildService _childService;
+        private readonly ChoreService _choreService;
 
         public User CurrentUser { get; set; }
         public Parent CurrentParent { get; set; }
@@ -21,13 +22,14 @@ namespace KidsChoresApp.Pages
         public ICommand OnChildTappedCommand { get; }
 
 
-        public HomePage(UserService userService, ChildService childService, ParentService parentService)
+        public HomePage(UserService userService, ParentService parentService, ChildService childService, ChoreService choreService)
         {
             InitializeComponent();
 
             _userService = userService;
-            _childService = childService;
             _parentService = parentService;
+            _childService = childService;
+            _choreService = choreService;
 
             OnChildTappedCommand = new Command<Child>(async (child) => await OnChildTapped(child));
 
@@ -102,6 +104,15 @@ namespace KidsChoresApp.Pages
                 var confirm = await DisplayAlert("Confirm", $"Are you sure you want to delete {selectedChild.Name}?", "Yes", "No");
                 if (confirm)
                 {
+                    // Fetch all chores associated with the child
+                    var chores = await _choreService.GetChoresByChildIdAsync(selectedChild.Id);
+
+                    // Delete each associated chore
+                    foreach (var chore in chores)
+                    {
+                        await _choreService.DeleteChoreAsync(chore);
+                    }
+
                     await _childService.DeleteChildAsync(selectedChild);
 
                     Children.Remove(selectedChild);
