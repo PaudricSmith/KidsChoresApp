@@ -6,9 +6,9 @@
              IsVisible="False">
     <VerticalStackLayout Padding="10" Spacing="10">
         <Label Text="Choose an Avatar" FontSize="24" HorizontalOptions="Center" />
-        <Button Text="Capture a photo" Clicked="OnCapturePhotoClicked" />
-        <Button Text="Choose from library" Clicked="OnChooseFromLibraryClicked" />
-        <Button Text="Select from avatars" Clicked="OnSelectFromAvatarsClicked" />
-        <Button Text="Cancel" TextColor="DarkOrange" Clicked="OnCancelClicked" />
+        <Button Text="Capture a photo" Clicked="OnCapturePhotoTapped" />
+        <Button Text="Choose from library" Clicked="OnChooseFromLibraryTapped" />
+        <Button Text="Select from avatars" Clicked="OnSelectFromAvatarsTapped" />
+        <Button Text="Cancel" TextColor="DarkOrange" Clicked="OnCancelTapped" />
     </VerticalStackLayout>
 </ContentView>

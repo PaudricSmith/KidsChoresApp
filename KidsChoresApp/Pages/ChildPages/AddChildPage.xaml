@@ -23,14 +23,14 @@
                         WidthRequest="150" />
                 </Frame>
 
-                <Button Text="Add an Avatar" Clicked="OnAddAvatarClicked" />
+                <Button Text="Add an Avatar" Clicked="OnAddAvatarTapped" />
 
                 <!-- Custom Avatar Action Sheet ==============================================-->
                 <views:CustomActionSheet x:Name="CustomActionSheet" 
-                                         CapturePhotoClicked="OnCapturePhotoClicked"
-                                         ChooseFromLibraryClicked="OnChooseFromLibraryClicked"
-                                         SelectFromAvatarsClicked="OnSelectFromAvatarsClicked"
-                                         CancelClicked="OnCancelClicked" />
+                                         CapturePhotoTapped="OnCapturePhotoTapped"
+                                         ChooseFromLibraryTapped="OnChooseFromLibraryTapped"
+                                         SelectFromAvatarsTapped="OnSelectFromAvatarsTapped"
+                                         CancelTapped="OnCancelTapped" />
                 <!--==========================================================================-->
 
                 <!-- Avatar Selection Overlay ========================================================================================================-->
@@ -58,7 +58,7 @@
                             </CollectionView.ItemTemplate>
                             
                         </CollectionView>
-                        <Button Text="Close" Clicked="OnCloseAvatarSelectionClicked" />
+                        <Button Text="Close" Clicked="OnCloseAvatarSelectionTapped" />
                     </StackLayout>
                 </ContentView>
                 <!--==================================================================================================================================-->
@@ -71,7 +71,7 @@
 
                 <Entry x:Name="VerifyPasscodeEntry" Placeholder="Verify 4 digit passcode" IsPassword="True" Keyboard="Numeric" MaxLength="4" FontSize="20" />
 
-                <Button Text="Add Child" Clicked="OnAddChildClicked" />
+                <Button Text="Add Child" Clicked="OnAddChildTapped" />
             </StackLayout>
         </ScrollView>
 

@@ -75,30 +75,30 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private void OnAddAvatarClicked(object sender, EventArgs e)
+        private void OnAddAvatarTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = true;
         }
 
-        private async void OnCapturePhotoClicked(object sender, EventArgs e)
+        private async void OnCapturePhotoTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = false;
             await CapturePhotoAsync();
         }
 
-        private async void OnChooseFromLibraryClicked(object sender, EventArgs e)
+        private async void OnChooseFromLibraryTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = false;
             await PickPhotoAsync();
         }
 
-        private void OnSelectFromAvatarsClicked(object sender, EventArgs e)
+        private void OnSelectFromAvatarsTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = false;
             AvatarSelectionOverlay.IsVisible = true;
         }
 
-        private void OnCancelClicked(object sender, EventArgs e)
+        private void OnCancelTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = false;
         }
@@ -146,12 +146,12 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private void OnCloseAvatarSelectionClicked(object sender, EventArgs e)
+        private void OnCloseAvatarSelectionTapped(object sender, EventArgs e)
         {
             AvatarSelectionOverlay.IsVisible = false;
         }
 
-        private async void OnAddChildClicked(object sender, EventArgs e)
+        private async void OnAddChildTapped(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(NameEntry.Text) ||
                 string.IsNullOrWhiteSpace(PasscodeEntry.Text) ||
@@ -175,9 +175,10 @@ namespace KidsChoresApp.Pages.ChildPages
                 Name = NameEntry.Text,
                 Image = _selectedImage,
                 Passcode = PasscodeEntry.Text,
-                Money = 20,
-                WeeklyEarnings = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0,
-                LifetimeEarnings = 20
+                Money = 0,
+                WeeklyAllowance = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0,
+                WeeklyEarnings = 0,
+                LifetimeEarnings = 0
             };
 
             await _childService.SaveChildAsync(child);

@@ -13,10 +13,11 @@ namespace KidsChoresApp.Pages.ChorePages
     {
         private readonly ChoreService _choreService;
         private readonly ChildService _childService;
-        private int _userId;
-        private ObservableCollection<Child> _children;
-        private ObservableCollection<string> _choreImages;
+        
+        private ObservableCollection<Child> _children = [];
+        private ObservableCollection<string> _choreImages = [];
         private string _selectedImage = "";
+        private int _userId;
 
         public ObservableCollection<Child> Children
         {
@@ -57,9 +58,6 @@ namespace KidsChoresApp.Pages.ChorePages
 
             _choreService = choreService;
             _childService = childService;
-
-            _children = [];
-            _choreImages = new ObservableCollection<string>();
 
             SelectImageCommand = new Command<string>(OnChoreImageSelected);
 
@@ -131,37 +129,90 @@ namespace KidsChoresApp.Pages.ChorePages
 
         private async void OnSaveChoreClicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ChoreNameEntry.Text) || ChildPicker.SelectedItem == null || string.IsNullOrWhiteSpace(ChoreWorthEntry.Text))
+            if (IsInputInvalid(out decimal worth))
             {
-                await DisplayAlert("Error", "Please fill all fields correctly.", "OK");
-                return;
-            }
-
-            if (!decimal.TryParse(ChoreWorthEntry.Text, out var worth))
-            {
-                await DisplayAlert("Error", "Invalid worth value.", "OK");
+                await DisplayAlert("Error", "Please fill all fields correctly with valid values.", "OK");
                 return;
             }
 
             var selectedChild = (Child)ChildPicker.SelectedItem;
 
-            var chore = new Chore
+            if (await IsExceedingAllowance(selectedChild, worth))
             {
-                Name = ChoreNameEntry.Text,
-                Description = ChoreDescriptionEditor.Text,
-                Worth = worth,
-                Deadline = DeadlinePicker.Date,
-                ChildId = selectedChild.Id,
-                AssignedTo = selectedChild.Name,
-                Image = _selectedImage
-            };
+                await DisplayAlert("Error", $"You have reached this child's weekly allowance limit of {selectedChild.WeeklyAllowance}. " +
+                    "Either reduce this chore's worth or increase the child's weekly allowance budget.", "OK");
+                return;
+            }
 
-            await _choreService.SaveChoreAsync(chore);
+            await AddChoresForSelectedDays(selectedChild, worth);
 
             await DisplayAlert("Success", "Chore added successfully.", "OK");
 
             await Shell.Current.GoToAsync("..");
         }
+
+        private bool IsInputInvalid(out decimal worth)
+        {
+            worth = 0;
+            return string.IsNullOrWhiteSpace(ChoreNameEntry.Text) ||
+                   ChildPicker.SelectedItem == null ||
+                   !decimal.TryParse(ChoreWorthEntry.Text, out worth) || worth < 0;
+        }
+
+        private async Task<bool> IsExceedingAllowance(Child selectedChild, decimal newChoreWorth)
+        {
+            var chores = await _choreService.GetChoresByChildIdAsync(selectedChild.Id);
+            var totalPotentialWeeklyEarnings = chores?.Sum(c => c.Worth) ?? 0m;
+            totalPotentialWeeklyEarnings += newChoreWorth;
+
+            return totalPotentialWeeklyEarnings > selectedChild.WeeklyAllowance;
+        }
+
+        private async Task AddChoresForSelectedDays(Child selectedChild, decimal worth)
+        {
+            foreach (var dayOfWeek in GetSelectedDaysOfWeek())
+            {
+                var chore = new Chore
+                {
+                    Name = ChoreNameEntry.Text,
+                    Description = ChoreDescriptionEditor.Text,
+                    Worth = worth,
+                    Deadline = DateTime.Now,
+                    ChildId = selectedChild.Id,
+                    AssignedTo = selectedChild.Name,
+                    Image = _selectedImage,
+                    DayOfWeek = dayOfWeek,
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    Priority = 0
+                };
+
+                await _choreService.SaveChoreAsync(chore);
+            }
+        }
+
+        private List<DayOfWeek> GetSelectedDaysOfWeek()
+        {
+            var selectedDays = new List<DayOfWeek>();
+
+            if (MondayCheckBox.IsChecked) 
+                selectedDays.Add(DayOfWeek.Monday);
+            if (TuesdayCheckBox.IsChecked)
+                selectedDays.Add(DayOfWeek.Tuesday);
+            if (WednesdayCheckBox.IsChecked)
+                selectedDays.Add(DayOfWeek.Wednesday);
+            if (ThursdayCheckBox.IsChecked) 
+                selectedDays.Add(DayOfWeek.Thursday);
+            if (FridayCheckBox.IsChecked) 
+                selectedDays.Add(DayOfWeek.Friday);
+            if (SaturdayCheckBox.IsChecked) 
+                selectedDays.Add(DayOfWeek.Saturday);
+            if (SundayCheckBox.IsChecked) 
+                selectedDays.Add(DayOfWeek.Sunday);
+
+            return selectedDays;
+        }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

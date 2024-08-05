@@ -3,7 +3,6 @@ using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 
 namespace KidsChoresApp.Pages
@@ -15,11 +14,11 @@ namespace KidsChoresApp.Pages
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
-        public User CurrentUser { get; set; }
-        public Parent CurrentParent { get; set; }
-        public ObservableCollection<Child> Children { get; set; } = [];
+        private bool _isNavigating;
 
-        public ICommand OnChildTappedCommand { get; }
+        public User? CurrentUser { get; set; }
+        public Parent? CurrentParent { get; set; }
+        public ObservableCollection<Child> Children { get; set; } = [];
 
 
         public HomePage(UserService userService, ParentService parentService, ChildService childService, ChoreService choreService)
@@ -30,8 +29,6 @@ namespace KidsChoresApp.Pages
             _parentService = parentService;
             _childService = childService;
             _choreService = choreService;
-
-            OnChildTappedCommand = new Command<Child>(async (child) => await OnChildTapped(child));
 
             BindingContext = this;
         }
@@ -57,15 +54,6 @@ namespace KidsChoresApp.Pages
             CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
         }
 
-
-        private async Task OnChildTapped(Child child)
-        {
-            if (child != null)
-            {
-                await Shell.Current.GoToAsync($"{nameof(ChildPage)}?childId={child.Id}");
-            }
-        }
-
         private async void OnViewChildDetailsClicked(object sender, EventArgs e)
         {
             if (ChildPicker.SelectedItem is Child selectedChild)
@@ -76,6 +64,7 @@ namespace KidsChoresApp.Pages
                     await DisplayAlert("Child Details",
                         $"Name: {child.Name}\n" +
                         $"Money: {child.Money}\n" +
+                        $"Weekly Allowance: {child.WeeklyAllowance}\n" +
                         $"Weekly Earnings: {child.WeeklyEarnings}\n" +
                         $"Lifetime Earnings: {child.LifetimeEarnings}",
                         "OK");
@@ -123,6 +112,26 @@ namespace KidsChoresApp.Pages
             else
             {
                 await DisplayAlert("Error", "Please select a child to delete.", "OK");
+            }
+        }
+
+        private async void OnChildFrameTapped(object sender, EventArgs e)
+        {
+            if (_isNavigating) return;
+            _isNavigating = true;
+
+            if (sender is Frame frame && frame.BindingContext is Child child)
+            {
+                var originalColor = frame.BackgroundColor;
+                frame.BackgroundColor = Colors.AliceBlue;
+
+                await Task.Delay(100);
+
+                frame.BackgroundColor = originalColor;
+
+                await Shell.Current.GoToAsync($"{nameof(ChildPage)}?childId={child.Id}");
+
+                _isNavigating = false;
             }
         }
     }

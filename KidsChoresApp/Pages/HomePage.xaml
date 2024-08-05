@@ -7,7 +7,7 @@
              x:DataType="pages:HomePage">
 
     <ScrollView>
-        <Grid Padding="10" RowSpacing="0">
+        <Grid Padding="10,10" RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -18,12 +18,12 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!-- Main Icon -->
-            <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" Margin="10" CornerRadius="10">
+            <Frame Grid.Row="0" Grid.ColumnSpan="2" Padding="0,0" Margin="10" CornerRadius="10" >
                 <Image Source="mainicon" 
                        HeightRequest="165"
                        Aspect="AspectFit" 
@@ -37,7 +37,7 @@
             </StackLayout>-->
 
             <!-- Children List -->
-            <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None">
+            <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
                 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
@@ -45,9 +45,9 @@
                 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Child">
-                        <Frame CornerRadius="10" Padding="10" Margin="10" HasShadow="True" BorderColor="CornflowerBlue" HeightRequest="200">
+                        <Frame x:Name="ChildFrame" CornerRadius="10" Padding="10" Margin="10" HasShadow="True" BorderColor="CornflowerBlue" HeightRequest="200">
                             <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pages:HomePage}}, Path=OnChildTappedCommand}" CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer Tapped="OnChildFrameTapped" />
                             </Frame.GestureRecognizers>
                             <StackLayout>
                                 <Image Source="{Binding Image}" HeightRequest="125" WidthRequest="125" Aspect="AspectFill"/>
@@ -64,25 +64,25 @@
             </CollectionView>
 
             <!-- Child Picker and Details -->
-            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10" Spacing="10">
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10" Spacing="10" HorizontalOptions="CenterAndExpand">
                 <Picker x:Name="ChildPicker"
                         Title="Select Child"
                         ItemsSource="{Binding Children}"
                         ItemDisplayBinding="{Binding Name}" />
 
-                <Button Text="View Child Details" Clicked="OnViewChildDetailsClicked" />
+                <Button Text="View Child Details" Clicked="OnViewChildDetailsClicked" HorizontalOptions="CenterAndExpand" />
             </StackLayout>
 
             <!-- Add and Delete Child Buttons -->
-            <StackLayout Grid.Row="3" Spacing="10" Padding="10">
+            <StackLayout Grid.Row="3" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
                 <Button Text="Add Child" Clicked="OnAddChildClicked" />
             </StackLayout>
-            <StackLayout Grid.Row="4" Spacing="10" Padding="10">
+            <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
                 <Button Text="Delete Child" Clicked="OnDeleteChildClicked" />
             </StackLayout>
 
             <!-- Add Chores Button -->
-            <StackLayout Grid.Row="5" Spacing="10" Padding="10">
+            <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
                 <Button Text="Add Chores" Clicked="OnAddChoresClicked" />
             </StackLayout>
 

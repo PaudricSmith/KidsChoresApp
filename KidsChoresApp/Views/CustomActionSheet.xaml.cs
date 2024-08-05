@@ -4,10 +4,10 @@ namespace KidsChoresApp.Views
 {
     public partial class CustomActionSheet : ContentView
     {
-        public event EventHandler CapturePhotoClicked;
-        public event EventHandler ChooseFromLibraryClicked;
-        public event EventHandler SelectFromAvatarsClicked;
-        public event EventHandler CancelClicked;
+        public event EventHandler? CapturePhotoTapped;
+        public event EventHandler? ChooseFromLibraryTapped;
+        public event EventHandler? SelectFromAvatarsTapped;
+        public event EventHandler? CancelTapped;
 
 
         public CustomActionSheet()
@@ -16,9 +16,9 @@ namespace KidsChoresApp.Views
         }
 
 
-        private void OnCapturePhotoClicked(object sender, EventArgs e) => CapturePhotoClicked?.Invoke(this, e);
-        private void OnChooseFromLibraryClicked(object sender, EventArgs e) => ChooseFromLibraryClicked?.Invoke(this, e);
-        private void OnSelectFromAvatarsClicked(object sender, EventArgs e) => SelectFromAvatarsClicked?.Invoke(this, e);
-        private void OnCancelClicked(object sender, EventArgs e) => CancelClicked?.Invoke(this, e);
+        private void OnCapturePhotoTapped(object sender, EventArgs e) => CapturePhotoTapped?.Invoke(this, e);
+        private void OnChooseFromLibraryTapped(object sender, EventArgs e) => ChooseFromLibraryTapped?.Invoke(this, e);
+        private void OnSelectFromAvatarsTapped(object sender, EventArgs e) => SelectFromAvatarsTapped?.Invoke(this, e);
+        private void OnCancelTapped(object sender, EventArgs e) => CancelTapped?.Invoke(this, e);
     }
 }

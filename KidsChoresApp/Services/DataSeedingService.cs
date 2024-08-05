@@ -64,9 +64,10 @@ namespace KidsChoresApp.Services
                     Name = "John Doe",
                     Image = "batboy",
                     Passcode = "1111",
-                    Money = 10.5m,
-                    WeeklyEarnings = 5.0m,
-                    LifetimeEarnings = 50.0m
+                    Money = 0m,
+                    WeeklyAllowance = 10m,
+                    WeeklyEarnings = 0m,
+                    LifetimeEarnings = 0m
                 };
 
                 var child2a = new Child
@@ -75,9 +76,10 @@ namespace KidsChoresApp.Services
                     Name = "Jane Doe",
                     Image = "batgirl",
                     Passcode = "1111",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m
+                    Money = 0m,
+                    WeeklyAllowance = 10m,
+                    WeeklyEarnings = 0m,
+                    LifetimeEarnings = 0m
                 };
 
                 await _database.InsertAsync(child1a);
@@ -90,9 +92,11 @@ namespace KidsChoresApp.Services
                     Description = "Clean your room thoroughly.",
                     Image = "tidybedroom.png",
                     Deadline = DateTime.Now.AddDays(2),
-                    Worth = 5.0m,
+                    Worth = 2.0m,
                     Priority = 1,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false, 
+                    DayOfWeek = DayOfWeek.Monday,
                 };
 
 
@@ -103,9 +107,12 @@ namespace KidsChoresApp.Services
                     Description = "Clean the bathroom thoroughly.",
                     Image = "cleanbathroom.png",
                     Deadline = DateTime.Now.AddDays(2),
-                    Worth = 5.0m,
+                    Worth = 2.0m,
                     Priority = 1,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    DayOfWeek = DayOfWeek.Tuesday,
+
                 };
 
                 var chore2a = new Chore
@@ -115,9 +122,11 @@ namespace KidsChoresApp.Services
                     Description = "Wash all the dishes after dinner.",
                     Image = "washdishes.png",
                     Deadline = DateTime.Now.AddDays(1),
-                    Worth = 3.0m,
+                    Worth = 2.0m,
                     Priority = 2,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    DayOfWeek = DayOfWeek.Wednesday,
                 };
 
                 var chore2b = new Chore
@@ -127,9 +136,11 @@ namespace KidsChoresApp.Services
                     Description = "Wash Dad's car.",
                     Image = "washcar.png",
                     Deadline = DateTime.Now.AddDays(1),
-                    Worth = 3.0m,
+                    Worth = 2.0m,
                     Priority = 2,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    DayOfWeek = DayOfWeek.Thursday,
                 };
 
                 await _database.InsertAsync(chore1a);
@@ -165,9 +176,10 @@ namespace KidsChoresApp.Services
                     Name = "John Doe",
                     Image = "superboy",
                     Passcode = "2222",
-                    Money = 10.5m,
-                    WeeklyEarnings = 5.0m,
-                    LifetimeEarnings = 50.0m
+                    Money = 0m,
+                    WeeklyAllowance = 10m,
+                    WeeklyEarnings = 0m,
+                    LifetimeEarnings = 0m
                 };
 
                 var child2b = new Child
@@ -176,9 +188,10 @@ namespace KidsChoresApp.Services
                     Name = "Jane Doe",
                     Image = "supergirl",
                     Passcode = "2222",
-                    Money = 15.75m,
-                    WeeklyEarnings = 7.0m,
-                    LifetimeEarnings = 70.0m
+                    Money = 0m,
+                    WeeklyAllowance = 10m,
+                    WeeklyEarnings = 0m,
+                    LifetimeEarnings = 0m
                 };
 
                 await _database.InsertAsync(child1b);
@@ -191,9 +204,11 @@ namespace KidsChoresApp.Services
                     Description = "Eat up all of your dinner.",
                     Image = "eatallfood.png",
                     Deadline = DateTime.Now.AddDays(2),
-                    Worth = 5.0m,
+                    Worth = 1.0m,
                     Priority = 1,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    DayOfWeek = DayOfWeek.Monday,
                 };
 
                 var chore2d = new Chore
@@ -203,9 +218,11 @@ namespace KidsChoresApp.Services
                     Description = "Feed Max, Rover and Purrrfect the cat.",
                     Image = "feedpets.png",
                     Deadline = DateTime.Now.AddDays(1),
-                    Worth = 3.0m,
+                    Worth = 1.0m,
                     Priority = 2,
-                    IsComplete = false
+                    IsComplete = false,
+                    IsDetailsVisible = false,
+                    DayOfWeek = DayOfWeek.Tuesday,
                 };
 
                 await _database.InsertAsync(chore1c);

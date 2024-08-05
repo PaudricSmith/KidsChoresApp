@@ -10,6 +10,7 @@ namespace KidsChoresApp.Models
         private string _passcode;
         private string _image;
         private decimal _money;
+        private decimal _weeklyAllowance;
         private decimal _weeklyEarnings;
         private decimal _lifetimeEarnings;
 
@@ -69,6 +70,19 @@ namespace KidsChoresApp.Models
                 if (_money != value)
                 {
                     _money = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public decimal WeeklyAllowance
+        {
+            get => _weeklyAllowance;
+            set
+            {
+                if (_weeklyAllowance != value)
+                {
+                    _weeklyAllowance = value;
                     OnPropertyChanged();
                 }
             }

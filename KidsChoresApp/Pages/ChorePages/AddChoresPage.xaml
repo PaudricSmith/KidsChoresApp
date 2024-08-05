@@ -56,7 +56,44 @@
             <Picker x:Name="ChildPicker" Title="Assign to Child" ItemsSource="{Binding Children}" ItemDisplayBinding="{Binding Name}" />
 
             <Entry x:Name="ChoreWorthEntry" Placeholder="Chore Worth" Keyboard="Numeric" />
-            <DatePicker x:Name="DeadlinePicker" />
+            
+            <!--<DatePicker x:Name="DeadlinePicker" />-->
+
+            <Label Text="Choose the days for this chore repeating" HorizontalOptions="Center" FontAttributes="Bold" />
+
+            <!-- Weekly Schedule -->
+            <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Padding="5" BackgroundColor="LightGray">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="0">
+                    <VerticalStackLayout>
+                        <Label Text="Mon" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="MondayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Tue" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="TuesdayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Wed" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="WednesdayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Thu" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="ThursdayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Fri" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="FridayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Sat" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="SaturdayCheckBox" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Sun" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+                        <CheckBox x:Name="SundayCheckBox" />
+                    </VerticalStackLayout>
+                </StackLayout>
+            </StackLayout>
 
             <Button Text="Save Chore" Clicked="OnSaveChoreClicked" />
         </StackLayout>
