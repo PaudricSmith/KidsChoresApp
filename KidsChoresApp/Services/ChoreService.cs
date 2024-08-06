@@ -42,5 +42,11 @@ namespace KidsChoresApp.Services
         {
             return await _database.DeleteAsync(chore);
         }
+
+        public async Task<int> DeleteChoresByChildIdAsync(int childId)
+        {
+            // Use raw SQL to delete multiple chores
+            return await _database.ExecuteAsync("DELETE FROM Chore WHERE ChildId = ?", childId);
+        }
     }
 }

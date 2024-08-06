@@ -106,7 +106,11 @@
 
             <!--<Line X1="180" Stroke="Black" StrokeThickness="1" ScaleX="1.75" TranslationX="120"  />-->
 
-            <Button Text="View Chores" Clicked="OnViewChoresTapped" Margin="10" />
+            <Button Text="View Details" Clicked="OnViewChildDetailsTapped" Margin="0,10,0,0" />
+
+            <Button Text="View Chores" Clicked="OnViewChoresTapped" Margin="0,10,0,0" />
+
+            <Button Text="Delete Child" Clicked="OnDeleteChildTapped" Margin="0,10,0,0" />
 
             <StackLayout x:Name="MoneySummary" IsVisible="False">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">

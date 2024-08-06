@@ -119,7 +119,7 @@ namespace KidsChoresApp.Services
                 {
                     ChildId = child2a.Id,
                     Name = "Wash Dishes",
-                    Description = "Wash all the dishes after dinner.",
+                    Description = "Wash all the dishes after dinner and put all the dishes away too.",
                     Image = "washdishes.png",
                     Deadline = DateTime.Now.AddDays(1),
                     Worth = 2.0m,

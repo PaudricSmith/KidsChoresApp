@@ -38,11 +38,11 @@
 
             <!-- Children List -->
             <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
-                
+
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
-                
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Child">
                         <Frame x:Name="ChildFrame" CornerRadius="10" Padding="10" Margin="10" HasShadow="True" BorderColor="CornflowerBlue" HeightRequest="200">
@@ -60,31 +60,14 @@
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                
+
             </CollectionView>
 
-            <!-- Child Picker and Details -->
-            <StackLayout Grid.Row="2" Grid.ColumnSpan="2" Padding="10" Spacing="10" HorizontalOptions="CenterAndExpand">
-                <Picker x:Name="ChildPicker"
-                        Title="Select Child"
-                        ItemsSource="{Binding Children}"
-                        ItemDisplayBinding="{Binding Name}" />
-
-                <Button Text="View Child Details" Clicked="OnViewChildDetailsClicked" HorizontalOptions="CenterAndExpand" />
-            </StackLayout>
-
-            <!-- Add and Delete Child Buttons -->
-            <StackLayout Grid.Row="3" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="Add Child" Clicked="OnAddChildClicked" />
-            </StackLayout>
-            <StackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="Delete Child" Clicked="OnDeleteChildClicked" />
-            </StackLayout>
-
-            <!-- Add Chores Button -->
-            <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="Add Chores" Clicked="OnAddChoresClicked" />
-            </StackLayout>
+            <!-- Buttons -->
+            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
+                <Button Text="Add Child" Clicked="OnAddChildClicked" WidthRequest="150" />
+                <Button Text="Add Chores" Clicked="OnAddChoresClicked" WidthRequest="150" />
+            </HorizontalStackLayout>
 
         </Grid>
     </ScrollView>

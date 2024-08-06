@@ -1,8 +1,6 @@
 using KidsChoresApp.Models;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 
@@ -94,7 +92,7 @@ namespace KidsChoresApp.Pages.ChildPages
         {
             if (Child != null)
             {
-                var chores = await _choreService.GetChoresByChildIdAsync(Child.Id);
+                var chores = await _choreService.GetChoresByChildIdAsync(ChildId);
 
                 Chores.Clear();
                 foreach (var chore in chores)
@@ -138,38 +136,17 @@ namespace KidsChoresApp.Pages.ChildPages
             SelectedDate = today;
         }
 
-        private void FilterChoresByDate()
+        private async void OnViewChildDetailsTapped(object sender, EventArgs e)
         {
-            FilteredChores.Clear();
-
-            var dayOfWeek = SelectedDate.DayOfWeek;
-            foreach (var chore in Chores)
+            if (Child != null)
             {
-                if (chore.DayOfWeek == dayOfWeek)
-                {
-                    FilteredChores.Add(chore);
-                }
-            }
-        }
-
-        private void UpdateChoresForText()
-        {
-            var today = DateTime.Today;
-            if (SelectedDate.Date == today)
-            {
-                ChoresForText = "Chores for Today";
-            }
-            else if (SelectedDate.Date == today.AddDays(1))
-            {
-                ChoresForText = "Chores for Tomorrow";
-            }
-            else if (SelectedDate.Date == today.AddDays(-1))
-            {
-                ChoresForText = "Chores for Yesterday";
-            }
-            else
-            {
-                ChoresForText = $"Chores for {SelectedDate:dddd}";
+                await DisplayAlert("Child Details",
+                    $"Name: {Child.Name}\n" +
+                    $"Weekly Allowance: {Child.WeeklyAllowance}\n" +
+                    $"Lifetime Earnings: {Child.LifetimeEarnings}\n" +
+                    $"Weekly Earnings: {Child.WeeklyEarnings}\n" +
+                    $"Passcode: {Child.Passcode}\n",
+                    "OK");
             }
         }
 
@@ -204,6 +181,41 @@ namespace KidsChoresApp.Pages.ChildPages
 
                 FilterChoresByDate();
                 UpdateChoresForText();
+            }
+        }
+
+        private void FilterChoresByDate()
+        {
+            FilteredChores.Clear();
+
+            var dayOfWeek = SelectedDate.DayOfWeek;
+            foreach (var chore in Chores)
+            {
+                if (chore.DayOfWeek == dayOfWeek)
+                {
+                    FilteredChores.Add(chore);
+                }
+            }
+        }
+
+        private void UpdateChoresForText()
+        {
+            var today = DateTime.Today;
+            if (SelectedDate.Date == today)
+            {
+                ChoresForText = "Chores for Today";
+            }
+            else if (SelectedDate.Date == today.AddDays(1))
+            {
+                ChoresForText = "Chores for Tomorrow";
+            }
+            else if (SelectedDate.Date == today.AddDays(-1))
+            {
+                ChoresForText = "Chores for Yesterday";
+            }
+            else
+            {
+                ChoresForText = $"Chores for {SelectedDate:dddd}";
             }
         }
 
@@ -287,17 +299,16 @@ namespace KidsChoresApp.Pages.ChildPages
                 bool isConfirmed = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this chore?", "Yes", "No");
                 if (isConfirmed)
                 {
-                    Chores.Remove(chore);
-                    FilteredChores.Remove(chore);
-                    await _choreService.DeleteChoreAsync(chore);
-
                     if (chore.IsComplete)
                     {
                         Child.LifetimeEarnings -= chore.Worth;
                         Child.WeeklyEarnings -= chore.Worth;
+                        await _childService.SaveChildAsync(Child);
                     }
-                   
-                    await _childService.SaveChildAsync(Child);
+
+                    Chores.Remove(chore);
+                    FilteredChores.Remove(chore);
+                    await _choreService.DeleteChoreAsync(chore);
                 }
             }
         }
@@ -366,6 +377,27 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
+        private async void OnDeleteChildTapped(object sender, EventArgs e)
+        {
+            if (Child != null)
+            {
+                var confirm = await DisplayAlert("Confirm", $"Are you sure you want to delete {Child.Name}?", "Yes", "No");
+                if (confirm)
+                {
+                    await _choreService.DeleteChoresByChildIdAsync(ChildId);
+                    await _childService.DeleteChildAsync(Child);
+
+                    await DisplayAlert("Success", "Child deleted successfully.", "OK");
+
+                    // Navigate back to the homepage
+                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Error", "Please select a child to delete.", "OK");
+            }
+        }
 
         private void OnCloseAvatarSelectionTapped(object sender, EventArgs e)
         {
@@ -382,9 +414,7 @@ namespace KidsChoresApp.Pages.ChildPages
         private async void OnNameEntryCompleted(object sender, EventArgs e)
         {
             if (Child != null)
-            {
                 await _childService.SaveChildAsync(Child);
-            }
 
             NameLabel.IsVisible = true;
             NameEntry.IsVisible = false;
