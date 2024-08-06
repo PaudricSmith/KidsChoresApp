@@ -1,6 +1,7 @@
 using KidsChoresApp.Models;
 using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Pages.ChorePages;
+using KidsChoresApp.Pages.FeedbackPages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 
@@ -54,20 +55,33 @@ namespace KidsChoresApp.Pages
             CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
         }
 
-        private async void OnAddChildClicked(object sender, EventArgs e)
+        private async void OnAddChildButtonTapped(object sender, EventArgs e)
         {
             if (CurrentUser == null) return;
 
             await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
         }
 
-        private async void OnAddChoresClicked(object sender, EventArgs e)
+        private async void OnAddChoresButtonTapped(object sender, EventArgs e)
         {
             if (CurrentUser == null) return;
 
             await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={CurrentUser.Id}");
         }
 
+        private async void OnSettingsButtonTapped(object sender, EventArgs e)
+        {
+            if (CurrentUser == null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}");
+        }
+
+        private async void OnFeedbackButtonTapped(object sender, EventArgs e)
+        {
+            if (CurrentUser == null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(FeedbackPage)}");
+        }
         private async void OnChildFrameTapped(object sender, EventArgs e)
         {
             if (_isNavigating) return;

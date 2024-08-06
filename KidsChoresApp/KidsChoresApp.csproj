@@ -80,6 +80,9 @@
     <MauiXaml Update="Pages\ChorePages\AddChoresPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Pages\FeedbackPages\FeedbackPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Pages\HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

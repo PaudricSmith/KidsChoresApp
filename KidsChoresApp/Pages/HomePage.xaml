@@ -30,12 +30,6 @@
                        BackgroundColor="CornflowerBlue" />
             </Frame>
 
-            <!-- Display User Details -->
-            <!--<StackLayout Grid.Row="1" Grid.ColumnSpan="2" Padding="10">
-                <Label Text="{Binding CurrentUser.Email}" FontAttributes="Bold" FontSize="Large" />
-                <Label Text="{Binding CurrentParent.Passcode}" FontAttributes="Italic" />
-            </StackLayout>-->
-
             <!-- Children List -->
             <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
 
@@ -64,9 +58,11 @@
             </CollectionView>
 
             <!-- Buttons -->
-            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="2" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="Add Child" Clicked="OnAddChildClicked" WidthRequest="150" />
-                <Button Text="Add Chores" Clicked="OnAddChoresClicked" WidthRequest="150" />
+            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
+                <Button Text="+Child" Clicked="OnAddChildButtonTapped" WidthRequest="70" HeightRequest="70" />
+                <Button Text="+Chore" Clicked="OnAddChoresButtonTapped" WidthRequest="70" HeightRequest="70" />
+                <Button Text="Settings" Clicked="OnSettingsButtonTapped" WidthRequest="70" HeightRequest="70" />
+                <Button Text="Feedback" Clicked="OnFeedbackButtonTapped" WidthRequest="70" HeightRequest="70" />
             </HorizontalStackLayout>
 
         </Grid>

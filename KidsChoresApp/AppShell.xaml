@@ -18,12 +18,18 @@
         ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="LoginPage" />
 
-    <TabBar FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
+    <ShellContent 
+        ContentTemplate="{DataTemplate pages:HomePage}"
+        Route="HomePage"  />
+
+    <!--<ShellContent Icon="Gear" ContentTemplate="{DataTemplate pages:SettingsPage}" />-->
+
+    <!--<TabBar FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
         <Tab  Route="HomePage" Title="Home">
             <ShellContent Icon="Home" ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
         <Tab Route="SettingsPage" Title="Settings">
             <ShellContent Icon="Gear" ContentTemplate="{DataTemplate pages:SettingsPage}" />
         </Tab>
-    </TabBar>
+    </TabBar>-->
 </Shell>
