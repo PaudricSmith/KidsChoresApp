@@ -21,7 +21,7 @@ namespace KidsChoresApp.Services
             return await _database.Table<User>().ToListAsync();
         }
 
-        public async Task<User> GetUserAsync(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             return await _database.Table<User>().Where(u => u.Id == id).FirstOrDefaultAsync();
         }
@@ -41,6 +41,23 @@ namespace KidsChoresApp.Services
         public async Task<int> DeleteUserAsync(User user)
         {
             return await _database.DeleteAsync(user);
+        }
+
+
+        public async Task<string> GetUserPreferredCurrency(int userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            return user?.PreferredCurrency ?? "EUR"; // Return default currency if user not found
+        }
+
+        public async Task SetUserPreferredCurrency(int userId, string currency)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user != null)
+            {
+                user.PreferredCurrency = currency;
+                await SaveUserAsync(user);
+            }
         }
     }
 }

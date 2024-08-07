@@ -15,11 +15,21 @@ namespace KidsChoresApp.Pages
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
+        private User? _currentUser;
         private bool _isNavigating;
 
-        public User? CurrentUser { get; set; }
         public Parent? CurrentParent { get; set; }
         public ObservableCollection<Child> Children { get; set; } = [];
+
+        public User? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public HomePage(UserService userService, ParentService parentService, ChildService childService, ChoreService choreService)
@@ -43,7 +53,7 @@ namespace KidsChoresApp.Pages
 
         private async Task LoadData()
         {
-            CurrentUser = await _userService.GetUserAsync(1);
+            CurrentUser = await _userService.GetUserByIdAsync(1);
 
             Children.Clear();
             var children = await _childService.GetChildrenByUserIdAsync(CurrentUser.Id);
@@ -73,7 +83,7 @@ namespace KidsChoresApp.Pages
         {
             if (CurrentUser == null) return;
 
-            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}");
+            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}?userId={CurrentUser.Id}");
         }
 
         private async void OnFeedbackButtonTapped(object sender, EventArgs e)

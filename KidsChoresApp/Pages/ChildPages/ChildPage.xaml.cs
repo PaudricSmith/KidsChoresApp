@@ -9,9 +9,11 @@ namespace KidsChoresApp.Pages.ChildPages
     [QueryProperty(nameof(ChildId), "childId")]
     public partial class ChildPage : ContentPage
     {
+        private readonly UserService _userService;
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
+        private User? _currentUser;
         private Child? _child;
         private DateTime _selectedDate;
         private Frame _previouslySelectedFrame;
@@ -23,7 +25,15 @@ namespace KidsChoresApp.Pages.ChildPages
         public ObservableCollection<Chore> FilteredChores { get; set; } = new ObservableCollection<Chore>();
         public ObservableCollection<DateTime> WeekDates { get; set; } = new ObservableCollection<DateTime>();
 
-
+        public User? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged();
+            }
+        }
         public Child? Child
         {
             get => _child;
@@ -62,10 +72,11 @@ namespace KidsChoresApp.Pages.ChildPages
         public ICommand? SelectAvatarCommand { private set; get; }
 
 
-        public ChildPage(ChildService childService, ChoreService choreService)
+        public ChildPage(UserService userService, ChildService childService, ChoreService choreService)
         {
             InitializeComponent();
 
+            _userService = userService;
             _childService = childService;
             _choreService = choreService;
 
@@ -79,11 +90,11 @@ namespace KidsChoresApp.Pages.ChildPages
 
         private async void ChildPage_Loaded(object? sender, EventArgs e)
         {
-            await LoadChildData();
+            await LoadData();
             GenerateWeekDates();
         }
 
-        private async Task LoadChildData()
+        private async Task LoadData()
         {
             Child = await _childService.GetChildAsync(ChildId);
         }
@@ -154,6 +165,8 @@ namespace KidsChoresApp.Pages.ChildPages
         {
             if (Chores.Count == 0)
                 await LoadChores();
+
+            CurrentUser = await _userService.GetUserByIdAsync(Child.UserId);
 
             MoneySummary.IsVisible = !MoneySummary.IsVisible;
             WeekDaysCollectionView.IsVisible = !WeekDaysCollectionView.IsVisible;

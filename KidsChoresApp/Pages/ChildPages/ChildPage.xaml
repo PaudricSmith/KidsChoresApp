@@ -5,16 +5,9 @@
              xmlns:models="clr-namespace:KidsChoresApp.Models"
              xmlns:views="clr-namespace:KidsChoresApp.Views"
              xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
-             xmlns:converters="clr-namespace:KidsChoresApp.Converters"
              x:DataType="childPages:ChildPage"
              Title="{Binding Child.Name}">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:DateConverter x:Key="DateConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    
     <ScrollView>
         <StackLayout Padding="10" Spacing="5">
 
@@ -115,15 +108,36 @@
             <StackLayout x:Name="MoneySummary" IsVisible="False">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
                     <Label Text="Weekly Allowance" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="{Binding Child.WeeklyAllowance, StringFormat='€{0:F2}'}" FontSize="18" />
+                    <Label FontSize="18" FontAttributes="Bold">
+                        <Label.Text>
+                            <MultiBinding Converter="{StaticResource CurrencyConverter}">
+                                <Binding Path="Child.WeeklyAllowance" />
+                                <Binding Path="CurrentUser.PreferredCurrency" Source="{RelativeSource AncestorType={x:Type childPages:ChildPage}}" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
                     <Label Text="Lifetime Earnings" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="{Binding Child.LifetimeEarnings, StringFormat='€{0:F2}'}" FontSize="18" />
+                    <Label FontSize="18" FontAttributes="Bold">
+                        <Label.Text>
+                            <MultiBinding Converter="{StaticResource CurrencyConverter}">
+                                <Binding Path="Child.LifetimeEarnings" />
+                                <Binding Path="CurrentUser.PreferredCurrency" Source="{RelativeSource AncestorType={x:Type childPages:ChildPage}}" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
                     <Label Text="Weekly Earnings" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="{Binding Child.WeeklyEarnings, StringFormat='€{0:F2}'}" FontSize="18" />
+                    <Label FontSize="18" FontAttributes="Bold">
+                        <Label.Text>
+                            <MultiBinding Converter="{StaticResource CurrencyConverter}">
+                                <Binding Path="Child.WeeklyEarnings" />
+                                <Binding Path="CurrentUser.PreferredCurrency" Source="{RelativeSource AncestorType={x:Type childPages:ChildPage}}" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
                 </StackLayout>
             </StackLayout>
 
@@ -197,7 +211,14 @@
                                     <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextTransform="Uppercase" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" />
                                     <HorizontalStackLayout>
                                         <Label Text="Worth: " FontSize="16" HorizontalOptions="Start" VerticalOptions="Center" />
-                                        <Label Text="{Binding Worth, StringFormat='€{0:F2}'}" FontSize="18" HorizontalOptions="Start" VerticalOptions="Center" />
+                                        <Label FontSize="16">
+                                            <Label.Text>
+                                                <MultiBinding Converter="{StaticResource CurrencyConverter}">
+                                                    <Binding Path="Worth" />
+                                                    <Binding Path="CurrentUser.PreferredCurrency" Source="{RelativeSource AncestorType={x:Type childPages:ChildPage}}" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
                                     </HorizontalStackLayout>
 
                                 </StackLayout>

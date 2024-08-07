@@ -24,8 +24,10 @@
                 <Setter Property="WidthRequest" Value="300" />
                 <Setter Property="CornerRadius" Value="15" />
             </Style>
-            
+
+            <converters:CurrencyConverter x:Key="CurrencyConverter" />
             <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
+            <converters:DateConverter x:Key="DateConverter"/>
             
         </ResourceDictionary>
     </Application.Resources>
