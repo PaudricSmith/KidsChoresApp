@@ -15,10 +15,12 @@ namespace KidsChoresApp.Services
 
             return authState;
         }
+
         public void Login()
         {
             Preferences.Default.Set<bool>(AuthStateKey, true);
         }
+
         public void Logout()
         {
             Preferences.Default.Remove(AuthStateKey);

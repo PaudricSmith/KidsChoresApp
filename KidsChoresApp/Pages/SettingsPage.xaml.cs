@@ -1,5 +1,6 @@
 
 
+using KidsChoresApp.Models;
 using KidsChoresApp.Services;
 
 namespace KidsChoresApp.Pages
@@ -9,6 +10,8 @@ namespace KidsChoresApp.Pages
     {
         private readonly AuthService _authService;
         private readonly UserService _userService;
+        private readonly ParentService _parentService;
+        private Parent? _parent;
         private int _userId;
 
         public int UserId
@@ -20,12 +23,13 @@ namespace KidsChoresApp.Pages
             }
         }
 
-        public SettingsPage(AuthService authService, UserService userService)
+        public SettingsPage(AuthService authService, UserService userService, ParentService parentService)
         {
             InitializeComponent();
 
             _authService = authService;
             _userService = userService;
+            _parentService = parentService;
 
             BindingContext = this;
         }
@@ -34,6 +38,8 @@ namespace KidsChoresApp.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            _parent = await _parentService.GetParentByUserIdAsync(UserId);
 
             CurrencyPicker.SelectedItem = await _userService.GetUserPreferredCurrency(UserId);
         }
@@ -50,12 +56,41 @@ namespace KidsChoresApp.Pages
         {
             _authService.Logout();
 
-            Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
 
         private async void OnChangePasscodeClicked(object sender, EventArgs e)
         {
-            
+            // Ask for old passcode
+            string oldPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your old Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+            if (oldPasscode == _parent?.Passcode)
+            {
+                // Ask for new passcode
+                string newPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your new Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+                if (!string.IsNullOrEmpty(newPasscode))
+                {
+                    // Confirm new passcode
+                    string confirmPasscode = await DisplayPromptAsync("Change Parental Passcode", "Confirm your new Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+                    if (newPasscode == confirmPasscode)
+                    {
+                        _parent.Passcode = newPasscode;
+                        await _parentService.SaveParentAsync(_parent);
+                        await DisplayAlert("Success", "Parental Passcode changed successfully.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "New passcodes do not match.", "OK");
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Error", "New passcode cannot be empty.", "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Error", "Incorrect old passcode.", "OK");
+            }
         }
     }
 }
