@@ -63,14 +63,20 @@ namespace KidsChoresApp.Pages
         {
             // Ask for old passcode
             string oldPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your old Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+            if (oldPasscode == null) return;
+
             if (oldPasscode == _parent?.Passcode)
             {
                 // Ask for new passcode
                 string newPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your new Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+                if (newPasscode == null) return;
+
                 if (!string.IsNullOrEmpty(newPasscode))
                 {
                     // Confirm new passcode
                     string confirmPasscode = await DisplayPromptAsync("Change Parental Passcode", "Confirm your new Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
+                    if (confirmPasscode == null) return;
+
                     if (newPasscode == confirmPasscode)
                     {
                         _parent.Passcode = newPasscode;
