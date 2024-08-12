@@ -175,10 +175,10 @@ namespace KidsChoresApp.Pages.ChildPages
                 Name = NameEntry.Text,
                 Image = _selectedImage,
                 Passcode = PasscodeEntry.Text,
-                Money = 0,
-                WeeklyAllowance = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0,
-                WeeklyEarnings = 0,
-                LifetimeEarnings = 0
+                Money = 0m,
+                WeeklyAllowance = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0m,
+                WeeklyEarnings = 0m,
+                LifetimeEarnings = 0m
             };
 
             await _childService.SaveChildAsync(child);

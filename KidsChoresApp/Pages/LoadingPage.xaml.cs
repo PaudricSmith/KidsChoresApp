@@ -22,11 +22,11 @@ namespace KidsChoresApp.Pages
 
             if (await _authService.IsAuthenticatedAsync())
             {
-                await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
             }
             else
             {
-                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+                await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
             }
         }
     }

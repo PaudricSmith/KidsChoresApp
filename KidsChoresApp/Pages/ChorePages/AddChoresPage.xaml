@@ -50,7 +50,7 @@
                 </StackLayout>
             </ContentView>
                 
-            <Entry x:Name="ChoreNameEntry" Placeholder="Chore Name" />
+            <Entry x:Name="ChoreNameEntry" Placeholder="Chore Name" MaxLength="18"/>
             <Editor x:Name="ChoreDescriptionEditor" Placeholder="Chore Description" AutoSize="TextChanges" />
 
             <Picker x:Name="ChildPicker" Title="Assign to Child" ItemsSource="{Binding Children}" ItemDisplayBinding="{Binding Name}" />

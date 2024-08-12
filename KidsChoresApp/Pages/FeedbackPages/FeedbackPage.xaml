@@ -22,7 +22,7 @@
             Clicked="OnLoveAppClicked"/>
         
         <Button 
-            Text="I don't like the App!" 
+            Text="I have some ideas!" 
             Clicked="OnDislikeAppClicked"/>
         
     </StackLayout>

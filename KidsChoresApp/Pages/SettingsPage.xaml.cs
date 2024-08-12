@@ -56,7 +56,7 @@ namespace KidsChoresApp.Pages
         {
             _authService.Logout();
 
-            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
         }
 
         private async void OnChangePasscodeClicked(object sender, EventArgs e)

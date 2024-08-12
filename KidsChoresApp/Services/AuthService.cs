@@ -9,7 +9,7 @@ namespace KidsChoresApp.Services
 
         public async Task<bool> IsAuthenticatedAsync()
         {
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             var authState = Preferences.Default.Get<bool>(AuthStateKey, false);
 

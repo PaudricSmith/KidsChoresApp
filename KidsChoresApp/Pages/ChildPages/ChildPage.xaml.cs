@@ -1,4 +1,5 @@
 using KidsChoresApp.Models;
+using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -9,31 +10,14 @@ namespace KidsChoresApp.Pages.ChildPages
     [QueryProperty(nameof(ChildId), "childId")]
     public partial class ChildPage : ContentPage
     {
-        private readonly UserService _userService;
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
-        private User? _currentUser;
         private Child? _child;
-        private DateTime _selectedDate;
-        private Frame _previouslySelectedFrame;
-        private string _choresForText;
         private int _childId;
 
         public ObservableCollection<string> Avatars { get; set; } = new ObservableCollection<string>();
-        public ObservableCollection<Chore> Chores { get; set; } = new ObservableCollection<Chore>();
-        public ObservableCollection<Chore> FilteredChores { get; set; } = new ObservableCollection<Chore>();
-        public ObservableCollection<DateTime> WeekDates { get; set; } = new ObservableCollection<DateTime>();
 
-        public User? CurrentUser
-        {
-            get => _currentUser;
-            set
-            {
-                _currentUser = value;
-                OnPropertyChanged();
-            }
-        }
         public Child? Child
         {
             get => _child;
@@ -49,22 +33,6 @@ namespace KidsChoresApp.Pages.ChildPages
             set
             {
                 _childId = value;
-            }
-        }
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-            }
-        }
-        public string ChoresForText
-        {
-            get => _choresForText;
-            set
-            {
-                _choresForText = value;
                 OnPropertyChanged();
             }
         }
@@ -72,11 +40,10 @@ namespace KidsChoresApp.Pages.ChildPages
         public ICommand? SelectAvatarCommand { private set; get; }
 
 
-        public ChildPage(UserService userService, ChildService childService, ChoreService choreService)
+        public ChildPage(ChildService childService, ChoreService choreService)
         {
             InitializeComponent();
 
-            _userService = userService;
             _childService = childService;
             _choreService = choreService;
 
@@ -91,26 +58,11 @@ namespace KidsChoresApp.Pages.ChildPages
         private async void ChildPage_Loaded(object? sender, EventArgs e)
         {
             await LoadData();
-            GenerateWeekDates();
         }
 
         private async Task LoadData()
         {
-            Child = await _childService.GetChildAsync(ChildId);
-        }
-
-        private async Task LoadChores()
-        {
-            if (Child != null)
-            {
-                var chores = await _choreService.GetChoresByChildIdAsync(ChildId);
-
-                Chores.Clear();
-                foreach (var chore in chores)
-                {
-                    Chores.Add(chore);
-                }
-            }
+            Child = await _childService.GetChildByIdAsync(ChildId);
         }
 
         private void LoadAvatars()
@@ -128,29 +80,12 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private void GenerateWeekDates()
-        {
-            var today = DateTime.Today;
-
-            // Adjust the day value to treat Monday as 0 and Sunday as 6
-            int dayValue = today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 1;
-
-            // Calculate the start of the week
-            var startOfWeek = today.AddDays(-dayValue);
-
-            WeekDates.Clear();
-            for (int i = 0; i < 7; i++)
-            {
-                WeekDates.Add(startOfWeek.AddDays(i));
-            }
-
-            SelectedDate = today;
-        }
-
         private async void OnViewChildDetailsTapped(object sender, EventArgs e)
         {
             if (Child != null)
             {
+                OnPropertyChanged(nameof(Child));
+
                 await DisplayAlert("Child Details",
                     $"Name: {Child.Name}\n" +
                     $"Weekly Allowance: {Child.WeeklyAllowance}\n" +
@@ -163,73 +98,8 @@ namespace KidsChoresApp.Pages.ChildPages
 
         private async void OnViewChoresTapped(object sender, EventArgs e)
         {
-            if (Chores.Count == 0)
-                await LoadChores();
-
-            CurrentUser = await _userService.GetUserByIdAsync(Child.UserId);
-
-            MoneySummary.IsVisible = !MoneySummary.IsVisible;
-            WeekDaysCollectionView.IsVisible = !WeekDaysCollectionView.IsVisible;
-            ChoresForTextLabel.IsVisible = !ChoresForTextLabel.IsVisible;
-            ChoresCollectionView.IsVisible = !ChoresCollectionView.IsVisible;
-        }
-
-        private async void OnDaySelectionTapped(object sender, TappedEventArgs e)
-        {
-            if (sender is Frame frame && frame.BindingContext is DateTime date)
-            {
-                if (Chores.Count == 0)
-                    await LoadChores();
-
-                if (_previouslySelectedFrame != null)
-                    _previouslySelectedFrame.BackgroundColor = Colors.CornflowerBlue;
-
-                SelectedDate = date;
-                frame.BackgroundColor = Colors.DarkSlateBlue;
-                _previouslySelectedFrame = frame;
-
-                // Scroll to the selected day
-                var itemIndex = WeekDates.IndexOf(date);
-                WeekDaysCollectionView.ScrollTo(itemIndex, position: ScrollToPosition.Center, animate: true);
-
-                FilterChoresByDate();
-                UpdateChoresForText();
-            }
-        }
-
-        private void FilterChoresByDate()
-        {
-            FilteredChores.Clear();
-
-            var dayOfWeek = SelectedDate.DayOfWeek;
-            foreach (var chore in Chores)
-            {
-                if (chore.DayOfWeek == dayOfWeek)
-                {
-                    FilteredChores.Add(chore);
-                }
-            }
-        }
-
-        private void UpdateChoresForText()
-        {
-            var today = DateTime.Today;
-            if (SelectedDate.Date == today)
-            {
-                ChoresForText = "Chores for Today";
-            }
-            else if (SelectedDate.Date == today.AddDays(1))
-            {
-                ChoresForText = "Chores for Tomorrow";
-            }
-            else if (SelectedDate.Date == today.AddDays(-1))
-            {
-                ChoresForText = "Chores for Yesterday";
-            }
-            else
-            {
-                ChoresForText = $"Chores for {SelectedDate:dddd}";
-            }
+            if (Child != null)
+                await Shell.Current.GoToAsync($"{nameof(ChoresPage)}?childId={ChildId}");
         }
 
         private async Task OnAvatarSelected(string selectedAvatar)
@@ -273,57 +143,6 @@ namespace KidsChoresApp.Pages.ChildPages
         private void OnCancelTapped(object sender, EventArgs e)
         {
             CustomActionSheet.IsVisible = false;
-        }
-
-        private async void OnChoreCompleteButtonTapped(object sender, EventArgs e)
-        {
-            if (sender is Button button && button.CommandParameter is Chore chore)
-            {
-                chore.IsComplete = !chore.IsComplete;
-
-                if (chore.IsComplete)
-                {
-                    Child.LifetimeEarnings += chore.Worth;
-                    Child.WeeklyEarnings += chore.Worth;
-                }
-                else
-                {
-                    Child.LifetimeEarnings -= chore.Worth;
-                    Child.WeeklyEarnings -= chore.Worth;
-                }
-
-                await _choreService.SaveChoreAsync(chore);
-                await _childService.SaveChildAsync(Child);
-            }
-        }
-
-        private void OnExpandButtonTapped(object sender, EventArgs e)
-        {
-            if (sender is Button button && button.CommandParameter is Chore chore)
-            {
-                chore.IsDetailsVisible = !chore.IsDetailsVisible;
-            }
-        }
-
-        private async void OnDeleteChoreButtonTapped(object sender, EventArgs e)
-        {
-            if (sender is Button button && button.CommandParameter is Chore chore)
-            {
-                bool isConfirmed = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this chore?", "Yes", "No");
-                if (isConfirmed)
-                {
-                    if (chore.IsComplete)
-                    {
-                        Child.LifetimeEarnings -= chore.Worth;
-                        Child.WeeklyEarnings -= chore.Worth;
-                        await _childService.SaveChildAsync(Child);
-                    }
-
-                    Chores.Remove(chore);
-                    FilteredChores.Remove(chore);
-                    await _choreService.DeleteChoreAsync(chore);
-                }
-            }
         }
 
         private async Task CapturePhotoAsync()
@@ -403,7 +222,7 @@ namespace KidsChoresApp.Pages.ChildPages
                     await DisplayAlert("Success", "Child deleted successfully.", "OK");
 
                     // Navigate back to the homepage
-                    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
                 }
             }
             else

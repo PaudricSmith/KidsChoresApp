@@ -38,7 +38,7 @@ namespace KidsChoresApp
             builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
             
             // Services
-            builder.Services.AddTransient<AuthService>();
+            builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<DataSeedingService>();
             builder.Services.AddSingleton<UserService>();
             builder.Services.AddSingleton<ParentService>();
@@ -53,6 +53,7 @@ namespace KidsChoresApp
             builder.Services.AddTransient<AddChildPage>();
             builder.Services.AddTransient<ChildPage>();
             builder.Services.AddTransient<AddChoresPage>();
+            builder.Services.AddTransient<ChoresPage>();
             builder.Services.AddSingleton<HomePage>();
 
             var app = builder.Build();

@@ -69,14 +69,14 @@ namespace KidsChoresApp.Pages
         {
             if (CurrentUser == null) return;
 
-            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={CurrentUser.Id}");
+            await Shell.Current.GoToAsync($"///{nameof(AddChildPage)}?userId={CurrentUser.Id}");
         }
 
         private async void OnAddChoresButtonTapped(object sender, EventArgs e)
         {
             if (CurrentUser == null) return;
 
-            await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={CurrentUser.Id}");
+            await Shell.Current.GoToAsync($"///{nameof(AddChoresPage)}?userId={CurrentUser.Id}");
         }
 
         private async void OnSettingsButtonTapped(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace KidsChoresApp.Pages
         {
             if (CurrentUser == null) return;
 
-            await Shell.Current.GoToAsync($"{nameof(FeedbackPage)}");
+            await Shell.Current.GoToAsync($"///{nameof(FeedbackPage)}");
         }
         private async void OnChildFrameTapped(object sender, EventArgs e)
         {

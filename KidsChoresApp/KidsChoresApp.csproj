@@ -80,6 +80,9 @@
     <MauiXaml Update="Pages\ChorePages\AddChoresPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Pages\ChorePages\ChoresPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Pages\FeedbackPages\FeedbackPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
@@ -105,9 +108,7 @@
   </ItemGroup>
 
   <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionKidsChoresAppHideInfoBar="True" />
-    </VisualStudio>
+    <VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionKidsChoresAppHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionKidsChoresAppHideInfoBar="True" /></VisualStudio>
   </ProjectExtensions>
 
 </Project>

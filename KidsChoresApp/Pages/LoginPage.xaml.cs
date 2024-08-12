@@ -19,7 +19,7 @@ namespace KidsChoresApp.Pages
         {
             _authService.Login();
 
-            await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+            await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
         }
     }
 }
