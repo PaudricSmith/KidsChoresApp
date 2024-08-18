@@ -1,37 +1,85 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KidsChoresApp.Pages.LoginPage">
+             xmlns:pages="clr-namespace:KidsChoresApp.Pages"
+             x:Class="KidsChoresApp.Pages.LoginPage"
+             x:DataType="pages:LoginPage">
 
-    <Grid RowDefinitions="*, Auto"  Padding="0,0,0,50">
-        
-        <VerticalStackLayout Grid.Row="0" Padding="20" Spacing="20">
-            <Frame BackgroundColor="AliceBlue">
-                <Image 
-                    Source="mainicon" 
-                    HeightRequest="200"
-                    WidthRequest="200"
-                    Aspect="AspectFit" />
-            </Frame>
-            <Label 
-                Text="Welcome"
-                FontSize="20"
-                TextColor="CornflowerBlue"
-                FontAttributes="Bold"
-                HorizontalOptions="Center" />
-            <Label 
-                Text="KIDS CHORES APP"
-                FontSize="24"
-                TextColor="CornflowerBlue"
-                FontAttributes="Bold"
-                HorizontalOptions="Center" />   
-        </VerticalStackLayout>
+    <ContentPage.Resources>
+        <Style TargetType="ImageButton">
+            <Style.Triggers>
+                <DataTrigger TargetType="ImageButton" Binding="{Binding IsPasswordVisible}" Value="true">
+                    <Setter Property="Source" Value="eye_open.png" />
+                </DataTrigger>
+                <DataTrigger TargetType="ImageButton" Binding="{Binding IsPasswordVisible}" Value="false">
+                    <Setter Property="Source" Value="eye_closed.png" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
 
-        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20" VerticalOptions="Center">
-            <Button Text="SignUp" Clicked="Button_Clicked"/>
-            <Button Text="SignIn" Clicked="Button_Clicked"/>
-        </VerticalStackLayout>
+    <Grid Padding="20" VerticalOptions="CenterAndExpand" RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Email Entry and Error Label -->
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Entry x:Name="EmailEntry" Placeholder="Email" Keyboard="Email" WidthRequest="250" Text="{Binding Email}" />
+            <Label x:Name="EmailErrorLabel" Grid.Row="1" Grid.ColumnSpan="3" TextColor="Red" IsVisible="False" HorizontalOptions="Center" />
+        </Grid>
+
+        <!-- Password Entry with Eye Toggle Button -->
+        <Entry x:Name="PasswordEntry" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Password" IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}" WidthRequest="250" Text="{Binding Password}" />
+        <ImageButton x:Name="PasswordToggle" Grid.Row="1" Grid.Column="3" Clicked="OnPasswordEyeToggleClicked" HorizontalOptions="FillAndExpand" />
+
+        <!-- Confirm Password Entry and Error Label -->
+        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" WidthRequest="250" Text="{Binding ConfirmPassword}" IsVisible="{Binding IsRegistering}" />
+            <Label x:Name="ConfirmPasswordErrorLabel" Grid.Row="1" Grid.ColumnSpan="3"  TextColor="Red" IsVisible="False" HorizontalOptions="Center" />
+        </Grid>
+
+        <!-- Sign Up Button -->
+        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Button x:Name="SignUpButton" Text="Sign Up" Clicked="OnSignUpButtonClicked" WidthRequest="250" IsVisible="{Binding IsRegistering}" />
+        </Grid>
+
+        <!-- Sign In Button -->
+        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Button x:Name="SignInButton" Text="Sign In" Clicked="OnSignInButtonClicked" WidthRequest="250" IsVisible="{Binding IsRegistering, Converter={StaticResource InverseBoolConverter}}" />
+        </Grid>
+
+        <!-- Toggle Sign In or Sign Up Link -->
+        <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Label Text="{Binding ToggleLinkText}" TextColor="CornflowerBlue" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleRegisterLoginCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- App Tip -->
+        <Grid Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
+            <Label Text=" How to use app with whole family " TextColor="CadetBlue"  TextDecorations="Underline" FontSize="18" FontAttributes="Italic" HorizontalOptions="CenterAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding HowToUseCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
 
     </Grid>
-    
+
 </ContentPage>

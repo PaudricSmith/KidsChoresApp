@@ -1,7 +1,6 @@
-
-
 using KidsChoresApp.Models;
 using KidsChoresApp.Services;
+
 
 namespace KidsChoresApp.Pages
 {
@@ -39,9 +38,10 @@ namespace KidsChoresApp.Pages
         {
             base.OnAppearing();
 
-            _parent = await _parentService.GetParentByUserIdAsync(UserId);
-
-            CurrencyPicker.SelectedItem = await _userService.GetUserPreferredCurrency(UserId);
+            if (CurrencyPicker != null)
+            {
+                CurrencyPicker.SelectedItem = await _userService.GetUserPreferredCurrency(UserId);
+            }
         }
 
         private async void OnCurrencySelected(object sender, EventArgs e)
@@ -61,6 +61,8 @@ namespace KidsChoresApp.Pages
 
         private async void OnChangePasscodeClicked(object sender, EventArgs e)
         {
+            _parent = await _parentService.GetParentByUserIdAsync(UserId);
+
             // Ask for old passcode
             string oldPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your old Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
             if (oldPasscode == null) return;

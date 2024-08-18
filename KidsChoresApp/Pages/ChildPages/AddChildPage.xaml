@@ -4,8 +4,8 @@
              x:Class="KidsChoresApp.Pages.ChildPages.AddChildPage"
              xmlns:views="clr-namespace:KidsChoresApp.Views"
              xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
-             x:DataType="childPages:AddChildPage"
-             Title="Add Child">
+             x:DataType="childPages:AddChildPage">
+    
     <Grid>
         <!-- Main Content -->
         <ScrollView>

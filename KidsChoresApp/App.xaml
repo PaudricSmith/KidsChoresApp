@@ -27,6 +27,7 @@
 
             <converters:CurrencyConverter x:Key="CurrencyConverter" />
             <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:DateConverter x:Key="DateConverter"/>
             
         </ResourceDictionary>

@@ -1,20 +1,16 @@
 using KidsChoresApp.Services;
 
-
 namespace KidsChoresApp.Pages
 {
     public partial class LoadingPage : ContentPage
     {
-    	private readonly AuthService _authService;
+        private readonly AuthService _authService;
 
-
-    	public LoadingPage(AuthService authService)
-    	{
-    		InitializeComponent();
-
-    		_authService = authService;
-    	}
-
+        public LoadingPage(AuthService authService)
+        {
+            InitializeComponent();
+            _authService = authService;
+        }
 
         protected async override void OnNavigatedTo(NavigatedToEventArgs args)
         {
@@ -22,7 +18,15 @@ namespace KidsChoresApp.Pages
 
             if (await _authService.IsAuthenticatedAsync())
             {
-                await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
+                int? userId = _authService.GetUserId();
+                if (userId.HasValue)
+                {
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={userId.Value}");
+                }
+                else
+                {
+                    await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
+                }
             }
             else
             {

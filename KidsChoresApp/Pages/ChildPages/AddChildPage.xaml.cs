@@ -36,9 +36,9 @@ namespace KidsChoresApp.Pages.ChildPages
 
             SelectAvatarCommand = new Command<string>(OnAvatarSelected);
 
-            LoadAvatars();
-
             BindingContext = this;
+
+            LoadAvatars();
         }
 
 
@@ -184,7 +184,7 @@ namespace KidsChoresApp.Pages.ChildPages
             await _childService.SaveChildAsync(child);
             await DisplayAlert("Success", "Child added successfully.", "OK");
 
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={UserId}");
         }
     }
 }

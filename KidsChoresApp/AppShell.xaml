@@ -10,32 +10,31 @@
     xmlns:feedbackPages="clr-namespace:KidsChoresApp.Pages.FeedbackPages"
     FlyoutBehavior="Disabled"
     Shell.NavBarHasShadow="True"
+    x:DataType="root:AppShell"
     Title="KidsChoresApp">
 
-    <ShellContent FlyoutItemIsVisible="False"
-        ContentTemplate="{DataTemplate pages:LoadingPage}"
-        Route="LoadingPage" />
+    <ShellContent
+        Route="LoadingPage"
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:LoadingPage}" />
 
-    <ShellContent FlyoutItemIsVisible="False"
-        ContentTemplate="{DataTemplate pages:LoginPage}"
-        Route="LoginPage" />
+    <ShellContent 
+        Route="LoginPage"
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:LoginPage}" />
 
-    <TabBar FlyoutDisplayOptions="AsSingleItem" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
-        <Tab Title="Home" Route="HomePage">
-            <ShellContent Icon="home.png" ContentTemplate="{DataTemplate pages:HomePage}" />
+    <ShellContent 
+        Route="SetupPage"
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:SetupPage}" />
+
+    <TabBar FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
+        <Tab Title="Home">
+            <ShellContent Route="HomePage" Icon="home.png" ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
-        <Tab Title="Settings" Route="SettingsPage">
-            <ShellContent Title="Settings" Icon="Gear" ContentTemplate="{DataTemplate pages:SettingsPage}" />
-        </Tab>
-        <Tab Title="Add Child" Route="AddChildPage">
-            <ShellContent Title="Add Child" Icon="Child" ContentTemplate="{DataTemplate childPages:AddChildPage}" />
-        </Tab>
-        <Tab Title="Add Chore" Route="AddChoresPage">
-            <ShellContent Title="Add Chore" Icon="Broom" ContentTemplate="{DataTemplate chorePages:AddChoresPage}" />
-        </Tab>
-        <Tab Title="Feedback" Route="FeedbackPage">
-            <ShellContent Title="Feedback" Icon="Feedback" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
+        <Tab Title="Feedback">
+            <ShellContent Route="FeedbackPage" Icon="Feedback.png" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
         </Tab>
     </TabBar>
-    
+
 </Shell>

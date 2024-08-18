@@ -27,6 +27,7 @@ namespace KidsChoresApp
     		    builder.Logging.AddDebug();
             #endif
 
+            //Preferences.Default.Clear();
 
             // Sqlite-net-pcl
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
@@ -48,6 +49,7 @@ namespace KidsChoresApp
             // Pages
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<SetupPage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<FeedbackPage>();
             builder.Services.AddTransient<AddChildPage>();

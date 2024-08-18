@@ -1,5 +1,7 @@
 ﻿using KidsChoresApp.Models;
 using SQLite;
+using System.Security.Cryptography;
+using System.Text;
 
 
 namespace KidsChoresApp.Services
@@ -26,6 +28,11 @@ namespace KidsChoresApp.Services
             return await _database.Table<User>().Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _database.Table<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task<int> SaveUserAsync(User user)
         {
             if (user.Id != 0)
@@ -41,6 +48,47 @@ namespace KidsChoresApp.Services
         public async Task<int> DeleteUserAsync(User user)
         {
             return await _database.DeleteAsync(user);
+        }
+
+
+        public async Task<bool> RegisterAsync(string email, string password)
+        {
+            var user = await _database.Table<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
+            if (user != null) return false; // User already exists
+
+            var newUser = new User
+            {
+                Email = email,
+                PasswordHash = HashPassword(password),
+                IsSetupCompleted = false,
+                PreferredCurrency = "EUR" // Default to Euro currency
+            };
+
+            // Create new User
+            await _database.InsertAsync(newUser);
+            return true;
+        }
+
+        public async Task<bool> LoginAsync(string email, string password)
+        {
+            var user = await _database.Table<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
+            if (user == null) return false;
+
+            return VerifyPassword(password, user.PasswordHash);
+        }
+
+        private string HashPassword(string password)
+        {
+            var hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
+
+            return Convert.ToBase64String(hashedBytes);
+        }
+
+        private bool VerifyPassword(string password, string storedHash)
+        {
+            var hashedPassword = HashPassword(password);
+
+            return hashedPassword == storedHash;
         }
 
 

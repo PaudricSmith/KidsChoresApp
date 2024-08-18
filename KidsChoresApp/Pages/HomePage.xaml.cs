@@ -4,11 +4,14 @@ using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Pages.FeedbackPages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace KidsChoresApp.Pages
 {
-    public partial class HomePage : ContentPage
+    [QueryProperty(nameof(UserId), "userId")]
+    public partial class HomePage : ContentPage, INotifyPropertyChanged
     {
         private readonly UserService _userService;
         private readonly ParentService _parentService;
@@ -16,11 +19,22 @@ namespace KidsChoresApp.Pages
         private readonly ChoreService _choreService;
 
         private User? _currentUser;
+        private int _userId;
         private bool _isNavigating;
+        private bool _isUserIdRetrieved;
 
         public Parent? CurrentParent { get; set; }
         public ObservableCollection<Child> Children { get; set; } = [];
 
+        public int UserId
+        {
+            get => _userId;
+            set
+            {
+                _userId = value;
+                _isUserIdRetrieved = true;
+            }
+        }
         public User? CurrentUser
         {
             get => _currentUser;
@@ -42,56 +56,74 @@ namespace KidsChoresApp.Pages
             _choreService = choreService;
 
             BindingContext = this;
+
+            _isUserIdRetrieved = false;
+
+            Loaded += HomePage_Loaded;
         }
 
+
+        private async void HomePage_Loaded(object? sender, EventArgs e)
+        {
+            if (_isUserIdRetrieved)
+            {
+                _isUserIdRetrieved = false;
+                await LoadData();
+            }
+        }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadData();
+
+            if (_isUserIdRetrieved)
+            {
+                _isUserIdRetrieved = false;
+                await LoadData();
+            }
+
         }
 
         private async Task LoadData()
         {
-            CurrentUser = await _userService.GetUserByIdAsync(1);
+            CurrentUser = await _userService.GetUserByIdAsync(UserId);
 
             Children.Clear();
-            var children = await _childService.GetChildrenByUserIdAsync(CurrentUser.Id);
+            var children = await _childService.GetChildrenByUserIdAsync(UserId);
             foreach (var child in children)
             {
                 Children.Add(child);
             }
 
-            CurrentParent = await _parentService.GetParentByUserIdAsync(CurrentUser.Id);
+            CurrentParent = await _parentService.GetParentByUserIdAsync(UserId);
         }
 
         private async void OnAddChildButtonTapped(object sender, EventArgs e)
         {
-            if (CurrentUser == null) return;
+            if (UserId == 0) return;
 
-            await Shell.Current.GoToAsync($"///{nameof(AddChildPage)}?userId={CurrentUser.Id}");
+            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={UserId}");
         }
 
         private async void OnAddChoresButtonTapped(object sender, EventArgs e)
         {
-            if (CurrentUser == null) return;
+            if (UserId == 0) return;
 
-            await Shell.Current.GoToAsync($"///{nameof(AddChoresPage)}?userId={CurrentUser.Id}");
+            await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={UserId}");
         }
 
         private async void OnSettingsButtonTapped(object sender, EventArgs e)
         {
-            if (CurrentUser == null) return;
+            if (UserId == 0) return;
 
-            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}?userId={CurrentUser.Id}");
+            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}?userId={UserId}");
         }
 
         private async void OnFeedbackButtonTapped(object sender, EventArgs e)
         {
-            if (CurrentUser == null) return;
-
             await Shell.Current.GoToAsync($"///{nameof(FeedbackPage)}");
         }
+
         private async void OnChildFrameTapped(object sender, EventArgs e)
         {
             if (_isNavigating) return;
@@ -110,6 +142,13 @@ namespace KidsChoresApp.Pages
 
                 _isNavigating = false;
             }
+        }
+
+
+        public new event PropertyChangedEventHandler? PropertyChanged;
+        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

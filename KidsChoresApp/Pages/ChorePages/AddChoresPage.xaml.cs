@@ -71,24 +71,10 @@ namespace KidsChoresApp.Pages.ChorePages
         {
             var imageFiles = new[]
             {
-                "brushteeth.png",
-                "cleanbathroom.png",
-                "cleankitchen.png",
-                "cleanlivingroom.png",
-                "cleanwindows.png",
-                "cookfood.png",
-                "eatallfood.png",
-                "feedpets.png",
-                "makebed.png",
-                "mopfloor.png",
-                "mowlawn.png",
-                "sweepfloor.png",
-                "takeouttrash.png",
-                "tidybedroom.png",
-                "vacuumfloor.png",
-                "washcar.png",
-                "washdishes.png",
-                "washlaundry.png",
+                "brushteeth.png", "cleanbathroom.png", "cleankitchen.png", "cleanlivingroom.png", "cleanwindows.png", 
+                "cookfood.png", "eatallfood.png", "feedpets.png", "makebed.png", "mopfloor.png", 
+                "mowlawn.png", "sweepfloor.png", "takeouttrash.png", "tidybedroom.png", "vacuumfloor.png", 
+                "washcar.png", "washdishes.png", "washlaundry.png",
             };
 
             foreach (var image in imageFiles)

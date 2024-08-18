@@ -4,15 +4,23 @@ namespace KidsChoresApp.Pages.FeedbackPages
 {
     public partial class FeedbackPage : ContentPage
     {
+
+
         public FeedbackPage()
         {
             InitializeComponent();
         }
 
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
         private async void OnLoveAppClicked(object sender, EventArgs e)
         {
             bool answer = await DisplayAlert("Rate this app", "Would you like to rate this app in the Google Play Store?", "Yes", "No");
+
             if (answer)
             {
                 Uri uri = new("https://play.google.com/store/apps/details?id=com.yokee.piano.keyboard");

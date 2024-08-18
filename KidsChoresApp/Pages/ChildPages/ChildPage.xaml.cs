@@ -50,19 +50,22 @@ namespace KidsChoresApp.Pages.ChildPages
             SelectAvatarCommand = new Command<string>(async (avatar) => await OnAvatarSelected(avatar));
 
             BindingContext = this;
-
-            Loaded += ChildPage_Loaded;
         }
 
 
-        private async void ChildPage_Loaded(object? sender, EventArgs e)
+        protected override async void OnAppearing()
         {
+            base.OnAppearing();
+
             await LoadData();
         }
 
         private async Task LoadData()
         {
-            Child = await _childService.GetChildByIdAsync(ChildId);
+            if (ChildId != 0)
+            {
+                Child = await _childService.GetChildByIdAsync(ChildId);
+            }
         }
 
         private void LoadAvatars()
@@ -222,7 +225,7 @@ namespace KidsChoresApp.Pages.ChildPages
                     await DisplayAlert("Success", "Child deleted successfully.", "OK");
 
                     // Navigate back to the homepage
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={Child.UserId}");
                 }
             }
             else

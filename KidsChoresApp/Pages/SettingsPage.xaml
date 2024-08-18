@@ -11,20 +11,22 @@
                CornerRadius="10"
                Padding="5"
                HasShadow="True">
-            <Picker x:Name="CurrencyPicker"
+            <VerticalStackLayout>
+                <Picker x:Name="CurrencyPicker"
                     Title="Select Currency"
                     FontSize="Medium"
                     BackgroundColor="AntiqueWhite"
                     HorizontalOptions="FillAndExpand"
                     SelectedIndexChanged="OnCurrencySelected">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>USD</x:String>
-                        <x:String>EUR</x:String>
-                        <x:String>GBP</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>USD</x:String>
+                            <x:String>EUR</x:String>
+                            <x:String>GBP</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </VerticalStackLayout>
         </Frame>
 
         <Button Text="Change Parental Passcode" Clicked="OnChangePasscodeClicked"/>

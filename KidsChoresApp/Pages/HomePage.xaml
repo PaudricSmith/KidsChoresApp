@@ -64,6 +64,12 @@
 
             </CollectionView>
 
+            <!-- Buttons -->
+            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
+                <Button Text="+ Child" Clicked="OnAddChildButtonTapped" WidthRequest="100" HeightRequest="70" />
+                <Button Text="+ Chore" Clicked="OnAddChoresButtonTapped" WidthRequest="100" HeightRequest="70" />
+                <Button Text="Settings" Clicked="OnSettingsButtonTapped" WidthRequest="100" HeightRequest="70" />
+            </HorizontalStackLayout>
         </Grid>
     </ScrollView>
 

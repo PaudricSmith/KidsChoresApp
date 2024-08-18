@@ -103,8 +103,6 @@ namespace KidsChoresApp.Pages.ChorePages
 
             GenerateWeekDates();
             MoneySummary.IsVisible = true;
-
-            Console.WriteLine("Shell.Current.Navigation.NavigationStack.Count: " + Shell.Current.Navigation.NavigationStack.Count);
         }
 
         private async Task LoadData()
