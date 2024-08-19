@@ -27,14 +27,18 @@ namespace KidsChoresApp
     		    builder.Logging.AddDebug();
             #endif
 
-            //Preferences.Default.Clear();
 
-            // Sqlite-net-pcl
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
-            //builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
 
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////// Uncomment to reset the preferences and database /////////////////////////////////////////////////////////////////
+            //Preferences.Default.Clear();
             //if (File.Exists(dbPath)) File.Delete(dbPath);
             //dbPath ??= Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
 
             builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
             
@@ -58,20 +62,21 @@ namespace KidsChoresApp
             builder.Services.AddTransient<ChoresPage>();
             builder.Services.AddSingleton<HomePage>();
 
-            var app = builder.Build();
 
+            return builder.Build();
+
+            //var app = builder.Build();
             // Seed database
-            SeedDatabase(app);
-
-            return app;
+            //SeedDatabase(app);
+            //return app;
         }
 
 
-        private static async void SeedDatabase(MauiApp app)
-        {
-            using var scope = app.Services.CreateScope();
-            var seeder = scope.ServiceProvider.GetRequiredService<DataSeedingService>();
-            await seeder.SeedDatabaseAsync();
-        }
+        //private static async void SeedDatabase(MauiApp app)
+        //{
+        //    using var scope = app.Services.CreateScope();
+        //    var seeder = scope.ServiceProvider.GetRequiredService<DataSeedingService>();
+        //    await seeder.SeedDatabaseAsync();
+        //}
     }
 }

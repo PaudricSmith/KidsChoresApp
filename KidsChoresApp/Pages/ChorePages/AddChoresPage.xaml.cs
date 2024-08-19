@@ -121,16 +121,23 @@ namespace KidsChoresApp.Pages.ChorePages
                 return;
             }
 
+            var selectedDays = GetSelectedDaysOfWeek();
+            if (selectedDays.Count == 0)
+            {
+                await DisplayAlert("Error", "Please select at least one day for the chore.", "OK");
+                return;
+            }
+
             var selectedChild = (Child)ChildPicker.SelectedItem;
 
-            if (await IsExceedingAllowance(selectedChild, worth))
+            if (await IsExceedingAllowance(selectedChild, worth, selectedDays.Count))
             {
                 await DisplayAlert("Error", $"You have reached this child's weekly allowance limit of {selectedChild.WeeklyAllowance}. " +
                     "Either reduce this chore's worth or increase the child's weekly allowance budget.", "OK");
                 return;
             }
 
-            await AddChoresForSelectedDays(selectedChild, worth);
+            await AddChoresForSelectedDays(selectedChild, worth, selectedDays);
 
             await DisplayAlert("Success", "Chore added successfully.", "OK");
 
@@ -145,18 +152,20 @@ namespace KidsChoresApp.Pages.ChorePages
                    !decimal.TryParse(ChoreWorthEntry.Text, out worth) || worth < 0;
         }
 
-        private async Task<bool> IsExceedingAllowance(Child selectedChild, decimal newChoreWorth)
+        private async Task<bool> IsExceedingAllowance(Child selectedChild, decimal newChoreWorth, int selectedDaysCount)
         {
             var chores = await _choreService.GetChoresByChildIdAsync(selectedChild.Id);
             var totalPotentialWeeklyEarnings = chores?.Sum(c => c.Worth) ?? 0m;
-            totalPotentialWeeklyEarnings += newChoreWorth;
+
+            // Multiply newChoreWorth by the number of selected days
+            totalPotentialWeeklyEarnings += newChoreWorth * selectedDaysCount;
 
             return totalPotentialWeeklyEarnings > selectedChild.WeeklyAllowance;
         }
 
-        private async Task AddChoresForSelectedDays(Child selectedChild, decimal worth)
+        private async Task AddChoresForSelectedDays(Child selectedChild, decimal worth, List<DayOfWeek> selectedDays)
         {
-            foreach (var dayOfWeek in GetSelectedDaysOfWeek())
+            foreach (var dayOfWeek in selectedDays)
             {
                 var chore = new Chore
                 {

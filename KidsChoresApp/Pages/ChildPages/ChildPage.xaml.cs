@@ -90,6 +90,8 @@ namespace KidsChoresApp.Pages.ChildPages
                 OnPropertyChanged(nameof(Child));
 
                 await DisplayAlert("Child Details",
+                    $"User Id: {Child.UserId}\n" +
+                    $"Id: {Child.Id}\n" +
                     $"Name: {Child.Name}\n" +
                     $"Weekly Allowance: {Child.WeeklyAllowance}\n" +
                     $"Lifetime Earnings: {Child.LifetimeEarnings}\n" +

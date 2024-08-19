@@ -72,9 +72,9 @@ namespace KidsChoresApp.Pages
         private async void OnSignUpButtonClicked(object sender, EventArgs e)
         {
             //// TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
-            Email = "testemail4@email.com";
-            Password = "Password4!";
-            ConfirmPassword = "Password4!";
+            Email = "testemail2@email.com";
+            Password = "Password2!";
+            ConfirmPassword = "Password2!";
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             
             if (!ValidateInputs(Email, Password, ConfirmPassword))
@@ -106,8 +106,8 @@ namespace KidsChoresApp.Pages
         private async void OnSignInButtonClicked(object sender, EventArgs e)
         {
             // TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
-            Email = "testemail1@email.com";
-            Password = "Password1!";
+            Email = "testemail2@email.com";
+            Password = "Password2!";
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             if (!ValidateInputs(Email, Password))
