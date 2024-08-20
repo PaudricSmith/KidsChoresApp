@@ -24,7 +24,7 @@ namespace KidsChoresApp.Pages
         private bool _isUserIdRetrieved;
 
         public Parent? CurrentParent { get; set; }
-        public ObservableCollection<Child> Children { get; set; } = [];
+        public ObservableCollection<Child> Children { get; set; } = new ObservableCollection<Child>();
 
         public int UserId
         {
@@ -57,8 +57,6 @@ namespace KidsChoresApp.Pages
 
             BindingContext = this;
 
-            _isUserIdRetrieved = false;
-
             Loaded += HomePage_Loaded;
         }
 
@@ -81,7 +79,6 @@ namespace KidsChoresApp.Pages
                 _isUserIdRetrieved = false;
                 await LoadData();
             }
-
         }
 
         private async Task LoadData()
@@ -107,8 +104,6 @@ namespace KidsChoresApp.Pages
 
         private async void OnAddChoresButtonTapped(object sender, EventArgs e)
         {
-            if (UserId == 0) return;
-
             await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={UserId}");
         }
 

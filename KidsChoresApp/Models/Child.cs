@@ -13,6 +13,8 @@ namespace KidsChoresApp.Models
         private decimal _weeklyAllowance;
         private decimal _weeklyEarnings;
         private decimal _lifetimeEarnings;
+        private bool _isSelected;
+
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -114,8 +116,21 @@ namespace KidsChoresApp.Models
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

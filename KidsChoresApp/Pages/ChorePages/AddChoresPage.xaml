@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:chorePages="clr-namespace:KidsChoresApp.Pages.ChorePages"
+             xmlns:models="clr-namespace:KidsChoresApp.Models"
              x:Class="KidsChoresApp.Pages.ChorePages.AddChoresPage"
              x:DataType="chorePages:AddChoresPage"
              Title="Add Chores">
@@ -9,6 +10,7 @@
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
 
+            <!-- Chore Image Frame -->
             <Frame 
                 CornerRadius="10" 
                 Padding="10" 
@@ -21,46 +23,95 @@
                     WidthRequest="150" />
             </Frame>
 
+            <!-- Button to Add Chore Image -->
             <Button Text="Add Chore Image" Clicked="OnAddChoreImageClicked" />
-            
+
             <!-- Image Selection Overlay -->
             <ContentView x:Name="ImageSelectionOverlay" IsVisible="False" BackgroundColor="White" Opacity="0.9" Padding="20">
                 <StackLayout Spacing="10">
                     <Label Text="Select an Image" FontSize="24" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" />
                     <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ChoreImages}" SelectionMode="None">
-
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical" Span="3" />
                         </CollectionView.ItemsLayout>
-
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="{x:Type x:String}">
                                 <Frame Padding="10" HasShadow="True" Margin="5" CornerRadius="10" BorderColor="Gray">
                                     <Image Source="{Binding}" Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer 
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type chorePages:AddChoresPage}}, Path=SelectImageCommand}" CommandParameter="{Binding .}" />
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type chorePages:AddChoresPage}}, Path=SelectImageCommand}" 
+                                                CommandParameter="{Binding .}" />
                                         </Image.GestureRecognizers>
                                     </Image>
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Button Text="Close" Clicked="OnCloseImageSelectionClicked" />
                 </StackLayout>
             </ContentView>
+
+            <!-- Button to Show Chore Details -->
+            <Button Text="Enter Chore Details" Clicked="OnEnterChoreDetailsClicked" />
+            
+            <!-- Chore Details Section (Initially Hidden) -->
+            <StackLayout x:Name="ChoreDetailsSection" IsVisible="False" Spacing="10">
+
+                <!-- Chore Name Entry -->
+                <Entry x:Name="ChoreNameEntry" Placeholder="Chore Name" MaxLength="18" />
+
+                <!-- Chore Description Editor -->
+                <Editor x:Name="ChoreDescriptionEditor" Placeholder="Chore Description" AutoSize="TextChanges" />
+
+                <!-- Chore Worth with Currency Symbol -->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="5">
+                    <Label HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label.Text>
+                            <Binding Path="PreferredCurrency" Converter="{StaticResource CurrencySymbolConverter}" />
+                        </Label.Text>
+                    </Label>
+                    <Entry x:Name="ChoreWorthEntry" Placeholder="Chore Worth" Keyboard="Numeric" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+                </StackLayout>
+
+            </StackLayout>
+
+            <!-- Assign Chore Button -->
+            <Button Text="Assign to Children" Clicked="OnAssignChoreClicked" />
+
+            <!-- Assign to Children Section (Initially Hidden) -->
+            <StackLayout x:Name="ChildrenAssignmentSection" IsVisible="False">
+                <Label Text="Assign to Children" HorizontalOptions="Center" FontAttributes="Bold" TextDecorations="Underline" />
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <CheckBox x:Name="AssignAllCheckBox" IsChecked="{Binding AssignAllChildren, Mode=TwoWay}" />
+                        <Label Text="Assign all" VerticalOptions="Center" />
+                    </StackLayout>
+                    <CollectionView x:Name="ChildrenCollectionView" ItemsSource="{Binding Children}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Child">
+                                <StackLayout Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding IsSelected}" />
+                                    <Label Text="{Binding Name}" VerticalOptions="Center" />
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </StackLayout>
+
+            <!-- Button to Show Day Selection -->
+            <Button Text="Select Days" Clicked="OnSelectDaysClicked" />
+
+            <!-- Weekly Schedule (Initially Hidden) -->
+            <StackLayout x:Name="DaySelectionSection" IsVisible="False" Padding="5" BackgroundColor="LightGray">
+                <Label Text="Choose the days for this chore repeating" HorizontalOptions="Center" FontAttributes="Bold" />
+
+                <!-- Select All Days Checkbox -->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5">
+                    <CheckBox x:Name="SelectAllDaysCheckBox" IsChecked="{Binding SelectAllDays, Mode=TwoWay}" />
+                    <Label Text="Select All Days" VerticalOptions="Center" />
+                </StackLayout>
                 
-            <Entry x:Name="ChoreNameEntry" Placeholder="Chore Name" MaxLength="18"/>
-            <Editor x:Name="ChoreDescriptionEditor" Placeholder="Chore Description" AutoSize="TextChanges" />
-
-            <Picker x:Name="ChildPicker" Title="Assign to Child" ItemsSource="{Binding Children}" ItemDisplayBinding="{Binding Name}" />
-
-            <Entry x:Name="ChoreWorthEntry" Placeholder="Chore Worth" Keyboard="Numeric" />
-
-            <Label Text="Choose the days for this chore repeating" HorizontalOptions="Center" FontAttributes="Bold" />
-
-            <!-- Weekly Schedule -->
-            <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Padding="5" BackgroundColor="LightGray">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="0">
                     <VerticalStackLayout>
                         <Label Text="Mon" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
@@ -93,6 +144,7 @@
                 </StackLayout>
             </StackLayout>
 
+            <!-- Save Chore Button -->
             <Button Text="Save Chore" Clicked="OnSaveChoreClicked" />
         </StackLayout>
     </ScrollView>

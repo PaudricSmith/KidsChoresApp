@@ -26,6 +26,7 @@
             </Style>
 
             <converters:CurrencyConverter x:Key="CurrencyConverter" />
+            <converters:CurrencySymbolConverter x:Key="CurrencySymbolConverter" />
             <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:DateConverter x:Key="DateConverter"/>

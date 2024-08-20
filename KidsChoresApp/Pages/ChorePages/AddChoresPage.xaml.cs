@@ -11,13 +11,17 @@ namespace KidsChoresApp.Pages.ChorePages
     [QueryProperty(nameof(UserId), "userId")]
     public partial class AddChoresPage : ContentPage, INotifyPropertyChanged
     {
+        private readonly UserService _userService;
         private readonly ChoreService _choreService;
         private readonly ChildService _childService;
-        
-        private ObservableCollection<Child> _children = [];
-        private ObservableCollection<string> _choreImages = [];
-        private string _selectedImage = "";
+
+        private ObservableCollection<Child> _children = new ObservableCollection<Child>();
+        private ObservableCollection<string> _choreImages = new ObservableCollection<string>();
+        private string? _selectedImage = string.Empty;
+        private string? _preferredCurrency;
         private int _userId;
+        private bool _assignAllChildren;
+        private bool _selectAllDays;
 
         public ObservableCollection<Child> Children
         {
@@ -28,7 +32,6 @@ namespace KidsChoresApp.Pages.ChorePages
                 OnPropertyChanged();
             }
         }
-
         public ObservableCollection<string> ChoreImages
         {
             get => _choreImages;
@@ -38,30 +41,63 @@ namespace KidsChoresApp.Pages.ChorePages
                 OnPropertyChanged();
             }
         }
-
         public int UserId
         {
             get => _userId;
             set
             {
                 _userId = value;
-                LoadChildren(value);
             }
         }
+        public string? PreferredCurrency
+        {
+            get => _preferredCurrency;
+            set
+            {
+                _preferredCurrency = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool AssignAllChildren
+        {
+            get => _assignAllChildren;
+            set
+            {
+                if (_assignAllChildren != value)
+                {
+                    _assignAllChildren = value;
+                    OnPropertyChanged();
+                    UpdateChildrenSelection(_assignAllChildren);
+                }
+            }
+        }
+        public bool SelectAllDays
+        {
+            get => _selectAllDays;
+            set
+            {
+                if (_selectAllDays != value)
+                {
+                    _selectAllDays = value;
+                    OnPropertyChanged();
+                    UpdateDaysSelection(_selectAllDays);
+                }
+            }
+        }
+
 
         public ICommand SelectImageCommand { get; }
 
 
-        public AddChoresPage(ChoreService choreService, ChildService childService)
+        public AddChoresPage(UserService userService, ChoreService choreService, ChildService childService)
         {
             InitializeComponent();
 
+            _userService = userService;
             _choreService = choreService;
             _childService = childService;
 
             SelectImageCommand = new Command<string>(OnChoreImageSelected);
-
-            LoadChoreImages();
 
             BindingContext = this;
         }
@@ -71,21 +107,26 @@ namespace KidsChoresApp.Pages.ChorePages
         {
             var imageFiles = new[]
             {
-                "brushteeth.png", "cleanbathroom.png", "cleankitchen.png", "cleanlivingroom.png", "cleanwindows.png", 
-                "cookfood.png", "eatallfood.png", "feedpets.png", "makebed.png", "mopfloor.png", 
-                "mowlawn.png", "sweepfloor.png", "takeouttrash.png", "tidybedroom.png", "vacuumfloor.png", 
+                "brushteeth.png", "cleanbathroom.png", "cleankitchen.png", "cleanlivingroom.png", "cleanwindows.png",
+                "cookfood.png", "eatallfood.png", "feedpets.png", "makebed.png", "mopfloor.png",
+                "mowlawn.png", "sweepfloor.png", "takeouttrash.png", "tidybedroom.png", "vacuumfloor.png",
                 "washcar.png", "washdishes.png", "washlaundry.png",
             };
 
-            foreach (var image in imageFiles)
+            var basePath = "Resources/Images/Chores/";
+            var imagePaths = imageFiles.Select(image => $"{basePath}{image}").ToList();
+
+
+            foreach (var imagePath in imagePaths)
             {
-                ChoreImages.Add($"Resources/Images/Chores/{image}");
+                _choreImages.Add(imagePath);
             }
+
         }
 
         private void OnChoreImageSelected(string selectedImage)
         {
-            if (selectedImage != null)
+            if (!string.IsNullOrEmpty(selectedImage))
             {
                 ImageSelectionOverlay.IsVisible = false;
                 ChoreImage.Source = selectedImage;
@@ -95,22 +136,41 @@ namespace KidsChoresApp.Pages.ChorePages
 
         private void OnAddChoreImageClicked(object sender, EventArgs e)
         {
-            ImageSelectionOverlay.IsVisible = true;
+            if (ChoreImages.Count == 0)
+                LoadChoreImages();
+
+            ImageSelectionOverlay.IsVisible = !ImageSelectionOverlay.IsVisible;
         }
 
-        private void OnCloseImageSelectionClicked(object sender, EventArgs e)
+        private async void OnEnterChoreDetailsClicked(object sender, EventArgs e)
         {
-            ImageSelectionOverlay.IsVisible = false;
+            PreferredCurrency = await _userService.GetUserPreferredCurrency(UserId);
+
+            ChoreDetailsSection.IsVisible = !ChoreDetailsSection.IsVisible;
         }
 
-        private async void LoadChildren(int userId)
+        private async void OnAssignChoreClicked(object sender, EventArgs e)
+        {
+            if (Children.Count == 0)
+                await LoadChildren(UserId);
+
+            ChildrenAssignmentSection.IsVisible = !ChildrenAssignmentSection.IsVisible;
+        }
+
+        private async Task LoadChildren(int userId)
         {
             var children = await _childService.GetChildrenByUserIdAsync(userId);
-            Children.Clear();
+
+            _children.Clear();
             foreach (var child in children)
             {
-                Children.Add(child);
+                _children.Add(child);
             }
+        }
+
+        private void OnSelectDaysClicked(object sender, EventArgs e)
+        {
+            DaySelectionSection.IsVisible = !DaySelectionSection.IsVisible;
         }
 
         private async void OnSaveChoreClicked(object sender, EventArgs e)
@@ -128,27 +188,81 @@ namespace KidsChoresApp.Pages.ChorePages
                 return;
             }
 
-            var selectedChild = (Child)ChildPicker.SelectedItem;
-
-            if (await IsExceedingAllowance(selectedChild, worth, selectedDays.Count))
+            var selectedChildren = Children.Where(c => c.IsSelected).ToList();
+            if (selectedChildren.Count == 0)
             {
-                await DisplayAlert("Error", $"You have reached this child's weekly allowance limit of {selectedChild.WeeklyAllowance}. " +
-                    "Either reduce this chore's worth or increase the child's weekly allowance budget.", "OK");
+                await DisplayAlert("Error", "Please select at least one child for the chore.", "OK");
                 return;
             }
 
-            await AddChoresForSelectedDays(selectedChild, worth, selectedDays);
+            var exceedingChildren = new List<string>();
 
-            await DisplayAlert("Success", "Chore added successfully.", "OK");
+            foreach (var selectedChild in selectedChildren)
+            {
+                if (await IsExceedingAllowance(selectedChild, worth, selectedDays.Count))
+                {
+                    var chores = await _choreService.GetChoresByChildIdAsync(selectedChild.Id);
+                    var totalPotentialWeeklyEarnings = chores?.Sum(c => c.Worth) ?? 0m;
+                    totalPotentialWeeklyEarnings += worth * selectedDays.Count;
 
-            await Shell.Current.GoToAsync("..");
+                    exceedingChildren.Add($"You have reached {selectedChild.Name}'s weekly allowance limit of {selectedChild.WeeklyAllowance} as the chore worth total would be {totalPotentialWeeklyEarnings}.");
+                }
+            }
+
+            if (exceedingChildren.Count > 0)
+            {
+                var errorMessage = string.Join("\n\n", exceedingChildren);
+                await DisplayAlert("Error", errorMessage, "OK");
+                return;
+            }
+
+            foreach (var selectedChild in selectedChildren)
+            {
+                await AddChoresForSelectedDays(selectedChild, worth, selectedDays);
+            }
+
+            // Reset the IsSelected property of each child
+            foreach (var child in Children)
+            {
+                child.IsSelected = false;
+            }
+
+            // Prompt the user for next action
+            var action = await DisplayActionSheet("", null, null, "Add Another Chore", "Go to Homepage");
+
+            if (action == "Add Another Chore")
+            {
+                ResetForm();
+            }
+            else if (action == "Go to Homepage")
+            {
+                await Shell.Current.GoToAsync("..");
+            }
+        }
+
+        private void ResetForm()
+        {
+            // Clear form fields and reset checkboxes, images, etc.
+            ChoreNameEntry.Text = string.Empty;
+            ChoreDescriptionEditor.Text = string.Empty;
+            ChoreWorthEntry.Text = string.Empty;
+            _selectedImage = string.Empty;
+            ChoreImage.Source = null;
+
+            AssignAllChildren = false;
+            SelectAllDays = false;
+            UpdateDaysSelection(false);
+
+            // Hide sections
+            ChoreDetailsSection.IsVisible = false;
+            ChildrenAssignmentSection.IsVisible = false;
+            DaySelectionSection.IsVisible = false;
         }
 
         private bool IsInputInvalid(out decimal worth)
         {
             worth = 0;
             return string.IsNullOrWhiteSpace(ChoreNameEntry.Text) ||
-                   ChildPicker.SelectedItem == null ||
                    !decimal.TryParse(ChoreWorthEntry.Text, out worth) || worth < 0;
         }
 
@@ -165,56 +279,70 @@ namespace KidsChoresApp.Pages.ChorePages
 
         private async Task AddChoresForSelectedDays(Child selectedChild, decimal worth, List<DayOfWeek> selectedDays)
         {
-            foreach (var dayOfWeek in selectedDays)
+            var tasks = selectedDays.Select(dayOfWeek => new Chore
             {
-                var chore = new Chore
-                {
-                    Name = ChoreNameEntry.Text,
-                    Description = ChoreDescriptionEditor.Text,
-                    Worth = worth,
-                    Deadline = DateTime.Now,
-                    ChildId = selectedChild.Id,
-                    AssignedTo = selectedChild.Name,
-                    Image = _selectedImage,
-                    DayOfWeek = dayOfWeek,
-                    IsComplete = false,
-                    IsDetailsVisible = false,
-                    Priority = 0
-                };
+                Name = ChoreNameEntry.Text,
+                Description = ChoreDescriptionEditor.Text,
+                Worth = worth,
+                Deadline = DateTime.Now,
+                ChildId = selectedChild.Id,
+                AssignedTo = selectedChild.Name,
+                Image = _selectedImage,
+                DayOfWeek = dayOfWeek,
+                IsComplete = false,
+                IsDetailsVisible = false,
+                Priority = 0
+            }).Select(_choreService.SaveChoreAsync);
 
-                await _choreService.SaveChoreAsync(chore);
-            }
+            await Task.WhenAll(tasks);
+        }
+
+        private void UpdateDaysSelection(bool isSelected)
+        {
+            MondayCheckBox.IsChecked = isSelected;
+            TuesdayCheckBox.IsChecked = isSelected;
+            WednesdayCheckBox.IsChecked = isSelected;
+            ThursdayCheckBox.IsChecked = isSelected;
+            FridayCheckBox.IsChecked = isSelected;
+            SaturdayCheckBox.IsChecked = isSelected;
+            SundayCheckBox.IsChecked = isSelected;
         }
 
         private List<DayOfWeek> GetSelectedDaysOfWeek()
         {
             var selectedDays = new List<DayOfWeek>();
 
-            if (MondayCheckBox.IsChecked) 
+            if (MondayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Monday);
             if (TuesdayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Tuesday);
             if (WednesdayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Wednesday);
-            if (ThursdayCheckBox.IsChecked) 
+            if (ThursdayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Thursday);
-            if (FridayCheckBox.IsChecked) 
+            if (FridayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Friday);
-            if (SaturdayCheckBox.IsChecked) 
+            if (SaturdayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Saturday);
-            if (SundayCheckBox.IsChecked) 
+            if (SundayCheckBox.IsChecked)
                 selectedDays.Add(DayOfWeek.Sunday);
 
             return selectedDays;
         }
 
+        private void UpdateChildrenSelection(bool isSelected)
+        {
+            foreach (var child in Children)
+            {
+                child.IsSelected = isSelected;
+            }
+        }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public new event PropertyChangedEventHandler? PropertyChanged;
+        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
- 
