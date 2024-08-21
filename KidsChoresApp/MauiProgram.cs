@@ -3,6 +3,7 @@ using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Pages.FeedbackPages;
 using KidsChoresApp.Services;
+using MauiIcons.Fluent;
 using Microsoft.Extensions.Logging;
 using SQLite;
 
@@ -14,22 +15,27 @@ namespace KidsChoresApp
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
+
+
             builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+               .UseMauiApp<App>()
+               .ConfigureFonts(fonts =>
+               {
+                   fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                   fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+               })
+               .UseFluentMauiIcons();
 
 
-            #if DEBUG
-    		    builder.Logging.AddDebug();
-            #endif
+            SQLitePCL.Batteries_V2.Init();
 
 
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kidschoresapp.db3");
-
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////// Uncomment to reset the preferences and database /////////////////////////////////////////////////////////////////
@@ -39,7 +45,6 @@ namespace KidsChoresApp
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
-
             builder.Services.AddSingleton(s => new SQLiteAsyncConnection(dbPath));
             
             // Services

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:KidsChoresApp"
              xmlns:converters="clr-namespace:KidsChoresApp.Converters"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
              x:Class="KidsChoresApp.App">
     
     <Application.Resources>
@@ -12,7 +13,16 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <converters:CurrencyConverter x:Key="CurrencyConverter" />
+            <converters:CurrencySymbolConverter x:Key="CurrencySymbolConverter" />
+            <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:DateConverter x:Key="DateConverter"/>
+
+            <FontImageSource x:Key="EyeOpenIcon" Glyph="{mi:Fluent Icon=Eye20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />
+            <FontImageSource x:Key="EyeClosedIcon" Glyph="{mi:Fluent Icon=EyeOff20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />
+
             <Style TargetType="Button">
                 <Setter Property="BackgroundColor" Value="CornflowerBlue" />
                 <Setter Property="BorderColor" Value="DarkSlateBlue" />
@@ -25,12 +35,6 @@
                 <Setter Property="CornerRadius" Value="15" />
             </Style>
 
-            <converters:CurrencyConverter x:Key="CurrencyConverter" />
-            <converters:CurrencySymbolConverter x:Key="CurrencySymbolConverter" />
-            <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
-            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-            <converters:DateConverter x:Key="DateConverter"/>
-            
         </ResourceDictionary>
     </Application.Resources>
     

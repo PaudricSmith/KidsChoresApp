@@ -9,16 +9,17 @@
         <Style TargetType="ImageButton">
             <Style.Triggers>
                 <DataTrigger TargetType="ImageButton" Binding="{Binding IsPasswordVisible}" Value="true">
-                    <Setter Property="Source" Value="eye_open.png" />
+                    <Setter Property="Source" Value="{StaticResource EyeOpenIcon}" />
                 </DataTrigger>
                 <DataTrigger TargetType="ImageButton" Binding="{Binding IsPasswordVisible}" Value="false">
-                    <Setter Property="Source" Value="eye_closed.png" />
+                    <Setter Property="Source" Value="{StaticResource EyeClosedIcon}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
     </ContentPage.Resources>
 
     <Grid Padding="20" VerticalOptions="CenterAndExpand" RowSpacing="20">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -38,33 +39,87 @@
 
         <!-- Email Entry and Error Label -->
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
-            <Entry x:Name="EmailEntry" Placeholder="Email" Keyboard="Email" WidthRequest="250" Text="{Binding Email}" />
-            <Label x:Name="EmailErrorLabel" Grid.Row="1" Grid.ColumnSpan="3" TextColor="Red" IsVisible="False" HorizontalOptions="Center" />
+            <Entry 
+                x:Name="EmailEntry"
+                Text="{Binding Email}"
+                FontSize="20"
+                Placeholder="Email" 
+                Keyboard="Email" 
+                WidthRequest="250" />
+            <Label 
+                x:Name="EmailErrorLabel" 
+                Grid.Row="1" 
+                Grid.ColumnSpan="3" 
+                TextColor="Red" 
+                IsVisible="False" 
+                HorizontalOptions="Center" />
         </Grid>
 
         <!-- Password Entry with Eye Toggle Button -->
-        <Entry x:Name="PasswordEntry" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Password" IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}" WidthRequest="250" Text="{Binding Password}" />
-        <ImageButton x:Name="PasswordToggle" Grid.Row="1" Grid.Column="3" Clicked="OnPasswordEyeToggleClicked" HorizontalOptions="FillAndExpand" />
+        <Entry 
+            x:Name="PasswordEntry"
+            Grid.Row="1" 
+            Grid.Column="1" 
+            Grid.ColumnSpan="2" 
+            Text="{Binding Password}" 
+            FontSize="20"
+            Placeholder="Password" 
+            IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}" 
+            WidthRequest="250" />
+        <ImageButton 
+            x:Name="PasswordToggle" 
+            Grid.Row="1" 
+            Grid.Column="4" 
+            Clicked="OnPasswordEyeToggleTapped" 
+            HorizontalOptions="FillAndExpand" />
 
         <!-- Confirm Password Entry and Error Label -->
         <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
-            <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" WidthRequest="250" Text="{Binding ConfirmPassword}" IsVisible="{Binding IsRegistering}" />
-            <Label x:Name="ConfirmPasswordErrorLabel" Grid.Row="1" Grid.ColumnSpan="3"  TextColor="Red" IsVisible="False" HorizontalOptions="Center" />
+            <Entry 
+                x:Name="ConfirmPasswordEntry" 
+                Text="{Binding ConfirmPassword}"
+                FontSize="20"
+                Placeholder="Confirm Password" 
+                IsPassword="True" 
+                IsVisible="{Binding IsRegistering}"
+                WidthRequest="250" />
+            <Label 
+                x:Name="ConfirmPasswordErrorLabel" 
+                Grid.Row="1" 
+                Grid.ColumnSpan="3"  
+                TextColor="Red" 
+                IsVisible="False" 
+                HorizontalOptions="Center" />
         </Grid>
 
         <!-- Sign Up Button -->
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
-            <Button x:Name="SignUpButton" Text="Sign Up" Clicked="OnSignUpButtonClicked" WidthRequest="250" IsVisible="{Binding IsRegistering}" />
+            <Button 
+                x:Name="SignUpButton" 
+                Text="Sign Up" 
+                IsVisible="{Binding IsRegistering}" 
+                Clicked="OnSignUpButtonTapped" 
+                WidthRequest="250" />
         </Grid>
 
         <!-- Sign In Button -->
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
-            <Button x:Name="SignInButton" Text="Sign In" Clicked="OnSignInButtonClicked" WidthRequest="250" IsVisible="{Binding IsRegistering, Converter={StaticResource InverseBoolConverter}}" />
+            <Button 
+                x:Name="SignInButton" 
+                Text="Sign In" 
+                IsVisible="{Binding IsRegistering, Converter={StaticResource InverseBoolConverter}}" 
+                Clicked="OnSignInButtonTapped" 
+                WidthRequest="250" />
         </Grid>
 
         <!-- Toggle Sign In or Sign Up Link -->
         <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
-            <Label Text="{Binding ToggleLinkText}" TextColor="CornflowerBlue" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center">
+            <Label 
+                Text="{Binding ToggleLinkText}" 
+                TextColor="CornflowerBlue" 
+                FontSize="18" 
+                FontAttributes="Bold" 
+                HorizontalOptions="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ToggleRegisterLoginCommand}" />
                 </Label.GestureRecognizers>
@@ -73,7 +128,13 @@
 
         <!-- App Tip -->
         <Grid Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
-            <Label Text=" How to use app with whole family " TextColor="CadetBlue"  TextDecorations="Underline" FontSize="18" FontAttributes="Italic" HorizontalOptions="CenterAndExpand">
+            <Label 
+                Text=" How to use app with whole family " 
+                TextColor="CadetBlue"  
+                TextDecorations="Underline" 
+                FontSize="18" 
+                FontAttributes="Italic" 
+                HorizontalOptions="CenterAndExpand">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding HowToUseCommand}" />
                 </Label.GestureRecognizers>

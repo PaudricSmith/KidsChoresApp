@@ -97,8 +97,6 @@ namespace KidsChoresApp.Pages
 
         private async void OnAddChildButtonTapped(object sender, EventArgs e)
         {
-            if (UserId == 0) return;
-
             await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={UserId}");
         }
 
@@ -109,8 +107,6 @@ namespace KidsChoresApp.Pages
 
         private async void OnSettingsButtonTapped(object sender, EventArgs e)
         {
-            if (UserId == 0) return;
-
             await Shell.Current.GoToAsync($"{nameof(SettingsPage)}?userId={UserId}");
         }
 

@@ -24,10 +24,13 @@ namespace KidsChoresApp.Pages
             get => _isRegistering;
             set
             {
-                _isRegistering = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ToggleLinkText));
-                ConfirmPasswordEntry.IsVisible = _isRegistering;
+                if (_isRegistering != value)
+                {
+                    _isRegistering = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ToggleLinkText));
+                    ConfirmPasswordEntry.IsVisible = _isRegistering;
+                }
             }
         }
         public bool IsPasswordVisible
@@ -35,10 +38,13 @@ namespace KidsChoresApp.Pages
             get => _isPasswordVisible;
             set
             {
-                _isPasswordVisible = value;
-                OnPropertyChanged();
-                PasswordEntry.IsPassword = !_isPasswordVisible;
-                ConfirmPasswordEntry.IsPassword = !_isPasswordVisible;
+                if (_isPasswordVisible != value)
+                {
+                    _isPasswordVisible = value;
+                    OnPropertyChanged();
+                    PasswordEntry.IsPassword = !_isPasswordVisible;
+                    ConfirmPasswordEntry.IsPassword = !_isPasswordVisible;
+                }
             }
         }
        
@@ -55,7 +61,7 @@ namespace KidsChoresApp.Pages
             _parentService = parentService;
 
             ToggleRegisterLoginCommand = new Command(OnToggleRegisterLogin);
-            HowToUseCommand = new Command(OnHowToUseClicked);
+            HowToUseCommand = new Command(OnHowToUseTapped);
 
             BindingContext = this;
 
@@ -64,12 +70,12 @@ namespace KidsChoresApp.Pages
         }
 
 
-        private void OnPasswordEyeToggleClicked(object sender, EventArgs e)
+        private void OnPasswordEyeToggleTapped(object sender, EventArgs e)
         {
             IsPasswordVisible = !IsPasswordVisible;
         }
 
-        private async void OnSignUpButtonClicked(object sender, EventArgs e)
+        private async void OnSignUpButtonTapped(object sender, EventArgs e)
         {
             //// TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
             Email = "testemail2@email.com";
@@ -103,7 +109,7 @@ namespace KidsChoresApp.Pages
             }
         }
 
-        private async void OnSignInButtonClicked(object sender, EventArgs e)
+        private async void OnSignInButtonTapped(object sender, EventArgs e)
         {
             // TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
             Email = "testemail2@email.com";
@@ -141,7 +147,7 @@ namespace KidsChoresApp.Pages
             IsRegistering = !IsRegistering;
         }
 
-        private void OnHowToUseClicked()
+        private void OnHowToUseTapped()
         {
             DisplayAlert("How to use app with whole family",
                 "The parent installs first on their phone and sets all the passwords, " +
