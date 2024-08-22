@@ -184,7 +184,7 @@ namespace KidsChoresApp.Pages.ChildPages
             await _childService.SaveChildAsync(child);
             await DisplayAlert("Success", "Child added successfully.", "OK");
 
-            await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={UserId}");
+            await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
         }
     }
 }

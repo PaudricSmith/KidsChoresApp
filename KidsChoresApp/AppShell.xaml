@@ -8,6 +8,7 @@
     xmlns:childPages="clr-namespace:KidsChoresApp.Pages.ChildPages"
     xmlns:chorePages="clr-namespace:KidsChoresApp.Pages.ChorePages"
     xmlns:feedbackPages="clr-namespace:KidsChoresApp.Pages.FeedbackPages"
+    xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
     FlyoutBehavior="Disabled"
     Shell.NavBarHasShadow="True"
     x:DataType="root:AppShell"
@@ -29,11 +30,17 @@
         ContentTemplate="{DataTemplate pages:SetupPage}" />
 
     <TabBar FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarTitleColor="DarkSlateBlue" Shell.BackgroundColor="AliceBlue" Shell.TabBarUnselectedColor="Black">
-        <Tab Title="Home">
-            <ShellContent Route="HomePage" Icon="home.png" ContentTemplate="{DataTemplate pages:HomePage}" />
+        <Tab Title="Home" Icon="{mi:Fluent Icon=HomePerson24}">
+            <ShellContent Route="HomePage" ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
-        <Tab Title="Feedback">
-            <ShellContent Route="FeedbackPage" Icon="Feedback.png" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
+        <Tab Title="Settings" Icon="{mi:Fluent Icon=Settings24}">
+            <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+        <Tab Title="Feedback" Icon="{mi:Fluent Icon=PersonFeedback24}">
+            <ShellContent Route="FeedbackPage" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
+        </Tab>
+        <Tab Title="Parent Lock" Icon="{mi:Fluent Icon=LockShield24}">
+            <ShellContent Route="ParentalLockPage" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
         </Tab>
     </TabBar>
 

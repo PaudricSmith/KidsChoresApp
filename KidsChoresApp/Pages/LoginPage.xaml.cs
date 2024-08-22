@@ -78,9 +78,9 @@ namespace KidsChoresApp.Pages
         private async void OnSignUpButtonTapped(object sender, EventArgs e)
         {
             //// TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
-            Email = "testemail2@email.com";
-            Password = "Password2!";
-            ConfirmPassword = "Password2!";
+            Email = "testemail1@email.com";
+            Password = "Password1!";
+            ConfirmPassword = "Password1!";
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             
             if (!ValidateInputs(Email, Password, ConfirmPassword))
@@ -95,13 +95,19 @@ namespace KidsChoresApp.Pages
                 var user = await _userService.GetUserByEmailAsync(Email);
 
                 // Create a new parent account
-                var parentAccount = new Parent { UserId = user.Id };
+                var parentAccount = new Parent 
+                { 
+                    UserId = user.Id, 
+                    IsPadlockUnlocked = true 
+                };
 
                 await _parentService.SaveParentAsync(parentAccount);
 
                 await DisplayAlert("Success", "Sign-Up successful", "OK");
 
-                await Shell.Current.GoToAsync($"///{nameof(SetupPage)}?userId={user.Id}");
+                _authService.Login(user.Id);
+
+                await Shell.Current.GoToAsync($"///{nameof(SetupPage)}");
             }
             else
             {
@@ -112,8 +118,8 @@ namespace KidsChoresApp.Pages
         private async void OnSignInButtonTapped(object sender, EventArgs e)
         {
             // TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
-            Email = "testemail2@email.com";
-            Password = "Password2!";
+            Email = "testemail1@email.com";
+            Password = "Password1!";
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             if (!ValidateInputs(Email, Password))
@@ -127,13 +133,13 @@ namespace KidsChoresApp.Pages
                 var user = await _userService.GetUserByEmailAsync(Email);
                 if (!user.IsSetupCompleted)
                 {
-                    await Shell.Current.GoToAsync($"///{nameof(SetupPage)}?userId={user.Id}");
+                    await Shell.Current.GoToAsync($"///{nameof(SetupPage)}");
                 }
                 else
                 {
                     _authService.Login(user.Id);
 
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={user.Id}");
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
                 }
             }
             else

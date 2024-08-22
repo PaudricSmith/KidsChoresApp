@@ -4,9 +4,9 @@ using KidsChoresApp.Services;
 
 namespace KidsChoresApp.Pages
 {
-    [QueryProperty(nameof(UserId), "userId")]
     public partial class SetupPage : ContentPage
     {
+        private readonly AuthService _authService;
         private readonly UserService _userService;
         private readonly ParentService _parentService;
 
@@ -16,9 +16,11 @@ namespace KidsChoresApp.Pages
         public int UserId { get; set; }
 
 
-        public SetupPage(UserService userService, ParentService parentService)
+        public SetupPage(AuthService authService, UserService userService, ParentService parentService)
         {
             InitializeComponent();
+
+            _authService = authService;
             _userService = userService;
             _parentService = parentService;
             _passcodeEntries = new List<Entry> { Digit1, Digit2, Digit3, Digit4 };
@@ -73,7 +75,7 @@ namespace KidsChoresApp.Pages
                 return;
             }
 
-            // Retrieve the existing User record using the UserId that was passed from the RegisterLoginPage query
+            UserId = _authService.GetUserId() ?? 0;
             _user = await _userService.GetUserByIdAsync(UserId);
 
             // Retrieve the existing parent record using the UserId
@@ -96,7 +98,7 @@ namespace KidsChoresApp.Pages
             // new AppShell will show the first shell content which is the 'HomePage'
             //if (Application.Current != null)
             //    Application.Current.MainPage = new AppShell();
-            await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={_user.Id}");
+            await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
         }
     }
 }

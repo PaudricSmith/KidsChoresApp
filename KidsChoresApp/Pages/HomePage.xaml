@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:KidsChoresApp.Pages"
              xmlns:models="clr-namespace:KidsChoresApp.Models"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
              x:Class="KidsChoresApp.Pages.HomePage"
              x:DataType="pages:HomePage">
 
@@ -11,9 +12,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -30,8 +30,17 @@
                        BackgroundColor="CornflowerBlue" />
             </Frame>
 
+            <!-- Padlock Icon -->
+            <StackLayout Grid.Row="4" Grid.Column="1">
+                <ImageButton 
+                    x:Name="PadlockToggle"
+                    Source="{Binding PadlockImage}"
+                    Clicked="OnPadlockToggleTapped" />  
+            </StackLayout>
+            
+
             <!-- Children List -->
-            <CollectionView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
+            <CollectionView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
@@ -66,9 +75,8 @@
 
             <!-- Buttons -->
             <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="+ Child" Clicked="OnAddChildButtonTapped" WidthRequest="100" HeightRequest="70" />
-                <Button Text="+ Chore" Clicked="OnAddChoresButtonTapped" WidthRequest="100" HeightRequest="70" />
-                <Button Text="Settings" Clicked="OnSettingsButtonTapped" WidthRequest="100" HeightRequest="70" />
+                <Button Text="{mi:Fluent Icon=PersonAdd24, IconSize=34}" IsVisible="{Binding IsPadlockUnlocked}" Clicked="OnAddChildButtonTapped" WidthRequest="100" HeightRequest="70" />
+                <Button Text="{mi:Fluent Icon=TaskListSquareAdd24, IconSize=34}" IsVisible="{Binding IsPadlockUnlocked}" Clicked="OnAddChoresButtonTapped" WidthRequest="100" HeightRequest="70" />
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>

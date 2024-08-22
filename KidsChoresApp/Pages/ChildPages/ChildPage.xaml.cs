@@ -227,7 +227,7 @@ namespace KidsChoresApp.Pages.ChildPages
                     await DisplayAlert("Success", "Child deleted successfully.", "OK");
 
                     // Navigate back to the homepage
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={Child.UserId}");
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
                 }
             }
             else

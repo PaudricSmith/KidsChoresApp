@@ -4,7 +4,6 @@ using KidsChoresApp.Services;
 
 namespace KidsChoresApp.Pages
 {
-    [QueryProperty(nameof(UserId), "userId")]
     public partial class SettingsPage : ContentPage
     {
         private readonly AuthService _authService;
@@ -37,6 +36,8 @@ namespace KidsChoresApp.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            UserId = _authService.GetUserId() ?? 0;
 
             if (CurrencyPicker != null)
             {

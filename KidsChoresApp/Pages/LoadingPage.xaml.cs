@@ -21,7 +21,7 @@ namespace KidsChoresApp.Pages
                 int? userId = _authService.GetUserId();
                 if (userId.HasValue)
                 {
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}?userId={userId.Value}");
+                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
                 }
                 else
                 {

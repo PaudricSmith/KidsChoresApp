@@ -11,6 +11,8 @@ namespace KidsChoresApp.Models
         [Indexed]
         public int UserId { get; set; }
 
+        public bool IsPadlockUnlocked { get; set; }
+
         [MaxLength(4)]
         public string? Passcode { get; set; }
     }
