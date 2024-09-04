@@ -39,8 +39,8 @@
         <Tab Title="Feedback" Icon="{mi:Fluent Icon=PersonFeedback24}">
             <ShellContent Route="FeedbackPage" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
         </Tab>
-        <Tab Title="Parent Lock" Icon="{mi:Fluent Icon=LockShield24}">
-            <ShellContent Route="ParentalLockPage" ContentTemplate="{DataTemplate feedbackPages:FeedbackPage}" />
+        <Tab Title="Parent Lock" Icon="{Binding ParentLockIcon}">
+            <ShellContent Route="ParentalLockPage" ContentTemplate="{DataTemplate pages:ParentalLockPage}" />
         </Tab>
     </TabBar>
 

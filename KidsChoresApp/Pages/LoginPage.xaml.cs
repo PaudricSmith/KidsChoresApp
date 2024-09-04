@@ -95,10 +95,10 @@ namespace KidsChoresApp.Pages
                 var user = await _userService.GetUserByEmailAsync(Email);
 
                 // Create a new parent account
-                var parentAccount = new Parent 
-                { 
-                    UserId = user.Id, 
-                    IsPadlockUnlocked = true 
+                var parentAccount = new Parent
+                {
+                    UserId = user.Id,
+                    IsParentLockEnabled = false,
                 };
 
                 await _parentService.SaveParentAsync(parentAccount);

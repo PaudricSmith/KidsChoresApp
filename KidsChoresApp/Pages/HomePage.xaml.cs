@@ -3,8 +3,6 @@ using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Pages.FeedbackPages;
 using KidsChoresApp.Services;
-using MauiIcons.Core;
-using MauiIcons.Fluent;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -20,12 +18,12 @@ namespace KidsChoresApp.Pages
         private readonly ChildService _childService;
         private readonly ChoreService _choreService;
 
+        private Parent? _currentParent;
         private ImageSource _padlockImage;
         private User? _currentUser;
         private int _userId;
         private bool _isNavigating;
 
-        public Parent? CurrentParent { get; set; }
         public ObservableCollection<Child> Children { get; set; } = new ObservableCollection<Child>();
 
         public int UserId
@@ -45,26 +43,16 @@ namespace KidsChoresApp.Pages
                 OnPropertyChanged();
             }
         }
-        public bool IsPadlockUnlocked
+        public Parent? CurrentParent
         {
-            get => CurrentParent?.IsPadlockUnlocked ?? false;
+            get => _currentParent;
             set
             {
-                if (CurrentParent != null)
+                if (_currentParent != value)
                 {
-                    CurrentParent.IsPadlockUnlocked = value;
+                    _currentParent = value;
                     OnPropertyChanged();
-                    UpdatePadlockImage();
                 }
-            }
-        }
-        public ImageSource PadlockImage
-        {
-            get => _padlockImage;
-            set
-            {
-                _padlockImage = value;
-                OnPropertyChanged();
             }
         }
 
@@ -82,6 +70,7 @@ namespace KidsChoresApp.Pages
             BindingContext = this;
         }
 
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -94,8 +83,6 @@ namespace KidsChoresApp.Pages
             CurrentUser = await _userService.GetUserByIdAsync(UserId);
             CurrentParent = await _parentService.GetParentByUserIdAsync(UserId);
 
-            UpdatePadlockImage();
-
             var children = await _childService.GetChildrenByUserIdAsync(UserId);
             if (children == null) return;
 
@@ -104,38 +91,6 @@ namespace KidsChoresApp.Pages
             {
                 Children.Add(child);
             }
-        }
-
-        private void UpdatePadlockImage()
-        {
-            // Set the padlock image based on the current lock state
-            PadlockImage = (ImageSource)(IsPadlockUnlocked
-                ? new MauiIcon().Icon(FluentIcons.LockOpen24).IconBackgroundColor(Colors.Red)
-                : new MauiIcon().Icon(FluentIcons.LockClosed24).IconBackgroundColor(Colors.Red));
-        }
-
-        private async void OnPadlockToggleTapped(object sender, EventArgs e)
-        {
-            if (CurrentParent == null) return;
-
-            if (IsPadlockUnlocked)
-            {
-                IsPadlockUnlocked = false;
-            }
-            else
-            {
-                string result = await DisplayPromptAsync("Enter your Parental Passcode", "", maxLength: 4, keyboard: Keyboard.Numeric);
-                if (result == CurrentParent.Passcode)
-                {
-                    IsPadlockUnlocked = true;
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Incorrect passcode", "OK");
-                }
-            }
-
-            await _parentService.SaveParentAsync(CurrentParent);
         }
 
         private async void OnAddChildButtonTapped(object sender, EventArgs e)
@@ -177,6 +132,7 @@ namespace KidsChoresApp.Pages
                 _isNavigating = false;
             }
         }
+
 
         public new event PropertyChangedEventHandler? PropertyChanged;
         protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)

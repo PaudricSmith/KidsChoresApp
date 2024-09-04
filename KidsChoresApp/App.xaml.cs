@@ -1,12 +1,21 @@
-﻿namespace KidsChoresApp
+﻿using KidsChoresApp.Services;
+
+
+namespace KidsChoresApp
 {
     public partial class App : Application
     {
-        public App()
+        private readonly AuthService _authService;
+        private readonly ParentService _parentService;
+
+        public App(AuthService authService, ParentService parentService)
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            _authService = authService;
+            _parentService = parentService;
+
+            MainPage = new AppShell(authService, parentService);
         }
     }
 }

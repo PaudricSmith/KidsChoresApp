@@ -23,9 +23,6 @@
             <FontImageSource x:Key="EyeOpenIcon" Glyph="{mi:Fluent Icon=Eye20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />
             <FontImageSource x:Key="EyeClosedIcon" Glyph="{mi:Fluent Icon=EyeOff20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />
 
-            <FontImageSource x:Key="LockOpenIcon" Glyph="{mi:Fluent Icon=LockOpen24}" FontFamily="FluentIcons" Size="32" Color="Black" />
-            <FontImageSource x:Key="LockClosedIcon" Glyph="{mi:Fluent Icon=LockClosed24}" FontFamily="FluentIcons" Size="32" Color="Black" />
-
             <Style TargetType="Button">
                 <Setter Property="BackgroundColor" Value="CornflowerBlue" />
                 <Setter Property="BorderColor" Value="DarkSlateBlue" />

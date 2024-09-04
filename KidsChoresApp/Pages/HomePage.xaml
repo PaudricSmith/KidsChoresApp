@@ -30,15 +30,6 @@
                        BackgroundColor="CornflowerBlue" />
             </Frame>
 
-            <!-- Padlock Icon -->
-            <StackLayout Grid.Row="4" Grid.Column="1">
-                <ImageButton 
-                    x:Name="PadlockToggle"
-                    Source="{Binding PadlockImage}"
-                    Clicked="OnPadlockToggleTapped" />  
-            </StackLayout>
-            
-
             <!-- Children List -->
             <CollectionView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Children}" SelectionMode="None" HorizontalOptions="CenterAndExpand">
 
@@ -74,9 +65,9 @@
             </CollectionView>
 
             <!-- Buttons -->
-            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
-                <Button Text="{mi:Fluent Icon=PersonAdd24, IconSize=34}" IsVisible="{Binding IsPadlockUnlocked}" Clicked="OnAddChildButtonTapped" WidthRequest="100" HeightRequest="70" />
-                <Button Text="{mi:Fluent Icon=TaskListSquareAdd24, IconSize=34}" IsVisible="{Binding IsPadlockUnlocked}" Clicked="OnAddChoresButtonTapped" WidthRequest="100" HeightRequest="70" />
+            <HorizontalStackLayout Grid.Row="5" Grid.ColumnSpan="4" IsVisible="{Binding CurrentParent.IsParentLockEnabled, Converter={StaticResource InverseBoolConverter}}" Spacing="10" Padding="10" HorizontalOptions="CenterAndExpand">
+                <Button Text="{mi:Fluent Icon=PersonAdd24, IconSize=34}" Clicked="OnAddChildButtonTapped" WidthRequest="100" HeightRequest="70" />
+                <Button Text="{mi:Fluent Icon=TaskListSquareAdd24, IconSize=34}" Clicked="OnAddChoresButtonTapped" WidthRequest="100" HeightRequest="70" />
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>
