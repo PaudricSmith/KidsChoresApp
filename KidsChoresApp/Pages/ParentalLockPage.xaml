@@ -4,4 +4,30 @@
              x:Class="KidsChoresApp.Pages.ParentalLockPage"
              Title="Parent Lock">
 
+    <StackLayout Padding="10,10" VerticalOptions="CenterAndExpand">
+
+        <Button 
+            x:Name="LockButton"
+            Text="Lock"
+            Clicked="OnLockButtonTapped"
+            IsVisible="False"
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand" />
+
+        <ActivityIndicator 
+            x:Name="ActivityIndicator"
+            IsRunning="False"
+            IsVisible="False"
+            Margin="10,10,10,10"
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand" />
+
+        <Label 
+            x:Name="ActivityIndicatorLabel"
+            Text=""
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand" />    
+
+    </StackLayout>
+
 </ContentPage>

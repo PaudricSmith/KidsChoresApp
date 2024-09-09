@@ -1,5 +1,4 @@
 ﻿using KidsChoresApp.Models;
-using KidsChoresApp.Pages;
 using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Pages.ChorePages;
 using KidsChoresApp.Services;
@@ -17,7 +16,6 @@ namespace KidsChoresApp
         private ImageSource? _parentLockIcon;
         private Parent? _currentParent;
         private int _userId;
-
 
         public ImageSource? ParentLockIcon
         {
@@ -64,59 +62,13 @@ namespace KidsChoresApp
 
         private async void OnShellNavigating(object? sender, ShellNavigatingEventArgs e)
         {
-            if (e.Target.Location.OriginalString == "//ParentalLockPage")
+            if (e.Target.Location.OriginalString == "///HomePage")
             {
-                await HandleParentalLockPageNavigation();
+                _userId = _authService.GetUserId() ?? 0;
+                _currentParent = await _parentService.GetParentByUserIdAsync(_userId);
+
                 UpdateParentLockIcon();
             }
-            else if (e.Current.Location.OriginalString == "//LoadingPage")
-            {
-                await LoadParentData();
-                UpdateParentLockIcon();
-            }
-        }
-
-        private async Task HandleParentalLockPageNavigation()
-        {
-            if (_currentParent == null)
-                return;
-
-            if (!_currentParent.IsParentLockEnabled)
-            {
-                _currentParent.IsParentLockEnabled = true;
-            }
-            else
-            {
-                string? passcode = await DisplayPromptAsync("Enter your Parental Passcode", "", maxLength: 4, keyboard: Keyboard.Numeric);
-
-                if (passcode == null)
-                {
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
-                    return;
-                }
-
-                if (passcode == _currentParent.Passcode)
-                {
-                    _currentParent.IsParentLockEnabled = false;
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Incorrect passcode", "OK");
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
-                    return;
-                }
-
-                _currentParent.IsParentLockEnabled = false;
-            }
-
-            await _parentService.SaveParentAsync(_currentParent);
-            await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
-        }
-
-        private async Task LoadParentData()
-        {
-            _userId = _authService.GetUserId() ?? 0;
-            _currentParent = await _parentService.GetParentByUserIdAsync(_userId);
         }
     }
 }
