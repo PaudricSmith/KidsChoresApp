@@ -126,7 +126,7 @@
             </Label>
         </Grid>
 
-        <!-- App Tip -->
+        <!-- App Tip --><!--
         <Grid Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End">
             <Label 
                 Text=" How to use app with whole family " 
@@ -139,7 +139,7 @@
                     <TapGestureRecognizer Command="{Binding HowToUseCommand}" />
                 </Label.GestureRecognizers>
             </Label>
-        </Grid>
+        </Grid>-->
 
     </Grid>
 

@@ -6,6 +6,8 @@
 
     <StackLayout Padding="20" Spacing="20" VerticalOptions="CenterAndExpand">
 
+        <Label Text="Add a Parental Passcode" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+        
         <Grid ColumnSpacing="10" Padding="20">
             
             <Grid.ColumnDefinitions>

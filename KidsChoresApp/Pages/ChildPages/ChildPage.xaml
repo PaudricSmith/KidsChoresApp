@@ -31,9 +31,9 @@
 
             <!-- Avatar Action Sheet ==============================================-->
             <views:CustomActionSheet x:Name="CustomActionSheet" 
-                         CapturePhotoTapped="OnCapturePhotoTapped"
-                         ChooseFromLibraryTapped="OnChooseFromLibraryTapped"
                          SelectFromAvatarsTapped="OnSelectFromAvatarsTapped"
+                         ChooseFromLibraryTapped="OnChooseFromLibraryTapped"
+                         CapturePhotoTapped="OnCapturePhotoTapped"
                          CancelTapped="OnCancelTapped" />
             <!--===================================================================-->
 

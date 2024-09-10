@@ -11,14 +11,50 @@ namespace KidsChoresApp.Pages
         private readonly UserService _userService;
         private readonly AuthService _authService;
         private readonly ParentService _parentService;
+        private string? _email;
+        private string? _password;
+        private string? _confirmPassword;
         private bool _isRegistering;
         private bool _isPasswordVisible;
 
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? ConfirmPassword { get; set; }
         public string ToggleLinkText => IsRegistering ? "or Sign In" : "or Sign Up";
 
+        public string? Email 
+        { 
+            get => _email; 
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string? Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string? ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                if (_confirmPassword != value)
+                {
+                    _confirmPassword = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public bool IsRegistering
         {
             get => _isRegistering;
@@ -50,7 +86,7 @@ namespace KidsChoresApp.Pages
        
 
         public ICommand ToggleRegisterLoginCommand { get; }
-        public ICommand HowToUseCommand { get; }
+        //public ICommand HowToUseCommand { get; }
 
 
         public LoginPage(AuthService authService, UserService userService, ParentService parentService)
@@ -61,7 +97,7 @@ namespace KidsChoresApp.Pages
             _parentService = parentService;
 
             ToggleRegisterLoginCommand = new Command(OnToggleRegisterLogin);
-            HowToUseCommand = new Command(OnHowToUseTapped);
+            //HowToUseCommand = new Command(OnHowToUseTapped);
 
             BindingContext = this;
 
@@ -77,12 +113,12 @@ namespace KidsChoresApp.Pages
 
         private async void OnSignUpButtonTapped(object sender, EventArgs e)
         {
-            //// TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
-            Email = "testemail1@email.com";
-            Password = "Password1!";
-            ConfirmPassword = "Password1!";
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
-            
+            ////// TESTING PURPOSES ONLY!!!!! ////////////////////////////////////////////////////////////////////
+            //Email = "testemail1@email.com";
+            //Password = "Password1!";
+            //ConfirmPassword = "Password1!";
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+
             if (!ValidateInputs(Email, Password, ConfirmPassword))
             {
                 return;
@@ -113,6 +149,10 @@ namespace KidsChoresApp.Pages
             {
                 await DisplayAlert("Error", "Sign-Up failed. Email might already be taken.", "OK");
             }
+
+            Email = "";
+            Password = "";
+            ConfirmPassword = "";
         }
 
         private async void OnSignInButtonTapped(object sender, EventArgs e)
@@ -146,6 +186,10 @@ namespace KidsChoresApp.Pages
             {
                 await DisplayAlert("Error", "Invalid login details. Please check your email and password.", "OK");
             }
+
+
+            Email = "";
+            Password = "";
         }
 
         private void OnToggleRegisterLogin()
@@ -153,13 +197,13 @@ namespace KidsChoresApp.Pages
             IsRegistering = !IsRegistering;
         }
 
-        private void OnHowToUseTapped()
-        {
-            DisplayAlert("How to use app with whole family",
-                "The parent installs first on their phone and sets all the passwords, " +
-                "then on the child's phone after they install, simply click on the child lock icon.",
-                "OK");
-        }
+        //private void OnHowToUseTapped()
+        //{
+        //    DisplayAlert("How to use app with whole family",
+        //        "The parent installs first on their phone and sets all the passwords, " +
+        //        "then on the child's phone after they install, simply click on the child lock icon.",
+        //        "OK");
+        //}
 
         private bool ValidateInputs(string email, string password, string? confirmPassword = null)
         {
