@@ -2,6 +2,8 @@ using KidsChoresApp.Models;
 using KidsChoresApp.Pages.ChildPages;
 using KidsChoresApp.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace KidsChoresApp.Pages.ChorePages
@@ -17,13 +19,14 @@ namespace KidsChoresApp.Pages.ChorePages
         private DateTime _selectedDate;
         private User? _currentUser;
         private Child? _child;
+        private WeekDay _currentDay;
         private string? _choresForText;
         private int _childId;
         private bool _loading = true;
 
         public ObservableCollection<Chore> Chores { get; set; } = new ObservableCollection<Chore>();
         public ObservableCollection<Chore> FilteredChores { get; set; } = new ObservableCollection<Chore>();
-        public ObservableCollection<DateTime> WeekDates { get; set; } = new ObservableCollection<DateTime>();
+        public ObservableCollection<WeekDay> WeekDays { get; set; } = new ObservableCollection<WeekDay>();
 
         public bool Loading
         {
@@ -60,14 +63,6 @@ namespace KidsChoresApp.Pages.ChorePages
                 _childId = value;
             }
         }
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-            }
-        }
         public string? ChoresForText
         {
             get => _choresForText;
@@ -77,6 +72,32 @@ namespace KidsChoresApp.Pages.ChorePages
                 OnPropertyChanged();
             }
         }
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if (_selectedDate != value)
+                {
+                    _selectedDate = value;
+                    OnPropertyChanged(nameof(SelectedDate));  
+                    UpdateSelectedDay();
+                }
+            }
+        }
+        public WeekDay CurrentDay
+        {
+            get => _currentDay;
+            set
+            {
+                if (_currentDay != value)
+                {
+                    _currentDay = value;
+                    SelectedDate = _currentDay.Date; 
+                }
+            }
+        }
+
 
         public ChoresPage(UserService userService, ChildService childService, ChoreService choreService)
         {
@@ -94,6 +115,7 @@ namespace KidsChoresApp.Pages.ChorePages
             Loaded += ChoresPage_Loaded;
         }
 
+
         private async void ChoresPage_Loaded(object? sender, EventArgs e)
         {
             await Task.Delay(300);
@@ -102,69 +124,88 @@ namespace KidsChoresApp.Pages.ChorePages
             await LoadChores();
 
             GenerateWeekDates();
-            MoneySummary.IsVisible = true;
+
+            UpdateSelectedDay();
+
+            ScrollToSelectedDay();
         }
 
         private async Task LoadData()
         {
             if (ChildId != 0)
             {
-                await Task.Run(async () =>
-                {
-                    Child = await _childService.GetChildByIdAsync(ChildId);
-                    CurrentUser = await _userService.GetUserByIdAsync(Child.UserId);
-                });
+                Child = await _childService.GetChildByIdAsync(ChildId);
+                CurrentUser = await _userService.GetUserByIdAsync(Child.UserId);
             }
         }
 
         private async Task LoadChores()
         {
-            await Task.Run(async () =>
+            var chores = await _choreService.GetChoresByChildIdAsync(ChildId);
+            if (chores.Count == 0)
             {
-                var chores = await _choreService.GetChoresByChildIdAsync(ChildId);
+                Loading = false;
+                return;
+            }
 
-                if (chores.Count == 0)
+            Dispatcher.Dispatch(() =>
+            {
+                Chores.Clear();
+                foreach (var chore in chores)
                 {
-                    Loading = false;
-                    return;
+                    Chores.Add(chore);
                 }
 
-                // Update the collection on the main thread
-                Dispatcher.Dispatch(() =>
-                {
-                    Chores.Clear();
-                    foreach (var chore in chores)
-                    {
-                        Chores.Add(chore);
-                    }
-
-                    FilterChoresByDate();
-                    UpdateChoresForText();
-                });
+                FilterChoresByDate();
+                UpdateChoresForText();
 
                 Loading = false;
             });
         }
 
-        //protected override bool OnBackButtonPressed()
-        //{
-        //    // Explicitly navigate back to the previous page
-        //    Shell.Current.GoToAsync($".."); // Go up one level in the Shell navigation hierarchy
-        //    return true;
-        //}
-
         private void GenerateWeekDates()
         {
             var today = DateTime.Today;
-
             int dayValue = today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 1;
-
             var startOfWeek = today.AddDays(-dayValue);
 
-            WeekDates.Clear();
+            WeekDays.Clear();
             for (int i = 0; i < 7; i++)
             {
-                WeekDates.Add(startOfWeek.AddDays(i));
+                var date = startOfWeek.AddDays(i);
+                var weekDay = new WeekDay
+                {
+                    Date = date,
+                    IsSelected = date.Date == SelectedDate.Date  
+                };
+
+                WeekDays.Add(weekDay);
+
+                if (weekDay.Date == today)
+                    CurrentDay = weekDay;
+            }
+        }
+
+        private void UpdateSelectedDay()
+        {
+            foreach (var weekDay in WeekDays)
+            {
+                if (weekDay.IsSelected != (weekDay.Date.Date == SelectedDate.Date))
+                {
+                    weekDay.IsSelected = weekDay.Date.Date == SelectedDate.Date;
+                }
+            }
+        }
+
+        private void ScrollToSelectedDay()
+        {
+            if (CurrentDay != null)
+            {
+                var itemIndex = WeekDays.IndexOf(CurrentDay);
+                if (itemIndex != -1)
+                {
+                    WeekDaysCollectionView.ScrollTo(itemIndex, position: ScrollToPosition.Center, animate: true);
+                }
             }
         }
 
@@ -203,19 +244,25 @@ namespace KidsChoresApp.Pages.ChorePages
 
         private void OnDaySelectionTapped(object sender, TappedEventArgs e)
         {
-            if (sender is Frame frame && frame.BindingContext is DateTime date)
+            if (e.Parameter is WeekDay selectedDay)
             {
-                if (_previouslySelectedFrame != null)
-                    _previouslySelectedFrame.BackgroundColor = Colors.CornflowerBlue;
+                // Deselect all days first
+                foreach (var day in WeekDays)
+                {
+                    day.IsSelected = false;
+                }
 
-                SelectedDate = date;
-                frame.BackgroundColor = Colors.DarkSlateBlue;
-                _previouslySelectedFrame = frame;
+                // Select the tapped day
+                selectedDay.IsSelected = true;
+
+                // Set the current day
+                CurrentDay = selectedDay;
 
                 // Scroll to the selected day
-                var itemIndex = WeekDates.IndexOf(date);
+                var itemIndex = WeekDays.IndexOf(selectedDay);
                 WeekDaysCollectionView.ScrollTo(itemIndex, position: ScrollToPosition.Center, animate: true);
 
+                // Filter chores by the selected day
                 FilterChoresByDate();
                 UpdateChoresForText();
             }
@@ -275,6 +322,35 @@ namespace KidsChoresApp.Pages.ChorePages
                     await _choreService.DeleteChoreAsync(chore);
                 }
             }
+        }
+    }
+
+
+
+    public class WeekDay : INotifyPropertyChanged
+    {
+        private bool _isSelected;
+        public DateTime Date { get; set; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
+        public new event PropertyChangedEventHandler? PropertyChanged;
+        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

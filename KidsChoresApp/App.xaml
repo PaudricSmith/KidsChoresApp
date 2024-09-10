@@ -19,6 +19,7 @@
             <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:DateConverter x:Key="DateConverter"/>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
 
             <FontImageSource x:Key="EyeOpenIcon" Glyph="{mi:Fluent Icon=Eye20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />
             <FontImageSource x:Key="EyeClosedIcon" Glyph="{mi:Fluent Icon=EyeOff20}" FontFamily="FluentIcons" Color="Black" FontAutoScalingEnabled="True" />

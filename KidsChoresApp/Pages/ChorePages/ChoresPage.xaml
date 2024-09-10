@@ -12,7 +12,7 @@
 
             <!--<Line X1="180" Stroke="Black" StrokeThickness="1" ScaleX="1.75" TranslationX="120"  />-->
 
-            <StackLayout x:Name="MoneySummary" IsVisible="False">
+            <StackLayout>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
                     <Label Text="Weekly Allowance" FontSize="18" FontAttributes="Bold" />
                     <Label FontSize="18" FontAttributes="Bold">
@@ -50,29 +50,28 @@
 
             <!-- Horizontal list for days of the week -->
             <CollectionView x:Name="WeekDaysCollectionView"
-                            ItemsSource="{Binding WeekDates}"
+                            ItemsSource="{Binding WeekDays}"
                             SelectionMode="None"
-                            SelectedItem="{Binding SelectedDate}"
                             HorizontalScrollBarVisibility="Never"
                             BackgroundColor="AliceBlue">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="x:Object">
+                    <DataTemplate x:DataType="chorePages:WeekDay">
                         <Frame x:Name="DayOfWeekFrame"
                                Padding="10"
                                CornerRadius="10"
                                HasShadow="True"
-                               BackgroundColor="CornflowerBlue"
+                               BackgroundColor="{Binding IsSelected, Converter={StaticResource BoolToColorConverter}}"
                                BorderColor="White"
-                               Margin="5"
-                               BindingContext="{Binding .}">
+                               HeightRequest="50"
+                               Margin="5">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnDaySelectionTapped" CommandParameter="{Binding .}" />
                             </Frame.GestureRecognizers>
                             <StackLayout>
-                                <Label Text="{Binding ., Converter={StaticResource DateConverter}}"
+                                <Label Text="{Binding Date, Converter={StaticResource DateConverter}}"
                                        FontAttributes="Bold"
                                        TextTransform="Uppercase"
                                        HorizontalOptions="CenterAndExpand"

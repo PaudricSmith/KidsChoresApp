@@ -134,6 +134,7 @@ namespace KidsChoresApp.Pages
         }
 
 
+
         public new event PropertyChangedEventHandler? PropertyChanged;
         protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
