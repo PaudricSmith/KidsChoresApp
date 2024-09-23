@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:KidsChoresApp.Pages"
              x:Class="KidsChoresApp.Pages.SettingsPage"
-             x:DataType="pages:SettingsPage">
+             x:DataType="pages:SettingsPage"
+             Title="Settings">
 
     <StackLayout Padding="20" Spacing="20">
 
@@ -29,9 +30,11 @@
             </VerticalStackLayout>
         </Frame>
 
-        <Button Text="Change Parental Passcode" Clicked="OnChangePasscodeClicked"/>
+        <StackLayout IsVisible="{Binding IsParentalLockEnabled, Converter={StaticResource InverseBoolConverter}}">
+            <Button Text="Change Parental Passcode" Clicked="OnChangePasscodeClicked"/>
+        </StackLayout>
 
-        <Button Text="Logout" Clicked="OnLogoutClicked"/>
+        <Button Text="Logout" Clicked="OnLogoutClicked" VerticalOptions="EndAndExpand"/>
 
     </StackLayout>
 

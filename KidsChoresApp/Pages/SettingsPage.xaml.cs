@@ -11,6 +11,7 @@ namespace KidsChoresApp.Pages
         private readonly ParentService _parentService;
         private Parent? _parent;
         private int _userId;
+        private bool _isParentalLockEnabled;
 
         public int UserId
         {
@@ -20,6 +21,19 @@ namespace KidsChoresApp.Pages
                 _userId = value;
             }
         }
+        public bool IsParentalLockEnabled
+        {
+            get => _isParentalLockEnabled;
+            set
+            {
+                if (_isParentalLockEnabled != value)
+                {
+                    _isParentalLockEnabled = value;
+                    OnPropertyChanged();  
+                }
+            }
+        }
+
 
         public SettingsPage(AuthService authService, UserService userService, ParentService parentService)
         {
@@ -38,6 +52,9 @@ namespace KidsChoresApp.Pages
             base.OnAppearing();
 
             UserId = _authService.GetUserId() ?? 0;
+            _parent = await _parentService.GetParentByUserIdAsync(UserId);
+
+            IsParentalLockEnabled = _parent.IsParentLockEnabled;
 
             if (CurrencyPicker != null)
             {
@@ -62,8 +79,6 @@ namespace KidsChoresApp.Pages
 
         private async void OnChangePasscodeClicked(object sender, EventArgs e)
         {
-            _parent = await _parentService.GetParentByUserIdAsync(UserId);
-
             // Ask for old passcode
             string oldPasscode = await DisplayPromptAsync("Change Parental Passcode", "Enter your old Parental Passcode", maxLength: 4, keyboard: Keyboard.Numeric);
             if (oldPasscode == null) return;
