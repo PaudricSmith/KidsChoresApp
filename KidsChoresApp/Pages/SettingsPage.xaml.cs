@@ -56,7 +56,7 @@ namespace KidsChoresApp.Pages
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
             _authService.Logout();
-
+            
             await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
         }
 

@@ -178,7 +178,7 @@ namespace KidsChoresApp.Pages
                 else
                 {
                     _authService.Login(user.Id);
-
+                    
                     await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
                 }
             }

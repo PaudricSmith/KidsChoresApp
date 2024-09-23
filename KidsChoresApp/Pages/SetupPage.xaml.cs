@@ -95,9 +95,6 @@ namespace KidsChoresApp.Pages
             _user.IsSetupCompleted = true;
             await _userService.SaveUserAsync(_user);
 
-            // new AppShell will show the first shell content which is the 'HomePage'
-            //if (Application.Current != null)
-            //    Application.Current.MainPage = new AppShell();
             await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
         }
     }
