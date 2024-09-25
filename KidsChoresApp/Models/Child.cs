@@ -9,6 +9,7 @@ namespace KidsChoresApp.Models
         private string _name;
         private string _passcode;
         private string _image;
+        private DateTime _lastWeekReset;
         private decimal _money;
         private decimal _weeklyAllowance;
         private decimal _weeklyEarnings;
@@ -59,6 +60,19 @@ namespace KidsChoresApp.Models
                 if (_image != value)
                 {
                     _image = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public DateTime LastWeekReset
+        {
+            get => _lastWeekReset;
+            set
+            {
+                if (_lastWeekReset != value)
+                {
+                    _lastWeekReset = value;
                     OnPropertyChanged();
                 }
             }

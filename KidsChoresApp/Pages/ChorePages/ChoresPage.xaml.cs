@@ -136,6 +136,9 @@ namespace KidsChoresApp.Pages.ChorePages
             {
                 Child = await _childService.GetChildByIdAsync(ChildId);
                 CurrentUser = await _userService.GetUserByIdAsync(Child.UserId);
+
+                // Check if the week has changed and reset WeeklyEarnings if needed
+                ResetForNewWeek();
             }
         }
 
@@ -183,6 +186,37 @@ namespace KidsChoresApp.Pages.ChorePages
 
                 if (weekDay.Date == today)
                     CurrentDay = weekDay;
+            }
+        }
+
+        private async void ResetForNewWeek()
+        {
+            if (Child == null) return;
+
+            // Get the current week start (Monday as the start of the week)
+            var currentWeekStart = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+
+            // Compare with the last reset date
+            if (Child.LastWeekReset < currentWeekStart)
+            {
+                // Add Weekly Earnings to Lifetime Earnings
+                Child.LifetimeEarnings += Child.WeeklyEarnings;
+
+                // Reset Weekly Earnings
+                Child.WeeklyEarnings = 0;
+
+                // Update LastWeekReset to the start of this week
+                Child.LastWeekReset = currentWeekStart;
+
+                // Uncheck all chores for the new week
+                foreach (var chore in Chores)
+                {
+                    chore.IsComplete = false; // Uncheck the chore
+                    await _choreService.SaveChoreAsync(chore); // Save the updated chore status
+                }
+
+                // Save the updated child data
+                await _childService.SaveChildAsync(Child);
             }
         }
 
@@ -276,12 +310,10 @@ namespace KidsChoresApp.Pages.ChorePages
 
                 if (chore.IsComplete)
                 {
-                    Child.LifetimeEarnings += chore.Worth;
                     Child.WeeklyEarnings += chore.Worth;
                 }
                 else
                 {
-                    Child.LifetimeEarnings -= chore.Worth;
                     Child.WeeklyEarnings -= chore.Worth;
                 }
 
@@ -312,7 +344,6 @@ namespace KidsChoresApp.Pages.ChorePages
                 {
                     if (chore.IsComplete)
                     {
-                        Child.LifetimeEarnings -= chore.Worth;
                         Child.WeeklyEarnings -= chore.Worth;
                         await _childService.SaveChildAsync(Child);
                     }
@@ -344,7 +375,6 @@ namespace KidsChoresApp.Pages.ChorePages
                 }
             }
         }
-
 
 
         public new event PropertyChangedEventHandler? PropertyChanged;

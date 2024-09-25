@@ -98,7 +98,8 @@ namespace KidsChoresApp
 
                 UpdateParentLockIcon();
             }
-            else if (e.Current.Location.OriginalString == $"//{nameof(LoadingPage)}")
+            else if (e.Current.Location.OriginalString == $"//{nameof(LoadingPage)}" ||
+                e.Current.Location.OriginalString == $"//{nameof(LoginPage)}")
             {
                 _userId = _authService.GetUserId() ?? 0;
                 _currentParent = await _parentService.GetParentByUserIdAsync(_userId);

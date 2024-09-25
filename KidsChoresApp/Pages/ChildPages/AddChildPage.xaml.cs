@@ -178,7 +178,8 @@ namespace KidsChoresApp.Pages.ChildPages
                 Money = 0m,
                 WeeklyAllowance = decimal.TryParse(WeeklyAllowanceEntry.Text, out var weeklyAllowance) ? weeklyAllowance : 0m,
                 WeeklyEarnings = 0m,
-                LifetimeEarnings = 0m
+                LifetimeEarnings = 0m,
+                LastWeekReset = DateTime.Today
             };
 
             await _childService.SaveChildAsync(child);

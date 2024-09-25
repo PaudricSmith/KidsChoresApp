@@ -96,6 +96,7 @@ namespace KidsChoresApp.Pages.ChildPages
                     $"Weekly Allowance: {Child.WeeklyAllowance}\n" +
                     $"Lifetime Earnings: {Child.LifetimeEarnings}\n" +
                     $"Weekly Earnings: {Child.WeeklyEarnings}\n" +
+                    $"Last Week Reset: {Child.LastWeekReset}\n" +
                     $"Passcode: {Child.Passcode}\n",
                     "OK");
             }
