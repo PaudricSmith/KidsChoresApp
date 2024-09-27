@@ -90,16 +90,6 @@ namespace KidsChoresApp.Pages
             }
         }
 
-        private async void OnAddChildButtonTapped(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={UserId}");
-        }
-
-        private async void OnAddChoresButtonTapped(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={UserId}");
-        }
-
         private async void OnChildFrameTapped(object sender, EventArgs e)
         {
             if (_isNavigating) return;
@@ -141,6 +131,80 @@ namespace KidsChoresApp.Pages
                 }
 
                 _isNavigating = false;
+            }
+        }
+
+        private async void OnAddChildButtonTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"{nameof(AddChildPage)}?userId={UserId}");
+        }
+
+        private async void OnAddChoresButtonTapped(object sender, EventArgs e)
+        {
+            if (Children.Count == 0)
+            {
+                await DisplayAlert("No Children Found", "Please add a child before assigning chores.", "OK");
+                return;
+            }
+
+            await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={UserId}");
+        }
+
+        private async void OnDeleteChildButtonTapped(object sender, EventArgs e)
+        {
+            if (Children.Count == 0)
+            {
+                await DisplayAlert("No Children", "There are no children to delete.", "OK");
+                return;
+            }
+
+            // Create an ActionSheet with all the children's names and a "Delete All" option
+            string[] childNames = Children.Select(c => c.Name).ToArray();
+            string selectedChildName = await DisplayActionSheet("Select a child", "Cancel", "Delete All", childNames);
+
+            // Check if the parent canceled the selection
+            if (selectedChildName == "Cancel" || string.IsNullOrEmpty(selectedChildName))
+                return;
+
+            if (selectedChildName == "Delete All")
+            {
+                // Confirm deletion of all children
+                bool isConfirmed = await DisplayAlert("Confirm Delete All", "Are you sure you want to delete all children?", "Yes", "No");
+                if (isConfirmed)
+                {
+                    // Delete all children and their chores
+                    foreach (var child in Children)
+                    {
+                        await _choreService.DeleteChoresByChildIdAsync(child.Id);
+                        await _childService.DeleteChildAsync(child);
+                    }
+
+                    await DisplayAlert("Success", "All children have been deleted.", "OK");
+
+                    // Refresh the list
+                    await LoadData();
+                }
+            }
+            else
+            {
+                // Find the selected child
+                Child selectedChild = Children.FirstOrDefault(c => c.Name == selectedChildName);
+                if (selectedChild != null)
+                {
+                    // Confirm deletion
+                    bool isConfirmed = await DisplayAlert("Confirm Delete", $"Are you sure you want to delete {selectedChild.Name}?", "Yes", "No");
+                    if (isConfirmed)
+                    {
+                        // Delete the child's chores and the child itself
+                        await _choreService.DeleteChoresByChildIdAsync(selectedChild.Id);
+                        await _childService.DeleteChildAsync(selectedChild);
+
+                        await DisplayAlert("Success", $"{selectedChild.Name} has been deleted.", "OK");
+
+                        // Refresh the list
+                        await LoadData();
+                    }
+                }
             }
         }
     }

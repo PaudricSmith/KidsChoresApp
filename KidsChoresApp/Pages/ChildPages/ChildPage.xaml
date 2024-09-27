@@ -107,8 +107,6 @@
 
             <Button Text="View Chores" Clicked="OnViewChoresTapped" Margin="0,10,0,0" />
 
-            <Button Text="Delete Child" Clicked="OnDeleteChildTapped" Margin="0,10,0,0" />
-
         </StackLayout>
     </ScrollView>
 

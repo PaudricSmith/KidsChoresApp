@@ -215,28 +215,6 @@ namespace KidsChoresApp.Pages.ChildPages
             }
         }
 
-        private async void OnDeleteChildTapped(object sender, EventArgs e)
-        {
-            if (Child != null)
-            {
-                var confirm = await DisplayAlert("Confirm", $"Are you sure you want to delete {Child.Name}?", "Yes", "No");
-                if (confirm)
-                {
-                    await _choreService.DeleteChoresByChildIdAsync(ChildId);
-                    await _childService.DeleteChildAsync(Child);
-
-                    await DisplayAlert("Success", "Child deleted successfully.", "OK");
-
-                    // Navigate back to the homepage
-                    await Shell.Current.GoToAsync($"///{nameof(HomePage)}");
-                }
-            }
-            else
-            {
-                await DisplayAlert("Error", "Please select a child to delete.", "OK");
-            }
-        }
-
         private void OnCloseAvatarSelectionTapped(object sender, EventArgs e)
         {
             AvatarSelectionOverlay.IsVisible = false;
