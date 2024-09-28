@@ -141,23 +141,11 @@ namespace KidsChoresApp.Pages
 
         private async void OnAddChoresButtonTapped(object sender, EventArgs e)
         {
-            if (Children.Count == 0)
-            {
-                await DisplayAlert("No Children Found", "Please add a child before assigning chores.", "OK");
-                return;
-            }
-
             await Shell.Current.GoToAsync($"{nameof(AddChoresPage)}?userId={UserId}");
         }
 
         private async void OnDeleteChildButtonTapped(object sender, EventArgs e)
         {
-            if (Children.Count == 0)
-            {
-                await DisplayAlert("No Children", "There are no children to delete.", "OK");
-                return;
-            }
-
             // Create an ActionSheet with all the children's names and a "Delete All" option
             string[] childNames = Children.Select(c => c.Name).ToArray();
             string selectedChildName = await DisplayActionSheet("Select a child", "Cancel", "Delete All", childNames);

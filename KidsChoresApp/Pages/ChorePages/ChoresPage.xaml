@@ -92,7 +92,15 @@
             </VerticalStackLayout>
 
             <!-- Chores List ============================================================================================================================================================-->
-            <CollectionView x:Name="ChoresCollectionView" ItemsSource="{Binding FilteredChores}" BackgroundColor="AliceBlue" SelectionMode="None">
+            <Label x:Name="NoChoresLabel" 
+               Text="No chores for this day!" 
+               FontSize="Large" 
+               TextColor="Gray" 
+               HorizontalOptions="CenterAndExpand" 
+               VerticalOptions="CenterAndExpand" 
+               IsVisible="{Binding FilteredChores.Count, Converter={StaticResource ZeroToBooleanConverter}}" />
+
+            <CollectionView x:Name="ChoresCollectionView" ItemsSource="{Binding FilteredChores}" BackgroundColor="AliceBlue" SelectionMode="None" IsVisible="{Binding FilteredChores.Count, Converter={StaticResource InverseZeroToBooleanConverter}}">
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
